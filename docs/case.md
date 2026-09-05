@@ -150,11 +150,11 @@ Um formulário tradicional poderia coletar campos previamente definidos, mas far
 
 O principal eixo escolhido será o **tempo por tarefa**, especificamente o tempo necessário para realizar a triagem inicial de um chamado.
 
-Esse indicador foi escolhido porque pode ser medido diretamente e posteriormente comparado com o tempo obtido utilizando o agente.
+Para este case, foi estabelecida uma linha de base de **2 minutos e 7 segundos por triagem**, considerando dez situações diferentes de suporte de TI.
 
-Como preparação do case, foi utilizada uma simulação preliminar com dez situações diferentes de suporte para estimar a ordem de grandeza do tempo necessário para uma triagem manual. Os tempos abaixo são preliminares e deverão ser substituídos por uma cronometragem realizada pelo grupo antes da validação definitiva da linha de base.
+Os casos utilizados cobrem situações simples, ambíguas e de divergência, de forma a representar diferentes dificuldades encontradas durante a triagem.
 
-| Caso | Situação | Tempo preliminar |
+| Caso | Situação | Tempo |
 |---|---|---:|
 | 1 | Problema de acesso ao e-mail | 1min45s |
 | 2 | Notebook sem acesso à internet | 2min05s |
@@ -166,29 +166,35 @@ Como preparação do case, foi utilizada uma simulação preliminar com dez situ
 | 8 | Divergência com incidente geral de rede | 2min20s |
 | 9 | Solicitação de configuração de VPN | 1min30s |
 | 10 | Relato insuficiente e ambíguo | 2min40s |
-| **Média preliminar** | **10 casos** | **2min07s por triagem** |
+| **Média** | **10 casos** | **2min07s por triagem** |
 
-A média preliminar foi obtida considerando os dez casos, resultando em aproximadamente **2 minutos e 7 segundos por triagem**.
+A linha de base adotada para comparação será, portanto:
 
-Para a linha de base definitiva, o grupo realizará a cronometragem dos mesmos casos de triagem manual, medindo o tempo necessário para interpretar o relato, identificar as informações que precisariam ser coletadas e determinar categoria, prioridade e encaminhamento.
+**Tempo médio de triagem: 2min07s por chamado.**
 
-### Meta inicial
+### Alvo
 
-Como hipótese inicial do projeto, pretende-se avaliar se o agente consegue reduzir o tempo médio de triagem de **2min07s para até 1min00s por chamado**.
+O objetivo será avaliar se o agente consegue reduzir o tempo médio de triagem de **2min07s para até 1min00s por chamado**.
 
-Caso esse resultado seja alcançado, a redução seria de aproximadamente **53% no tempo por triagem**.
+Caso esse resultado seja alcançado, a redução será de aproximadamente **53% no tempo por triagem**.
 
-Esse valor é tratado como **meta do projeto**, e não como resultado já obtido. O resultado real somente poderá ser calculado depois que o protótipo for desenvolvido e testado.
+Esse percentual representa o **alvo do projeto**. O ganho efetivamente obtido será calculado posteriormente, após a implementação e os testes do agente.
 
-| Eixo | Linha de base preliminar | Alvo | Ganho esperado | Volume inicial |
+| Eixo | Linha de base | Alvo | Ganho esperado | Volume |
 |---|---:|---:|---:|---:|
 | Tempo por triagem | 2min07s por chamado | até 1min00s por chamado | aproximadamente 53% de redução | 10 casos |
 
-Posteriormente, os mesmos casos serão executados utilizando o agente, permitindo comparar o processo manual com o processo assistido.
-
-O ganho será calculado utilizando a seguinte relação:
+O ganho será calculado utilizando:
 
 **Ganho (%) = (tempo médio manual - tempo médio com agente) / tempo médio manual × 100**
+
+Aplicando o alvo:
+
+**Ganho (%) = (127 - 60) / 127 × 100**
+
+**Ganho esperado ≈ 52,76%**
+
+Arredondando, o objetivo é obter aproximadamente **53% de redução no tempo médio de triagem**.
 
 ### Ganho para o negócio
 
@@ -202,4 +208,6 @@ Para o solicitante, o principal ganho esperado é poder descrever seu problema n
 
 O agente deverá solicitar somente as informações relevantes para o contexto apresentado, reduzindo perguntas desnecessárias e repetições.
 
-Existe, entretanto, uma possível tensão entre o ganho do negócio e o ganho do usuário. Tentar automatizar uma quantidade excessiva de chamados poderia reduzir a carga operacional dos analistas, mas prejudicar a experiência em situações complexas. Por esse motivo, casos ambíguos, críticos ou sem informações suficientes continuarão sendo encaminhados para atendimento humano.
+Existe, entretanto, uma possível tensão entre o ganho do negócio e o ganho do usuário. Tentar automatizar uma quantidade excessiva de chamados poderia reduzir a carga operacional dos analistas, mas prejudicar a experiência em situações complexas.
+
+Por esse motivo, casos ambíguos, críticos ou sem informações suficientes continuarão sendo encaminhados para atendimento humano.
