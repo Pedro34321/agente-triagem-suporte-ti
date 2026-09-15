@@ -138,7 +138,69 @@ A necessidade dessas informações varia conforme cada relato. Essa característ
 
 ---
 
-## 3. Os ganhos esperados
+### 2.3 O workflow do agente
+
+O fluxo inicial do sistema será composto pelas seguintes etapas:
+
+1. ENTRADA
+   O solicitante descreve o problema em linguagem natural.
+   [decide: USUÁRIO]
+
+2. EXTRAÇÃO
+   O sistema identifica problema, contexto e informações ausentes.
+   [decide: MODELO]
+
+3. COLETA
+   O agente escolhe quais perguntas adicionais precisa fazer.
+   [decide: MODELO]
+
+4. CONSULTA
+   O sistema consulta equipamento, incidentes conhecidos e regras de suporte.
+   [decide: CÓDIGO]
+
+5. ANÁLISE E CLASSIFICAÇÃO
+   O agente compara o relato com os dados encontrados e propõe
+   categoria, prioridade e encaminhamento.
+   [decide: MODELO]
+
+6. VALIDAÇÃO E REGISTRO
+   O código valida limites e registra a triagem.
+   [decide: CÓDIGO]
+   [ESCRITA — REVERSÍVEL]
+
+7. RETORNO
+   O sistema apresenta a triagem ao solicitante ou encaminha o caso
+   para análise humana quando não houver segurança suficiente.
+   [decide: CÓDIGO]
+
+A maior parte do fluxo utiliza código determinístico. O modelo é utilizado apenas nas etapas em que é necessário interpretar linguagem natural, descobrir informações ausentes e comparar o contexto informado pelo usuário com os registros consultados.
+
+Casos críticos, ambíguos ou com informações insuficientes serão encaminhados para um analista de suporte.
+
+### 2.4 O sistema
+
+O sistema realiza a triagem inicial de chamados de suporte de TI recebidos em linguagem natural. Ele identifica informações ausentes, faz perguntas complementares, consulta registros externos e produz uma classificação estruturada contendo categoria, prioridade e encaminhamento sugerido.
+
+O nível de autonomia pretendido é o de **agente com autonomia limitada**.
+
+Um workflow totalmente fixo não é suficiente porque não é possível determinar antecipadamente quais perguntas serão necessárias em todos os chamados. Dependendo do relato e das respostas obtidas, o sistema precisa decidir em tempo de execução quais informações ainda faltam, quais consultas devem ser realizadas e quando já possui contexto suficiente para produzir uma triagem.
+
+A autonomia será limitada por regras no código, número máximo de passos e encaminhamento para atendimento humano quando o sistema não conseguir chegar a uma decisão segura.
+
+#### Ferramentas
+
+| Ferramenta | O que faz | Leitura ou escrita? | Reversível? | Contra o que ela conversa |
+|---|---|---|---|---|
+| `consultar_equipamento` | Consulta informações sobre o equipamento informado pelo usuário | Leitura | — | Banco de dados SQLite |
+| `consultar_incidentes` | Verifica incidentes gerais ativos relacionados ao problema | Leitura | — | Banco de dados SQLite |
+| `consultar_regras` | Consulta categorias, prioridades e regras de encaminhamento | Leitura | — | Arquivo estruturado acessado por uma camada própria |
+| `registrar_triagem` | Registra o resultado final da triagem | Escrita | Sim | Banco de dados SQLite |
+
+A primeira versão do sistema não realizará automaticamente alterações críticas em contas de usuários, equipamentos, redes ou sistemas corporativos.
+
+A única ferramenta de escrita será `registrar_triagem`, responsável por armazenar o resultado da análise. Essa operação será reversível, pois um analista poderá posteriormente corrigir ou substituir a classificação registrada.
+
+### 2.5 A justificativa de negócio — a venda
 
 ### Por que um agente, e não software comum?
 
@@ -211,3 +273,121 @@ O agente deverá solicitar somente as informações relevantes para o contexto a
 Existe, entretanto, uma possível tensão entre o ganho do negócio e o ganho do usuário. Tentar automatizar uma quantidade excessiva de chamados poderia reduzir a carga operacional dos analistas, mas prejudicar a experiência em situações complexas.
 
 Por esse motivo, casos ambíguos, críticos ou sem informações suficientes continuarão sendo encaminhados para atendimento humano.
+
+### 2.6 O verificador
+
+Para verificar se a saída produzida pelo agente está correta, será utilizado um conjunto de **40 chamados simulados e previamente rotulados pelo grupo**.
+
+Cada caso terá uma resposta de referência contendo:
+
+- categoria esperada;
+- prioridade esperada;
+- encaminhamento esperado;
+- indicação de necessidade de intervenção humana.
+
+A saída produzida pelo agente será comparada com essa referência.
+
+Além da comparação das classificações, também serão utilizadas regras determinísticas para verificar situações que não podem depender apenas da interpretação do modelo, como:
+
+- incidentes críticos devem ser encaminhados para atendimento humano;
+- equipamentos inexistentes não podem ser tratados como equipamentos válidos;
+- o agente não pode inventar registros que não foram encontrados;
+- solicitações meramente informativas não devem gerar automaticamente um registro de incidente.
+
+O verificador permitirá transformar cada execução em um resultado objetivo de acerto ou erro, em vez de depender apenas de avaliação subjetiva.
+
+### 2.7 O critério de sucesso
+
+O critério inicial de sucesso será:
+
+- acertar a **categoria** em pelo menos **32 de 40 casos** rotulados;
+- acertar a **prioridade** em pelo menos **32 de 40 casos**;
+- acertar o **encaminhamento** em pelo menos **32 de 40 casos**;
+- não deixar de encaminhar para atendimento humano nenhum dos casos previamente marcados como críticos.
+
+Portanto, o resultado mínimo esperado será de **80% de acerto nos 40 casos**, com a condição adicional de que nenhum caso crítico seja tratado automaticamente de forma incorreta.
+
+Essa segunda condição existe porque o custo de erro não é igual em todas as situações. Classificar incorretamente um chamado comum é menos grave do que deixar de identificar uma situação crítica que deveria chegar a um analista humano.
+
+### 2.8 Dados
+
+Os dados utilizados no protótipo serão **simulados**, pois o projeto não utilizará registros reais de empresas ou informações pessoais de usuários.
+
+Será criada uma pequena base contendo:
+
+- usuários fictícios;
+- equipamentos fictícios;
+- incidentes conhecidos;
+- categorias de suporte;
+- prioridades;
+- chamados simulados.
+
+Os dados serão construídos de forma a preservar casos fáceis e casos difíceis do domínio.
+
+#### Caso de divergência
+
+O usuário informa que acredita que seu notebook está com problema de conexão, mas a consulta ao sistema identifica um incidente geral de rede afetando vários usuários do mesmo local.
+
+Nesse caso, o agente deverá priorizar as evidências encontradas no sistema e explicar a divergência, em vez de aceitar automaticamente a interpretação do usuário.
+
+#### Registro inexistente
+
+O usuário informa o patrimônio `NB-98451`, mas esse equipamento não existe na base de dados.
+
+O agente deverá tratar o retorno de "registro não encontrado" como informação válida da ferramenta e solicitar correção ou informação adicional, sem inventar dados sobre o equipamento.
+
+#### Caso que não deve disparar a ação principal
+
+O usuário pergunta:
+
+"Vou trabalhar de casa amanhã. Como faço para configurar a VPN?"
+
+Neste caso, não existe necessariamente um incidente de suporte. O agente deverá reconhecer que se trata de uma solicitação informativa e não deverá registrar automaticamente uma triagem de incidente.
+
+#### Caso simples
+
+Um usuário informa que não consegue acessar o e-mail corporativo porque a senha é rejeitada.
+
+Após coletar as informações necessárias e não encontrar incidente geral, o agente deverá classificar a situação como problema de acesso e encaminhá-la para o suporte adequado.
+
+### 2.9 Dado sensível
+
+O domínio de suporte de TI pode envolver dados pessoais e corporativos, como nome de usuário, identificadores de equipamentos, informações sobre contas, sistemas utilizados e registros internos da organização.
+
+Neste projeto, nenhum dado real de empresa ou de pessoa será utilizado.
+
+Todos os usuários, equipamentos, incidentes, chamados, identificadores e demais registros serão **simulados**.
+
+Nenhuma senha, token, chave de API, endereço real, dado pessoal ou informação corporativa sigilosa será incluída no repositório ou enviada ao modelo.
+
+A chave utilizada para acessar o provedor do modelo ficará armazenada somente em variável de ambiente e não será versionada no Git.
+
+### 2.10 Espaço para o que ainda vem
+
+- [x] **RAG — Parte 2:** o agente deverá consultar uma base de conhecimento contendo procedimentos de suporte, regras de prioridade, categorias de chamados, perguntas frequentes e orientações técnicas. Inicialmente, esse conhecimento poderá existir em arquivos Markdown estruturados.
+
+- [x] **MCP — Parte 2:** as ferramentas de consulta a equipamentos, incidentes e registro de triagem poderão ser expostas por meio de um servidor MCP, substituindo a integração direta utilizada na Parte 1.
+
+- [x] **LangChain / LangGraph — Parte 2:** a orquestração do fluxo do agente poderá ser migrada para um grafo de estado, representando etapas como coleta, consulta, classificação, registro e encaminhamento humano.
+
+- [x] **Multiagente — Parte 3:** uma evolução possível será separar responsabilidades entre um agente responsável pela coleta e atendimento inicial e outro agente responsável pela análise e classificação. Essa divisão somente será adotada se os testes demonstrarem ganho real em relação ao agente único.
+
+Essas evoluções não serão implementadas integralmente na Parte 1. Neste momento, o objetivo é garantir que o case escolhido tenha espaço técnico para receber esses componentes posteriormente.
+
+### 2.11 O maior risco
+
+O maior risco do projeto é que os dados simulados e as regras criadas pelo grupo sejam simples demais e não representem a dificuldade real de um processo de suporte de TI.
+
+Nesse cenário, o agente poderia apresentar bons resultados nos testes apenas porque os casos foram construídos de forma previsvisível, mas falhar quando recebesse relatos ambíguos, contraditórios ou incompletos.
+
+Para reduzir esse risco, o conjunto de testes incluirá propositalmente:
+
+- chamados incompletos;
+- informações contraditórias;
+- equipamentos inexistentes;
+- incidentes gerais;
+- casos críticos;
+- solicitações que não devem gerar incidente;
+- situações em que o agente precisa parar e encaminhar o atendimento para um humano.
+
+Além disso, o conjunto de 40 casos rotulados será utilizado como referência para comparar alterações futuras no agente e evitar que mudanças no prompt ou no modelo sejam avaliadas apenas por impressão subjetiva.
