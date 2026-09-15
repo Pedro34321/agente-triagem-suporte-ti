@@ -7,4 +7,4 @@
 
 ## Problema
 
-Analistas de suporte gastam tempo interpretando chamados incompletos, coletando informações adicionais e classificando manualmente a categoria, prioridade e encaminhamento correto de cada solicitação.
+Analistas de suporte gastam tempo interpretando chamados incompletos, coletando informações adicionais e classificam manualmente a categoria, prioridade e encaminhamento correto de cada solicitação.
