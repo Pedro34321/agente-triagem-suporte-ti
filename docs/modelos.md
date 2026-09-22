@@ -182,31 +182,35 @@ A estimativa de 1.000 execuções representa apenas uma referência de volume pa
 
 ## 3.3 A verificação mínima
 
-Para comparar os modelos de forma prática, serão utilizados os mesmos cinco casos de teste, com o mesmo prompt e os mesmos critérios de avaliação.
+A verificação foi planejada inicialmente para utilizar cinco casos de teste e três modelos candidatos, mantendo o mesmo prompt, os mesmos dados e os mesmos critérios de avaliação.
 
-O objetivo não é produzir uma medição estatística, mas observar como cada modelo se comporta no domínio específico de triagem de chamados de suporte de TI.
+O objetivo dessa comparação não era produzir uma medição estatística, mas observar o comportamento dos modelos no domínio específico de triagem de chamados de suporte de TI.
+
+Durante a implementação do protótipo, entretanto, a verificação prática foi concentrada no modelo efetivamente utilizado pelo agente, devido ao escopo da entrega, à disponibilidade das APIs e às limitações encontradas durante os testes.
+
+Os demais modelos permanecem registrados como candidatos da análise inicial, mas não são apresentados como modelos executados nesta versão do protótipo.
 
 ### Prompt utilizado nos testes
 
-O mesmo prompt será utilizado nos três modelos:
+O agente utiliza o prompt armazenado em:
 
-> Você é um agente responsável pela triagem inicial de chamados de suporte de TI.
->
-> Analise o relato apresentado e produza uma resposta estruturada contendo:
->
-> - categoria;
-> - prioridade;
-> - encaminhamento;
-> - justificativa;
-> - necessidade de intervenção humana.
->
-> Não invente informações.
->
-> Caso não existam informações suficientes para concluir a triagem com segurança, indique quais informações ainda precisam ser obtidas.
->
-> Se houver divergência entre o relato do usuário e dados provenientes do sistema, considere os dados do sistema como evidência e explique a divergência.
+`prompts/triagem-v1.txt`
 
-### Casos utilizados
+O prompt define o agente como responsável exclusivamente pela triagem inicial de chamados de suporte de TI e estabelece regras para:
+
+- interpretar o relato do usuário;
+- identificar categoria e prioridade;
+- utilizar ferramentas apenas quando necessário;
+- evitar invenção de informações;
+- diferenciar problemas individuais de incidentes coletivos;
+- tratar registros inexistentes;
+- reconhecer solicitações informativas;
+- encaminhar casos críticos, contraditórios ou inseguros para atendimento humano;
+- produzir uma saída final estruturada.
+
+O prompt também utiliza exemplos de comportamento esperado para reduzir associações incorretas entre o relato do usuário e informações encontradas nas ferramentas.
+
+### Casos definidos para avaliação
 
 #### Caso 1 — Simples
 
@@ -219,24 +223,26 @@ Resultado esperado:
 - categoria: Acesso / Conta;
 - prioridade: Média;
 - encaminhamento: Suporte N1;
-- intervenção humana: não obrigatória.
+- intervenção humana: não obrigatória;
+- não consultar incidentes gerais sem evidência de impacto coletivo.
 
 #### Caso 2 — Divergência
 
 Relato:
 
-> "Minha internet caiu novamente. Acho que meu notebook está com problema."
+> "Estou no Andar 3 e minha internet caiu. Acho que meu notebook está com problema."
 
 Informação encontrada no sistema:
 
-> Existe um incidente ativo de indisponibilidade de rede no andar do usuário, afetando aproximadamente 35 funcionários.
+> Existe um incidente ativo de indisponibilidade de rede no Andar 3, afetando aproximadamente 35 usuários.
 
 Resultado esperado:
 
 - categoria: Rede / Conectividade;
-- reconhecer incidente geral;
+- reconhecer o incidente geral;
+- utilizar os dados do sistema como evidência;
 - não tratar o notebook como causa confirmada;
-- encaminhamento relacionado ao incidente de rede.
+- encaminhar o caso de acordo com o incidente de rede.
 
 #### Caso 3 — Registro inexistente
 
@@ -251,11 +257,11 @@ Informação encontrada no sistema:
 Resultado esperado:
 
 - não inventar informações sobre o equipamento;
-- informar que o registro não foi encontrado;
-- solicitar confirmação do patrimônio ou outro identificador;
-- não concluir a triagem como se o equipamento fosse válido.
+- reconhecer o retorno de registro inexistente;
+- solicitar confirmação do patrimônio ou outro identificador quando necessário;
+- não concluir a análise como se o equipamento fosse válido.
 
-#### Caso 4 — Não deve disparar a ação principal
+#### Caso 4 — Não deve registrar incidente
 
 Relato:
 
@@ -263,9 +269,11 @@ Relato:
 
 Resultado esperado:
 
-- reconhecer que se trata de solicitação informativa;
+- categoria: Solicitação Informativa;
+- prioridade: Baixa;
+- encaminhamento: Orientação ao usuário;
 - não registrar automaticamente um incidente;
-- fornecer ou buscar orientação sobre configuração de VPN.
+- não utilizar ferramentas de incidentes quando não houver falha relatada.
 
 #### Caso 5 — Ambíguo
 
@@ -277,94 +285,204 @@ Resultado esperado:
 
 - não classificar definitivamente sem informações adicionais;
 - perguntar qual sistema está sendo afetado;
-- descobrir quem mais foi afetado;
+- descobrir se outras pessoas também foram afetadas;
 - verificar mensagem de erro;
 - avaliar impacto e urgência antes da classificação.
 
-### Critérios de comparação
+O caso ambíguo permanece definido para evolução e avaliações posteriores do agente, mas não foi incluído nos logs finais desta versão do protótipo.
 
-Para cada caso serão observados:
+### Critérios de avaliação
 
-1. se o modelo identificou corretamente a categoria quando havia informação suficiente;
+Para os casos executados foram observados:
+
+1. se o agente identificou corretamente a categoria quando havia informação suficiente;
 2. se respeitou a prioridade esperada;
 3. se escolheu encaminhamento adequado;
 4. se evitou inventar informações;
 5. se reconheceu quando não havia informações suficientes;
 6. se tratou corretamente divergências entre usuário e sistema;
-7. se produziu resposta no formato solicitado.
+7. se utilizou as ferramentas somente quando necessário;
+8. se produziu resposta compatível com o formato solicitado.
 
 ### Registro dos resultados
 
-A tabela abaixo será preenchida após a execução dos cinco casos nos três modelos.
+A verificação prática desta versão foi realizada com o modelo `ministral-3b-2512`.
 
-| Caso | Mistral Small 4 | GPT-5.6 Luna | Gemini 3.8 Flash |
-|---|---|---|---|
-| 1 — Simples | A testar | A testar | A testar |
-| 2 — Divergência | A testar | A testar | A testar |
-| 3 — Registro inexistente | A testar | A testar | A testar |
-| 4 — Não deve registrar incidente | A testar | A testar | A testar |
-| 5 — Ambíguo | A testar | A testar | A testar |
+| Caso | Comportamento esperado | Resultado |
+|---|---|---|
+| 1 — Simples | Classificar senha incorreta como Acesso / Conta sem consultar incidentes gerais | Aprovado |
+| 2 — Divergência | Consultar incidentes e priorizar a evidência de indisponibilidade coletiva | Aprovado |
+| 3 — Registro inexistente | Não inventar dados para patrimônio inexistente | Aprovado |
+| 4 — Não deve registrar incidente | Reconhecer solicitação informativa sem gerar incidente | Aprovado |
+| 5 — Ambíguo | Coletar informações adicionais antes de concluir | Não executado nesta versão |
 
-Os testes serão executados utilizando o mesmo prompt e os mesmos dados para evitar favorecer qualquer um dos modelos.
+Os registros completos das quatro execuções realizadas estão armazenados na pasta `logs/`:
 
-Após a execução, será registrado para cada modelo se o resultado foi considerado adequado, parcialmente adequado ou inadequado, acompanhado de uma justificativa curta.
+- `logs/caso-simples.txt`
+- `logs/caso-divergencia.txt`
+- `logs/caso-registro-inexistente.txt`
+- `logs/caso-nao-dispara.txt`
+
+Os modelos GPT-5.6 Luna e Gemini 3.8 Flash permaneceram como candidatos da análise inicial, porém não foram executados nesta versão do protótipo. Por esse motivo, não são apresentados resultados experimentais para esses modelos.
 
 ## 3.4 A decisão
 
-A escolha inicial para a primeira implementação do agente será o **Mistral Small 4**.
+### Decisão inicial
 
-A decisão foi tomada principalmente pelo equilíbrio entre:
+Na etapa de planejamento, o modelo inicialmente escolhido foi o **Mistral Small 4**, principalmente pelo equilíbrio esperado entre:
 
-- baixo custo estimado por execução;
+- baixo custo estimado;
 - suporte a tool calling;
 - suporte a saída estruturada;
 - capacidade suficiente para interpretar chamados curtos de suporte;
 - compatibilidade com a biblioteca `openai` por meio de `base_url`;
-- proximidade com a infraestrutura utilizada nos laboratórios da disciplina.
+- adequação ao escopo acadêmico do protótipo.
 
-Para a primeira versão do projeto, uma janela de contexto extremamente grande não é um requisito decisivo, pois o agente trabalhará com conversas relativamente curtas, poucas ferramentas e dados estruturados. Por isso, o custo e a capacidade de integração têm maior peso nesta etapa.
+A análise inicial também considerou GPT-5.6 Luna e Gemini 3.8 Flash como alternativas.
 
-Essa escolha, entretanto, ainda será validada pela verificação prática dos cinco casos descritos na seção anterior.
+### Ajuste realizado durante a implementação
 
-### Condições para mudar de modelo
+Durante a implementação prática, o projeto passou a utilizar o modelo:
 
-O grupo poderá mudar a escolha caso os testes demonstrem que outro candidato apresenta uma vantagem relevante.
+`ministral-3b-2512`
 
-A escolha será reconsiderada se ocorrer alguma das situações abaixo:
+A mudança ocorreu durante os testes de integração com a API da Mistral.
 
-- o Mistral Small 4 não utilizar corretamente as ferramentas em pelo menos 4 dos 5 casos testados;
-- o modelo produzir informações inexistentes ou ignorar retornos de erro das ferramentas;
-- houver dificuldade recorrente em respeitar o formato estruturado solicitado;
-- outro modelo apresentar resultados claramente melhores nos casos de divergência, registro inexistente e relato ambíguo;
-- a diferença de qualidade justificar o aumento de custo;
-- forem identificadas limitações técnicas durante a implementação do agente.
+O modelo inicialmente configurado apresentou limitações de uso durante as chamadas realizadas no ambiente disponível. O `ministral-3b-2512` apresentou acesso funcional pela mesma API e foi suficiente para executar o fluxo necessário ao protótipo.
 
-Portanto, a decisão atual é:
+Essa alteração não exigiu uma mudança estrutural no agente, porque a implementação utiliza o SDK `openai` com endereço de API configurável por variável de ambiente.
 
-**Modelo inicialmente escolhido: Mistral Small 4.**
+A configuração utilizada ficou baseada nas variáveis:
 
-A escolha definitiva será confirmada depois da execução dos mesmos cinco casos nos três candidatos.
+- `OPENAI_API_KEY`
+- `LLM_BASE_URL`
+- `LLM_MODEL`
 
-O objetivo não é selecionar o modelo mais poderoso de forma geral, mas o modelo com melhor equilíbrio entre qualidade, custo e requisitos específicos deste sistema.
+Dessa forma, o provedor ou modelo pode ser alterado sem reescrever toda a arquitetura do sistema.
+
+### Modelo utilizado na versão entregue
+
+Portanto, o modelo efetivamente utilizado na implementação e nos testes registrados desta versão foi:
+
+**`ministral-3b-2512`**
+
+Essa escolha prática foi suficiente para:
+
+- interpretar os relatos utilizados nos testes;
+- utilizar function calling;
+- consultar ferramentas externas;
+- considerar retornos do banco de dados;
+- distinguir situações individuais de incidentes gerais;
+- lidar com registro inexistente;
+- reconhecer solicitações informativas;
+- produzir a classificação de triagem.
+
+### Possibilidade de evolução
+
+A arquitetura permite que outros modelos sejam testados posteriormente.
+
+Em uma evolução do trabalho, GPT-5.6 Luna, Gemini 3.8 Flash ou versões mais novas de modelos da Mistral poderão ser submetidos aos mesmos casos de teste.
+
+A substituição poderá ser considerada caso outro modelo apresente vantagens relevantes em:
+
+- uso correto das ferramentas;
+- aderência ao contrato de saída;
+- tratamento de ambiguidades;
+- quantidade de informações inventadas;
+- latência;
+- custo;
+- estabilidade da API.
+
+O objetivo não é escolher o modelo mais poderoso de forma geral, mas utilizar um modelo adequado aos requisitos específicos do agente.
 
 ## 3.5 Resultados da verificação
 
-Após a implementação do protótipo, o agente foi executado com casos representativos do domínio para verificar o comportamento definido no case.
+Após a implementação do protótipo, o agente foi executado com quatro casos representativos do domínio.
 
-| Caso | Comportamento esperado | Resultado |
-|---|---|---|
-| Caso simples | Classificar problema individual de senha como Acesso / Conta | Aprovado |
-| Divergência | Priorizar evidência de incidente geral em relação à hipótese de problema individual | Aprovado |
-| Registro inexistente | Não inventar dados de equipamento inexistente | Aprovado |
-| Não dispara | Reconhecer solicitação informativa sem gerar incidente | Aprovado |
+Os resultados permitiram verificar tanto o comportamento esperado quanto problemas encontrados durante o desenvolvimento.
 
-Os registros completos das execuções estão armazenados na pasta `logs/`.
+### Caso simples
+
+Entrada:
+
+> "Não consigo entrar no meu e-mail corporativo. Quando coloco minha senha, aparece que ela está incorreta."
+
+Resultado final:
+
+- categoria: Acesso / Conta;
+- prioridade: Média;
+- encaminhamento: Suporte N1;
+- intervenção humana: não necessária;
+- ferramentas utilizadas: nenhuma.
+
+O agente concluiu corretamente que o relato apresentava informação suficiente para a triagem e não realizou consultas desnecessárias.
+
+### Caso de divergência
+
+Entrada:
+
+> "Estou no Andar 3 e minha internet caiu. Acho que meu notebook está com problema."
+
+O agente utilizou a ferramenta `consultar_incidentes`.
+
+A consulta encontrou um incidente ativo de indisponibilidade de rede no Andar 3, afetando aproximadamente 35 usuários.
+
+Nesse caso, o agente priorizou a evidência encontrada no sistema em relação à hipótese inicial do usuário de que o notebook seria a causa do problema.
+
+O comportamento foi considerado adequado.
+
+### Caso de registro inexistente
+
+Entrada:
+
+> "Meu notebook patrimônio NB-98451 parou de carregar."
+
+O agente utilizou a consulta de equipamento e recebeu a informação de que o patrimônio não estava cadastrado.
+
+O sistema tratou o retorno de registro inexistente como uma informação válida e não criou dados fictícios sobre o equipamento.
+
+Esse comportamento foi considerado adequado.
+
+### Caso que não deve disparar incidente
+
+Entrada:
+
+> "Vou trabalhar de casa amanhã. Como faço para configurar a VPN no notebook corporativo?"
+
+O agente reconheceu que o relato representa uma solicitação informativa e não uma falha de TI.
+
+O resultado esperado definido para esse tipo de situação é:
+
+- categoria: Solicitação Informativa;
+- prioridade: Baixa;
+- encaminhamento: Orientação ao usuário;
+- intervenção humana: não necessária.
+
+Nenhuma ferramenta de consulta de incidentes foi necessária.
+
+### Resumo dos resultados
+
+| Caso | Resultado |
+|---|---|
+| Simples | Aprovado |
+| Divergência | Aprovado |
+| Registro inexistente | Aprovado |
+| Não dispara | Aprovado |
+| Ambíguo | Não executado nesta versão |
+
+Os registros completos das execuções estão disponíveis na pasta `logs/`.
 
 ### Modelo utilizado no protótipo
 
-Durante os testes foi utilizado o modelo `ministral-3b-2512`, acessado pela API compatível com o SDK OpenAI.
+Durante os testes foi utilizado o modelo:
 
-O modelo foi suficiente para executar o fluxo de ferramentas, seguir o contrato de saída e tratar os casos de teste definidos para o protótipo.
+`ministral-3b-2512`
+
+O modelo foi acessado pela API da Mistral utilizando o SDK `openai` e uma `base_url` configurável.
+
+Essa estratégia mantém a implementação desacoplada de um único endpoint e facilita a substituição do modelo em versões futuras.
+
+### Orçamento do agente
 
 O agente possui limites explícitos de execução:
 
@@ -372,12 +490,83 @@ O agente possui limites explícitos de execução:
 - máximo de 5.000 tokens;
 - máximo de 60 segundos por execução.
 
-Esses limites evitam que o agente continue executando indefinidamente e implementam o orçamento definido na arquitetura inicial.
+Esses limites foram implementados para impedir execução indefinida e controlar a autonomia do agente.
+
+Caso algum limite seja atingido sem uma resposta segura, o sistema encerra o fluxo automático e pode encaminhar o caso para atendimento humano.
+
+### Refinamentos realizados durante os testes
+
+A primeira execução do caso simples revelou um problema importante.
+
+Mesmo diante de um relato explícito de senha incorreta, o agente consultou os incidentes ativos e associou indevidamente o chamado a uma indisponibilidade de rede no Andar 3.
+
+Não havia evidência no relato de que o usuário estivesse naquele local.
+
+Isso demonstrou que apenas disponibilizar uma ferramenta ao modelo não é suficiente para garantir seu uso correto.
+
+Para corrigir o comportamento foram realizados dois ajustes principais:
+
+1. refinamento das descrições das ferramentas;
+2. refinamento do system prompt.
+
+A ferramenta de consulta de incidentes passou a informar explicitamente que deve ser utilizada somente quando houver indícios de:
+
+- indisponibilidade geral;
+- falha de rede;
+- múltiplos usuários afetados;
+- impacto coletivo;
+- sistema ou serviço indisponível.
+
+O prompt também passou a proibir a associação automática entre um incidente ativo e um chamado individual sem evidência concreta.
+
+Além disso, foram acrescentadas regras específicas para:
+
+- problemas individuais de senha e autenticação;
+- solicitações informativas;
+- registros inexistentes;
+- uso de patrimônio;
+- localização do usuário;
+- encaminhamento para atendimento humano.
+
+### Resultado após o refinamento
+
+Após as alterações, o mesmo caso de senha foi executado novamente.
+
+O agente retornou:
+
+- categoria: Acesso / Conta;
+- prioridade: Média;
+- encaminhamento: Suporte N1;
+- `precisa_humano`: false.
+
+Nenhuma ferramenta foi utilizada nessa execução.
+
+Esse resultado demonstrou uma melhora importante no comportamento do agente, pois ele passou a utilizar menor autonomia quando o próprio relato já continha informações suficientes para concluir a triagem.
 
 ### Conclusão da verificação
 
-Os testes mostraram que apenas disponibilizar ferramentas ao modelo não garante que elas sejam utilizadas corretamente. Na primeira versão, o agente relacionou um incidente de rede a um problema individual de senha sem evidência suficiente.
+A implementação mostrou que o desempenho de um agente não depende apenas do modelo utilizado.
 
-O prompt e as descrições das ferramentas foram então refinados para restringir o uso de consultas de incidentes aos casos em que há evidência de impacto coletivo.
+O comportamento final também depende de:
 
-Essa alteração melhorou a separação entre problemas individuais, incidentes gerais e solicitações informativas.
+- clareza do system prompt;
+- descrição das ferramentas;
+- contratos de entrada e saída;
+- dados disponíveis;
+- regras do domínio;
+- limites de autonomia;
+- tratamento de erros;
+- testes com casos representativos.
+
+Os testes também mostraram que ferramentas não devem ser chamadas simplesmente porque estão disponíveis.
+
+O agente deve decidir se a consulta realmente acrescenta informação necessária ao processo.
+
+A versão final do protótipo conseguiu diferenciar:
+
+- problemas individuais de acesso;
+- incidentes coletivos;
+- registros inexistentes;
+- solicitações informativas.
+
+Como evolução futura, o caso ambíguo poderá ser executado juntamente com testes comparativos usando outros modelos, permitindo ampliar a avaliação de qualidade, custo e comportamento do agente.
