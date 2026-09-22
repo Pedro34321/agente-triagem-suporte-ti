@@ -1,0 +1,60 @@
+{
+  "casos": [
+    {
+      "id": "caso_simples",
+      "tipo": "simples",
+      "relato": "Não consigo entrar no meu e-mail corporativo. Quando coloco minha senha, aparece que ela está incorreta.",
+      "resultado_esperado": {
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "precisa_humano": false
+      }
+    },
+    {
+      "id": "caso_divergencia",
+      "tipo": "divergencia",
+      "relato": "Estou no Andar 3 e minha internet caiu. Acho que meu notebook está com problema.",
+      "contexto_sistema": {
+        "incidente_ativo": "Indisponibilidade de rede no andar 3",
+        "usuarios_afetados": 35
+      },
+      "resultado_esperado": {
+        "categoria": "Rede / Conectividade",
+        "reconhecer_incidente_geral": true,
+        "nao_confirmar_notebook_como_causa": true
+      }
+    },
+    {
+      "id": "caso_registro_inexistente",
+      "tipo": "registro_inexistente",
+      "relato": "Meu notebook patrimônio NB-98451 parou de carregar.",
+      "contexto_sistema": {
+        "equipamento_encontrado": false
+      },
+      "resultado_esperado": {
+        "nao_inventar_equipamento": true,
+        "solicitar_confirmacao_patrimonio": true
+      }
+    },
+    {
+      "id": "caso_nao_dispara",
+      "tipo": "nao_dispara",
+      "relato": "Vou trabalhar de casa amanhã. Como faço para configurar a VPN no notebook corporativo?",
+      "resultado_esperado": {
+        "categoria": "Solicitação Informativa",
+        "registrar_incidente": false,
+        "precisa_humano": false
+      }
+    },
+    {
+      "id": "caso_ambiguo",
+      "tipo": "ambiguo",
+      "relato": "O sistema não está funcionando e preciso resolver isso urgente porque tenho coisa para entregar hoje.",
+      "resultado_esperado": {
+        "pedir_informacoes_adicionais": true,
+        "nao_classificar_definitivamente": true
+      }
+    }
+  ]
+}

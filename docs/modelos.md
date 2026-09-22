@@ -346,3 +346,38 @@ Portanto, a decisão atual é:
 A escolha definitiva será confirmada depois da execução dos mesmos cinco casos nos três candidatos.
 
 O objetivo não é selecionar o modelo mais poderoso de forma geral, mas o modelo com melhor equilíbrio entre qualidade, custo e requisitos específicos deste sistema.
+
+## 3.5 Resultados da verificação
+
+Após a implementação do protótipo, o agente foi executado com casos representativos do domínio para verificar o comportamento definido no case.
+
+| Caso | Comportamento esperado | Resultado |
+|---|---|---|
+| Caso simples | Classificar problema individual de senha como Acesso / Conta | Aprovado |
+| Divergência | Priorizar evidência de incidente geral em relação à hipótese de problema individual | Aprovado |
+| Registro inexistente | Não inventar dados de equipamento inexistente | Aprovado |
+| Não dispara | Reconhecer solicitação informativa sem gerar incidente | Aprovado |
+
+Os registros completos das execuções estão armazenados na pasta `logs/`.
+
+### Modelo utilizado no protótipo
+
+Durante os testes foi utilizado o modelo `ministral-3b-2512`, acessado pela API compatível com o SDK OpenAI.
+
+O modelo foi suficiente para executar o fluxo de ferramentas, seguir o contrato de saída e tratar os casos de teste definidos para o protótipo.
+
+O agente possui limites explícitos de execução:
+
+- máximo de 5 passos;
+- máximo de 5.000 tokens;
+- máximo de 60 segundos por execução.
+
+Esses limites evitam que o agente continue executando indefinidamente e implementam o orçamento definido na arquitetura inicial.
+
+### Conclusão da verificação
+
+Os testes mostraram que apenas disponibilizar ferramentas ao modelo não garante que elas sejam utilizadas corretamente. Na primeira versão, o agente relacionou um incidente de rede a um problema individual de senha sem evidência suficiente.
+
+O prompt e as descrições das ferramentas foram então refinados para restringir o uso de consultas de incidentes aos casos em que há evidência de impacto coletivo.
+
+Essa alteração melhorou a separação entre problemas individuais, incidentes gerais e solicitações informativas.

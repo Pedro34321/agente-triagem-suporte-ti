@@ -50,7 +50,9 @@ def consultar_regras():
             "Caso crítico deve ser encaminhado para humano.",
             "Registro inexistente nunca deve ser inventado.",
             "Solicitação informativa não deve gerar incidente.",
-            "Incidente geral deve prevalecer sobre hipótese individual sem evidência."
+            "Um incidente geral só deve ser relacionado ao chamado quando houver evidência concreta de correspondência, como mesmo serviço afetado, mesma localização ou contexto claramente compatível."
+            "Não associe um incidente ao usuário apenas porque existe um incidente ativo no sistema.",
+            "Problemas explícitos de senha, autenticação ou credencial devem ser classificados inicialmente como Acesso / Conta, salvo quando houver evidência concreta de outra causa."
         ]
     }
 
