@@ -1,15 +1,15 @@
-﻿======================================================================
-TESTE DE ELIMINAÃ├O DE DADOS ù LGPD
+======================================================================
+TESTE DE ELIMINAÇÃO DE DADOS — LGPD
 ======================================================================
 
-Titular fictÝcio: TITULAR_TESTE_LGPD_001
-Patrim¶nio fictÝcio: NB-LGPD-001
+Titular fictício: TITULAR_TESTE_LGPD_001
+Patrimônio fictício: NB-LGPD-001
 
-Banco de referÛncia: C:\Users\EPH inc\Documents\agente-triagem-suporte-ti\dados\suporte.db
-O banco original N├O serß alterado. O teste serß executado em uma c¾pia temporßria.
+Banco de referência: C:\Users\EPH inc\Documents\agente-triagem-suporte-ti\dados\suporte.db
+O banco original NÃO será alterado. O teste será executado em uma cópia temporária.
 
 ======================================================================
-ANTES DA ELIMINAÃ├O
+ANTES DA ELIMINAÇÃO
 ======================================================================
 {
   "equipamentos": [
@@ -24,11 +24,11 @@ ANTES DA ELIMINAÃ├O
   "triagens": [
     {
       "id": 1,
-      "relato": "TITULAR_TESTE_LGPD_001: meu notebook de teste nÒo estß conectando Ó rede.",
+      "relato": "TITULAR_TESTE_LGPD_001: meu notebook de teste não está conectando à rede.",
       "categoria": "Rede / Conectividade",
-      "prioridade": "MÚdia",
+      "prioridade": "Média",
       "encaminhamento": "Suporte N1",
-      "justificativa": "Triagem fictÝcia criada exclusivamente para o teste LGPD do TITULAR_TESTE_LGPD_001.",
+      "justificativa": "Triagem fictícia criada exclusivamente para o teste LGPD do TITULAR_TESTE_LGPD_001.",
       "precisa_humano": 0
     }
   ]
@@ -38,13 +38,13 @@ Quantidade encontrada em equipamentos: 1
 Quantidade encontrada em triagens: 1
 
 ======================================================================
-EXECUTANDO PEDIDO DE ELIMINAÃ├O
+EXECUTANDO PEDIDO DE ELIMINAÇÃO
 ======================================================================
 Triagens removidas: 1
 Equipamentos associados removidos: 1
 
 ======================================================================
-DEPOIS DA ELIMINAÃ├O
+DEPOIS DA ELIMINAÇÃO
 ======================================================================
 {
   "equipamentos": [],
@@ -55,19 +55,19 @@ Quantidade encontrada em equipamentos: 0
 Quantidade encontrada em triagens: 0
 
 ======================================================================
-VERIFICAÃ├O FINAL
+VERIFICAÇÃO FINAL
 ======================================================================
-RESULTADO: APROVADO ù o titular fictÝcio nÒo foi encontrado nas estruturas verificadas.
+RESULTADO: APROVADO — o titular fictício não foi encontrado nas estruturas verificadas.
 
 Estruturas verificadas:
 - tabela equipamentos
 - tabela triagens
 
-Estruturas nÒo utilizadas neste teste:
-- Ýndice vetorial: nÒo utilizado
-- mem¾ria persistente: nÒo implementada
-- provedor LLM: nÒo acionado
-- logs do agente: nÒo gravados por este teste
+Estruturas não utilizadas neste teste:
+- índice vetorial: não utilizado
+- memória persistente: não implementada
+- provedor LLM: não acionado
+- logs do agente: não gravados por este teste
 - prompt: nenhum dado do titular foi inserido
 
-ObservaþÒo: a saÝda desta execuþÒo pode ser preservada como evidÛncia porque o titular utilizado Ú totalmente fictÝcio.
+Observação: a saída desta execução pode ser preservada como evidência porque o titular utilizado é totalmente fictício.
