@@ -570,3 +570,22 @@ A versão final do protótipo conseguiu diferenciar:
 - solicitações informativas.
 
 Como evolução futura, o caso ambíguo poderá ser executado juntamente com testes comparativos usando outros modelos, permitindo ampliar a avaliação de qualidade, custo e comportamento do agente.
+
+## Atualização da Parte 2
+
+O modelo usado é `ministral-3b-2512`, preservando o modelo que funcionou na Parte 1.
+A integração agora usa JSON Schema em Chat Completions, com validação Pydantic e
+orquestração LangGraph. Não houve seleção por benchmark comparativo: a escolha
+considera acesso disponível e continuidade do experimento anterior.
+
+O adaptador opcional OpenAI usa Responses e `gpt-4.1-mini-2025-04-14`. A primeira
+execução OpenAI encontrou falta de créditos. Por solicitação do usuário, migramos a
+execução para Mistral, que passou no teste real de extração estruturada. Não atribuir
+resultados Mistral ao modelo OpenAI. O SDK openai serve como cliente compatível no
+endpoint oficial Mistral; o provedor usado fica explícito em LLM_PROVIDER.
+
+Resultados por caso, tokens, latência e hashes de prompts ficam nos logs de Parte 2.
+Os candidatos históricos acima não foram reavaliados nesta entrega.
+
+Fontes: https://docs.mistral.ai/studio/conversations/structured-output/custom e
+https://developers.openai.com/api/docs/guides/structured-outputs

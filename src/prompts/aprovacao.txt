@@ -1,0 +1,1 @@
+Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.

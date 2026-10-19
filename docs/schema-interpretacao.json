@@ -1,0 +1,78 @@
+{
+  "additionalProperties": false,
+  "properties": {
+    "intent": {
+      "enum": [
+        "falha",
+        "informacao",
+        "incompleto",
+        "ambiguo",
+        "fora_escopo"
+      ],
+      "title": "Intent",
+      "type": "string"
+    },
+    "topic": {
+      "enum": [
+        "acesso",
+        "rede",
+        "hardware",
+        "software",
+        "vpn",
+        "prioridade",
+        "outros"
+      ],
+      "title": "Topic",
+      "type": "string"
+    },
+    "query": {
+      "maxLength": 300,
+      "title": "Query",
+      "type": "string"
+    },
+    "asset": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Asset"
+    },
+    "location": {
+      "anyOf": [
+        {
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Location"
+    },
+    "collective": {
+      "title": "Collective",
+      "type": "boolean"
+    },
+    "questions": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Questions",
+      "type": "array"
+    }
+  },
+  "required": [
+    "intent",
+    "topic",
+    "query",
+    "asset",
+    "location",
+    "collective",
+    "questions"
+  ],
+  "title": "Interpretation",
+  "type": "object"
+}
