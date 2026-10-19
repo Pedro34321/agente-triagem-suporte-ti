@@ -1,5 +1,6 @@
 """Gera evidências com modelo real; recusa produzir demonstrações se a API falhar."""
 import json
+import argparse
 import subprocess
 import time
 from datetime import datetime, timezone
@@ -17,6 +18,13 @@ def main():
         {'id': 'caso_incompleto', 'relato': 'Preciso de ajuda.'},
         {'id': 'caso_fora_escopo', 'relato': 'Escreva uma receita de bolo.'},
     ]
+    parser = argparse.ArgumentParser()
+    parser.add_argument('--caso', help='Reexecuta somente o caso indicado e preserva os demais logs.')
+    args = parser.parse_args()
+    if args.caso:
+        cases = [c for c in cases if c['id'] == args.caso]
+        if not cases:
+            parser.error('Caso não encontrado.')
     session = str(time.time_ns())
     app = App(ROOT / '.runtime' / ('demonstracao-' + session))
     directory = ROOT / 'logs/parte2'
@@ -34,7 +42,8 @@ def main():
             raise SystemExit('API indisponível. Logs de sucesso não foram inventados. Consulte logs/parte2/falha-api.json.')
         final = initial
         if initial['motivo_termino'] == 'aguardando_aprovacao':
-            response = {'decisao': 'editar', 'encaminhamento': 'Suporte N2'} if case['id'] == 'caso_humano' else {'decisao': 'aprovar'}
+            edited_team = 'Infraestrutura' if initial['encaminhamento'] == 'Suporte N2' else 'Suporte N2'
+            response = {'decisao': 'editar', 'encaminhamento': edited_team} if case['id'] == 'caso_humano' else {'decisao': 'aprovar'}
             # A aprovação abaixo é o roteiro automatizado de demonstração, não identidade humana autenticada.
             evidence['aprovacao_roteirizada'] = response
             final = app.resume(initial['thread_id'], response)
@@ -49,6 +58,9 @@ def main():
         (directory / (case['id'] + '.json')).write_text(json.dumps(evidence, ensure_ascii=False, indent=2), encoding='utf-8')
         outputs.append((case['id'], evidence))
         print(case['id'], final['motivo_termino'], flush=True)
+    if args.caso:
+        outputs = [(p.stem, json.loads(p.read_text(encoding='utf-8'))) for p in directory.glob('caso_*.json')]
+    outputs.sort(key=lambda pair: (pair[0] != 'caso_simples', pair[0]))
     lines = ['# Entrada e saída — execuções reais', '', 'Gerado por `python -m scripts.demonstrar`; dados fictícios.', '']
     for name, e in outputs:
         lines += ['## ' + name, '', f"Commit: `{e['commit']}`. Data: {e['data']}. Log: `logs/parte2/{name}.json`.", '',

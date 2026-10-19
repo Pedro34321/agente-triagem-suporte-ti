@@ -18,12 +18,12 @@ def main():
     checks['informativo'] = out('caso_nao_dispara')['categoria'] == 'Solicitação Informativa' and not out('caso_nao_dispara')['registrar'] and out('caso_nao_dispara')['registro_id'] is None
     checks['fora_corpus'] = not out('caso_fora_corpus')['suficiente'] and out('caso_fora_corpus')['registro_id'] is None
     human = cases['caso_humano']
-    checks['humano'] = human['inicial']['motivo_termino'] == 'aguardando_aprovacao' and human['aprovacao_roteirizada']['decisao'] == 'editar' and human['segunda_aprovacao']['ja_existia'] and human['registros_deste_caso'] == 1
+    checks['humano'] = human['inicial']['motivo_termino'] == 'aguardando_aprovacao' and human['aprovacao_roteirizada']['decisao'] == 'editar' and human['inicial']['encaminhamento'] != human['saida']['encaminhamento'] and human['segunda_aprovacao']['ja_existia'] and human['registros_deste_caso'] == 1
     for name in ('caso_ambiguo', 'caso_incompleto'):
         checks[name] = not out(name)['suficiente'] and bool(out(name)['perguntas']) and out(name)['registro_id'] is None
     checks['fora_escopo'] = out('caso_fora_escopo')['motivo_termino'] == 'fora_escopo'
     report = {'criterios': checks, 'aprovados': sum(checks.values()), 'total': len(checks),
-              'modelo': cases['caso_simples']['modelo'], 'commit_execucao': cases['caso_simples']['commit'],
+              'modelo': cases['caso_simples']['modelo'], 'commits_execucao': {name: c['commit'] for name, c in cases.items()},
               'chamadas_recuperacao': {name: sum(e.get('chamadas_recuperacao', 0) for e in c['eventos']) for name, c in cases.items()},
               'tokens': {name: sum(e.get('tokens', 0) for e in c['eventos']) for name, c in cases.items()},
               'segundos': {name: c['segundos'] for name, c in cases.items()},
