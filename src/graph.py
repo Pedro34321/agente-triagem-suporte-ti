@@ -118,6 +118,8 @@ class App:
             info['asset'] = None
         update['interpretation'] = info
         if info['intent'] in ('incompleto', 'ambiguo', 'fora_escopo'):
+            if info['intent'] != 'fora_escopo' and not info['questions']:
+                info['questions'] = ['Qual problema de TI ocorre, em qual sistema e qual mensagem de erro aparece?']
             msg = 'Atendo triagem de suporte de TI. ' if info['intent'] == 'fora_escopo' else 'Preciso de informações adicionais. '
             update.update(route='finalizar', reason=info['intent'], decision=refusal(msg + ' '.join(info['questions']), info['questions']))
         else:
@@ -135,6 +137,9 @@ class App:
                             'erros': errors, 'memorias': memories, 'semantica': semantic}]}
 
     def responder(self, state):
+        if not state['sources']:
+            return {'decision': refusal('O corpus de suporte não contém informação para responder a este pedido. Consulte o Suporte N1 para obter o procedimento autorizado.'),
+                    'reason': 'base_insuficiente', 'route': 'finalizar'}
         update = self.call(state, 'responder', Decision, {'relato': state['text'], 'historico': state.get('history', []),
                            'interpretacao': state['interpretation'], 'fontes': state['sources'],
                            'erros_ferramentas': state['tool_errors'], 'memorias': state['memories'],
@@ -160,6 +165,8 @@ class App:
             errors.append('Informação não registra incidente.')
         if d['registrar'] and (not d['suficiente'] or not all(d[k] for k in ('categoria', 'prioridade', 'encaminhamento'))):
             errors.append('Registro exige classificação completa e suficiente.')
+        if not d['suficiente'] and not d['perguntas'] and state['tool_errors']:
+            errors.append('Peça explicitamente confirmação do patrimônio informado.')
         signature = digest(d)
         if errors:
             repeated = signature in state.get('signatures', [])
@@ -169,7 +176,9 @@ class App:
             return {'route': 'responder', 'validation': errors, 'signatures': [signature]}
         if d['registrar']:
             return {'route': 'aprovar', 'deadline': self.clock() + APPROVAL_SECONDS, 'validation': []}
-        return {'route': 'finalizar', 'reason': 'informativo' if d['suficiente'] else 'base_insuficiente', 'validation': []}
+        if not d['suficiente']:
+            d.update(categoria=None, prioridade=None, encaminhamento=None, registrar=False)
+        return {'decision': d, 'route': 'finalizar', 'reason': 'informativo' if d['suficiente'] else 'base_insuficiente', 'validation': []}
 
     def aprovar(self, state):
         # Sem efeitos colaterais antes de interrupt: este nó reinicia na retomada.

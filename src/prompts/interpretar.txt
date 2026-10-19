@@ -8,3 +8,7 @@ Use collective somente quando houver múltiplas pessoas afetadas no relato.
 Exemplos: "senha do email incorreta" -> falha/acesso; "como configurar VPN?" -> informacao/vpn;
 "o sistema não funciona" -> ambiguo/software; "internet caiu no Andar 3, acho que o notebook quebrou" -> falha/rede, location="Andar 3".
 Query deve manter os termos técnicos relevantes e não inventar uma resposta.
+"Urgente" e "tenho coisa para entregar" não indicam mais pessoas afetadas: collective=false.
+"O sistema não está funcionando e preciso resolver urgente" é ambiguo, pois o sistema não foi identificado.
+Para incompleto/ambiguo, questions nunca é vazio: pergunte o problema, sistema ou erro que está faltando.
+Para "Preciso de ajuda", intent=incompleto, questions=["Qual problema de TI você está enfrentando?"]
