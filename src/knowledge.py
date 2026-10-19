@@ -29,12 +29,14 @@ def records(info):
         if info['asset']:
             row = conn.execute('SELECT patrimonio,tipo,status,localizacao FROM equipamentos WHERE patrimonio=?', (info['asset'],)).fetchone()
             if row:
-                sources.append({'id': 'equipamento:' + info['asset'], 'texto': canonical(dict(row)), 'origem': 'cadastro simulado', 'versao': 'parte1'})
+                record = dict(row)
+                sources.append({'id': 'equipamento:' + info['asset'], 'texto': '; '.join(f'{k}: {v}' for k, v in record.items()), 'registro': record, 'origem': 'cadastro simulado', 'versao': 'parte1'})
             else:
                 errors.append({'tipo': 'registro_nao_encontrado', 'patrimonio': info['asset'], 'recuperavel': True})
         if info['topic'] in ('rede', 'software'):
             for row in conn.execute("SELECT id,titulo,categoria,localizacao,usuarios_afetados FROM incidentes WHERE status='Ativo'"):
                 # Localização explícita é obrigatória; senha individual nunca entra aqui.
                 if info['location'] and row['localizacao'].casefold() == info['location'].casefold():
-                    sources.append({'id': 'incidente:' + str(row['id']), 'texto': canonical(dict(row)), 'origem': 'cadastro simulado', 'versao': 'parte1'})
+                    record = dict(row)
+                    sources.append({'id': 'incidente:' + str(row['id']), 'texto': '; '.join(f'{k}: {v}' for k, v in record.items()), 'registro': record, 'origem': 'cadastro simulado', 'versao': 'parte1'})
     return sources, errors

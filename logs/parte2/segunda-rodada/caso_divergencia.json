@@ -1,0 +1,93 @@
+{
+  "tipo": "modelo_real",
+  "commit": "4cb3ab49f5b7160adf4e445b31ed37e6bafecf29",
+  "data": "2026-10-19T23:46:17.804659+00:00",
+  "modelo": "ministral-3b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "bec6ac72d7064f67b448fd2a21eba559df77f3e813b22720f1ad6a7eaebc9b29",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Estou no Andar 3 e minha internet caiu. Acho que meu notebook está com problema.",
+  "inicial": {
+    "resultado": "Não consegui validar a decisão e as fontes. Encaminhe ao analista N1.",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "validacao_falhou",
+    "thread_id": "demo:1792453571441887300:caso_divergencia",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Não consegui validar a decisão e as fontes. Encaminhe ao analista N1.",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "validacao_falhou",
+    "thread_id": "demo:1792453571441887300:caso_divergencia",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 3.86,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-3b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "bec6ac72d7064f67b448fd2a21eba559df77f3e813b22720f1ad6a7eaebc9b29",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792453573.9407656
+    },
+    {
+      "node": "interpretar",
+      "tokens": 529,
+      "modelo": "ministral-3b-2512"
+    },
+    {
+      "node": "recuperar",
+      "chamadas_recuperacao": 1,
+      "fontes": [
+        "KB-REDE",
+        "KB-PRIORIDADE",
+        "incidente:1"
+      ],
+      "erros": [],
+      "memorias": [],
+      "semantica": {
+        "atual": null,
+        "descartados": []
+      }
+    },
+    {
+      "node": "responder",
+      "tokens": 1274,
+      "modelo": "ministral-3b-2512"
+    },
+    {
+      "node": "responder",
+      "tokens": 1235,
+      "modelo": "ministral-3b-2512"
+    },
+    {
+      "node": "finalizar",
+      "motivo": "validacao_falhou"
+    }
+  ]
+}

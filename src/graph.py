@@ -208,7 +208,7 @@ class App:
         facts = []
         for source in state['sources']:
             if source['id'].startswith('equipamento:'):
-                facts.append(self.store.fact(state['owner'], source['id'], json.loads(source['texto']), state['started']))
+                facts.append(self.store.fact(state['owner'], source['id'], source['registro'], state['started']))
         return {'receipt': receipt, 'reason': 'registrado', 'events': [{'node': 'registrar', 'recibo': receipt, 'memoria': memory, 'fatos': facts}]}
 
     def finalizar(self, state):

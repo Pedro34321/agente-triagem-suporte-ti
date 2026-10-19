@@ -17,3 +17,4 @@ Se faltar a identificação do sistema ou a descrição do erro, categoria=null,
 Não use a palavra urgente para inferir impacto coletivo nem descreva vários usuários sem fonte que os confirme.
 Sem nenhuma fonte pertinente, diga que o corpus não contém o procedimento e sugira consultar o Suporte N1. Não especule sobre causas ou dê instruções técnicas.
 Na divergência, explique que foi encontrado incidente no mesmo local; não afirme que falta essa evidência quando ela já veio da ferramenta.
+Para citar um cadastro, copie um trecho do campo texto, como "Indisponibilidade de rede no andar 3". Não monte um JSON parcial nem cite o campo registro.
