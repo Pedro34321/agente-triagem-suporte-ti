@@ -46,8 +46,12 @@ Etapa fixa para relatos atendíveis: interpretar -> recuperar -> responder. Entr
 incompletas, ambíguas e externas terminam antes dela. Cada passagem registra
 `chamadas_recuperacao=1`, ids e retornos de ferramenta. Correção de citação reutiliza
 fontes já obtidas. O conjunto de logs reais deve permitir contar buscas sem resultado
-e buscas inúteis; ainda não há medição do modelo quando a API está sem créditos.
+e buscas inúteis. Na rodada final, seis das nove execuções fizeram uma busca; três
+encerraram antes. A consulta fora do corpus retornou vazia e produziu recusa útil;
+zero buscas foram desperdiçadas por repetição de correção. Não foi feita ablação
+para estimar se alguma busca com resultado poderia ser eliminada sem perda.
 
+O modelo seleciona ids; o código preenche o trecho com o texto integral da fonte curta.
 O portão rejeita ids inexistentes e trechos que não são substrings exatas da fonte.
 Isso verifica **existência da citação**, não prova que toda afirmação decorre dela.
 Entailment e pertinência continuam sujeitos a revisão humana e avaliação rotulada.

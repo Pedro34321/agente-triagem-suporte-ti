@@ -571,21 +571,25 @@ A versão final do protótipo conseguiu diferenciar:
 
 Como evolução futura, o caso ambíguo poderá ser executado juntamente com testes comparativos usando outros modelos, permitindo ampliar a avaliação de qualidade, custo e comportamento do agente.
 
-## Atualização da Parte 2
+## Atualização da Parte 2 — decisão medida
 
-O modelo usado é `ministral-3b-2512`, preservando o modelo que funcionou na Parte 1.
-A integração agora usa JSON Schema em Chat Completions, com validação Pydantic e
-orquestração LangGraph. Não houve seleção por benchmark comparativo: a escolha
-considera acesso disponível e continuidade do experimento anterior.
+Modelo final: `ministral-8b-2512`, pela API Mistral e JSON Schema. A implementação
+começou com o 3B da Parte 1, mas as rodadas reais mostraram recusa indevida do caso
+simples e cópias incorretas de citações. As falhas ficaram preservadas nas subpastas
+de logs/parte2. O 8B respondeu melhor à divergência; alterações de prompt e seleção
+de fontes por id completaram a correção. Não se atribui todo o ganho apenas ao tamanho
+do modelo: código e prompt também mudaram entre as rodadas.
 
-O adaptador opcional OpenAI usa Responses e `gpt-4.1-mini-2025-04-14`. A primeira
-execução OpenAI encontrou falta de créditos. Por solicitação do usuário, migramos a
-execução para Mistral, que passou no teste real de extração estruturada. Não atribuir
-resultados Mistral ao modelo OpenAI. O SDK openai serve como cliente compatível no
-endpoint oficial Mistral; o provedor usado fica explícito em LLM_PROVIDER.
+Os nove casos finais passaram nos critérios de scripts/conferir_casos.py, incluindo
+registro inexistente, recusa e aprovação editada/repetida. O conjunto é pequeno e foi
+usado para desenvolvimento, portanto não é um teste cego de generalização.
+Tokens e tempos por caso estão em logs/parte2/conferencia-casos.json. Não foi calculado
+custo monetário nem benchmark contra Gemini ou outros candidatos históricos.
 
-Resultados por caso, tokens, latência e hashes de prompts ficam nos logs de Parte 2.
-Os candidatos históricos acima não foram reavaliados nesta entrega.
+OpenAI continua como adaptador opcional (Responses, gpt-4.1-mini-2025-04-14), mas sua
+execução inicial encontrou saldo esgotado. O usuário autorizou a mudança para Mistral.
+A chave fica em MISTRAL_API_KEY no arquivo local ignorado; o SDK openai é somente o
+cliente compatível e não muda quem presta a inferência.
 
 Fontes: https://docs.mistral.ai/studio/conversations/structured-output/custom e
 https://developers.openai.com/api/docs/guides/structured-outputs

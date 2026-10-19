@@ -1,0 +1,68 @@
+{
+  "tipo": "modelo_real",
+  "commit": "8a081b3c8efb40532df566d24685943208f256f8",
+  "data": "2026-10-19T23:53:58.527613+00:00",
+  "modelo": "ministral-8b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Escreva uma receita de bolo.",
+  "inicial": {
+    "resultado": "Atendo triagem de suporte de TI. ",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "fora_escopo",
+    "thread_id": "demo:1792454013396141800:caso_fora_escopo",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Atendo triagem de suporte de TI. ",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "fora_escopo",
+    "thread_id": "demo:1792454013396141800:caso_fora_escopo",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 1.344,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-8b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792454037.1962867
+    },
+    {
+      "node": "interpretar",
+      "tokens": 507,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "finalizar",
+      "motivo": "fora_escopo"
+    }
+  ]
+}

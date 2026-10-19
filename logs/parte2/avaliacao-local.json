@@ -1,0 +1,101 @@
+{
+  "tipo": "avaliacao_local_sem_modelo",
+  "data": "2026-10-19T23:54:27.196263+00:00",
+  "commit": "8a081b3c8efb40532df566d24685943208f256f8",
+  "rag": [
+    {
+      "id": 1,
+      "fontes": [
+        "KB-ACESSO"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 2,
+      "fontes": [
+        "KB-ACESSO"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 3,
+      "fontes": [
+        "KB-VPN"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 4,
+      "fontes": [
+        "KB-VPN"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 5,
+      "fontes": [
+        "KB-HARDWARE",
+        "KB-PRIORIDADE"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 6,
+      "fontes": [
+        "KB-PRIORIDADE",
+        "KB-ACESSO",
+        "KB-REDE"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 7,
+      "fontes": [
+        "KB-SOFTWARE"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 8,
+      "fontes": [
+        "equipamento:NB-10203"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 9,
+      "fontes": [
+        "incidente:1"
+      ],
+      "acerto": true
+    },
+    {
+      "id": 10,
+      "fontes": [],
+      "acerto": true
+    }
+  ],
+  "acertos": 10,
+  "total": 10,
+  "revogado_sem_filtro": [
+    "KB-VPN",
+    "KB-VPN-REVOGADO"
+  ],
+  "revogado_com_filtro": [
+    "KB-VPN"
+  ],
+  "reducers": {
+    "sem_reducer": {
+      "events": [
+        "b"
+      ]
+    },
+    "com_reducer": {
+      "events": [
+        "a",
+        "b"
+      ]
+    },
+    "paralelo_sem_reducer": "InvalidUpdateError"
+  }
+}

@@ -1,19 +1,16 @@
 {
-  "data": "2026-10-19T23:46:42.582644+00:00",
-  "modelo": "ministral-3b-2512",
+  "data": "2026-10-19T23:54:16.500613+00:00",
+  "modelo": "ministral-8b-2512",
   "frase_removida": "Não associe senha individual a rede coletiva.",
-  "commit": "4cb3ab49f5b7160adf4e445b31ed37e6bafecf29",
+  "commit": "8a081b3c8efb40532df566d24685943208f256f8",
   "resultados": [
     {
       "tratamento": "com_frase",
       "entrada": "Minha senha do email está incorreta.",
       "saida": {
-        "resultado": "Relato de senha incorreta individualmente reportada. Não há evidência de comprometimento coletivo ou impacto sistêmico.",
+        "resultado": "Falha individual de senha ou conta no sistema de email.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
@@ -22,19 +19,16 @@
         "perguntas": [],
         "registrar": true
       },
-      "tokens": 847,
+      "tokens": 975,
       "acerto_categoria": true
     },
     {
       "tratamento": "sem_frase",
       "entrada": "Minha senha do email está incorreta.",
       "saida": {
-        "resultado": "Relato de senha incorreta do email do usuário. A falha é individual e não afeta o ambiente coletivo, conforme procedimento do KB-ACESSO (KB-ACESSO:trecho: 'Falha individual de senha ou conta').",
+        "resultado": "Falha individual de senha ou conta no email.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
@@ -43,19 +37,16 @@
         "perguntas": [],
         "registrar": true
       },
-      "tokens": 865,
+      "tokens": 962,
       "acerto_categoria": true
     },
     {
       "tratamento": "com_frase",
       "entrada": "Conta bloqueada só para mim.",
       "saida": {
-        "resultado": "Conta bloqueada individualmente, sem impacto coletivo. Procedimento descrito no KB-ACESSO (KB-ACESSO:trecho 'Falha individual de senha ou conta').",
+        "resultado": "Conta bloqueada individualmente.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
@@ -64,19 +55,16 @@
         "perguntas": [],
         "registrar": true
       },
-      "tokens": 859,
+      "tokens": 967,
       "acerto_categoria": true
     },
     {
       "tratamento": "sem_frase",
       "entrada": "Conta bloqueada só para mim.",
       "saida": {
-        "resultado": "Conta bloqueada individualmente, sem impacto coletivo. Procedimento padrão aplicável.",
+        "resultado": "Conta bloqueada individualmente sem impacto coletivo.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
@@ -85,19 +73,16 @@
         "perguntas": [],
         "registrar": true
       },
-      "tokens": 821,
+      "tokens": 960,
       "acerto_categoria": true
     },
     {
       "tratamento": "com_frase",
       "entrada": "Senha incorreta no Andar 3.",
       "saida": {
-        "resultado": "Relato de senha incorreta individual, sem evidência de impacto coletivo ou comprometimento de conta. Acesso / Conta, prioridade Média, Suporte N1.",
+        "resultado": "Falha individual de senha no Andar 3.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
@@ -106,19 +91,16 @@
         "perguntas": [],
         "registrar": true
       },
-      "tokens": 858,
+      "tokens": 974,
       "acerto_categoria": true
     },
     {
       "tratamento": "sem_frase",
       "entrada": "Senha incorreta no Andar 3.",
       "saida": {
-        "resultado": "Incidente de senha incorreta reportado no Andar 3, mas sem confirmação de impacto coletivo ou suspeita de comprometimento. Baseado no KB-ACESSO, trata-se de uma falha individual.",
+        "resultado": "Falha individual de senha no Andar 3.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
@@ -127,19 +109,16 @@
         "perguntas": [],
         "registrar": true
       },
-      "tokens": 853,
+      "tokens": 963,
       "acerto_categoria": true
     },
     {
       "tratamento": "com_frase",
       "entrada": "Esqueci a senha da conta corporativa.",
       "saida": {
-        "resultado": "Senha esquecida de conta corporativa. Procedimento padrão para falha individual de senha.",
+        "resultado": "Falha individual de senha ou conta.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
@@ -148,19 +127,16 @@
         "perguntas": [],
         "registrar": true
       },
-      "tokens": 841,
+      "tokens": 972,
       "acerto_categoria": true
     },
     {
       "tratamento": "sem_frase",
       "entrada": "Esqueci a senha da conta corporativa.",
       "saida": {
-        "resultado": "Senha esquecida individualmente. Não há evidência de comprometimento ou impacto coletivo.",
+        "resultado": "Falha individual de senha sem impacto coletivo.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
@@ -169,53 +145,43 @@
         "perguntas": [],
         "registrar": true
       },
-      "tokens": 825,
+      "tokens": 963,
       "acerto_categoria": true
     },
     {
       "tratamento": "com_frase",
       "entrada": "Meu email rejeita a credencial mas os colegas conseguem entrar.",
       "saida": {
-        "resultado": "Incidente de divergência: relato de falha individual de credencial (email) enquanto colegas acessam com sucesso. Não há evidência de comprometimento coletivo ou de senha compartilhada.",
+        "resultado": "Falha individual de autenticação no email sem impacto coletivo.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
         "prioridade": "Média",
         "encaminhamento": "Suporte N1",
-        "perguntas": [
-          "Confirme se o usuário possui acesso exclusivo ao email em questão ou se há configuração compartilhada de credenciais."
-        ],
+        "perguntas": [],
         "registrar": true
       },
-      "tokens": 896,
+      "tokens": 982,
       "acerto_categoria": true
     },
     {
       "tratamento": "sem_frase",
       "entrada": "Meu email rejeita a credencial mas os colegas conseguem entrar.",
       "saida": {
-        "resultado": "Incidente de divergência localizada: usuário relata bloqueio individual de credencial (email) enquanto colegas acessam com sucesso. Hipótese: possível configuração de bloqueio temporário ou restrição de acesso por conta de política de segurança ou verificação de identidade.",
+        "resultado": "Falha individual de autenticação no email do usuário, sem impacto coletivo.",
         "fontes": [
-          {
-            "id": "KB-ACESSO",
-            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1."
-          }
+          "KB-ACESSO"
         ],
         "suficiente": true,
         "categoria": "Acesso / Conta",
         "prioridade": "Média",
         "encaminhamento": "Suporte N1",
-        "perguntas": [
-          "Confirme se o bloqueio é específico para este usuário ou se há evidência de configuração compartilhada (ex.: política de autenticação multifator ou restrição de IP)."
-        ],
+        "perguntas": [],
         "registrar": true
       },
-      "tokens": 917,
+      "tokens": 974,
       "acerto_categoria": true
     }
   ]

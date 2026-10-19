@@ -1,5 +1,6 @@
 """Acrescenta inventário e tabela do estado a partir do grafo e tipo reais."""
 import inspect
+import re
 from src.common import ROOT
 from src.graph import State, App
 from conferir_grafo import inventory
@@ -12,16 +13,25 @@ WRITERS = {
  'attempts':'responder', 'calls':'interpretar/responder', 'tokens':'interpretar/responder',
  'signatures':'validar', 'events':'entrada e nós', 'route':'nós de decisão',
  'reason':'interpretar/responder/validar/aprovar/registrar', 'receipt':'registrar', 'output':'finalizar'}
+READERS = {
+ 'owner':'recuperar, registrar, log', 'thread_id':'registrar, finalizar, retomar', 'text':'interpretar, recuperar, responder',
+ 'history':'interpretar, responder', 'started':'call, registrar', 'deadline':'aprovar, expire',
+ 'interpretation':'recuperar, responder, validar, registrar', 'sources':'responder, validar, registrar',
+ 'tool_errors':'responder, validar', 'memories':'responder', 'semantic':'responder',
+ 'decision':'validar, aprovar, registrar, finalizar', 'validation':'responder', 'attempts':'responder, validar',
+ 'calls':'call', 'tokens':'call, log', 'signatures':'validar', 'events':'log e scripts de evidência',
+ 'route':'arestas condicionais', 'reason':'finalizar', 'receipt':'finalizar, run', 'output':'snapshot_output, resume'}
 
 
 def main():
     path = ROOT / 'docs/arquitetura.md'
     intro = path.read_text(encoding='utf-8').split('<!-- GERADO -->')[0]
     lines = ['<!-- GERADO -->', '', '## Conferência executada', '', '`python conferir_grafo.py`', '', '```text', inventory(), '```', '',
-             '## Campos do estado', '', '| Campo | Tipo | Escreve | Lê / origem |', '|---|---|---|---|']
+             '## Campos do estado', '', '| Campo | Tipo | Escreve | Lê | Origem |', '|---|---|---|---|---|']
     for field, annotation in State.__annotations__.items():
-        type_name = str(annotation).replace('typing.', '').replace('|', '/')
-        lines.append(f'| {field} | `{type_name}` | {WRITERS[field]} | nós posteriores e checkpoint; definição em src/graph.py |')
+        type_name = re.sub(r' at 0x[0-9A-Fa-f]+', '', str(annotation)).replace('typing.', '').replace('|', '/')
+        origin = 'metadados e texto da CLI' if field in ('owner', 'thread_id', 'text', 'history') else 'nó produtor em src/graph.py'
+        lines.append(f'| {field} | `{type_name}` | {WRITERS[field]} | {READERS[field]} | {origin} |')
     lines += ['', 'Escritas múltiplas são sequenciais: não há ramos paralelos no agente.',
               '`events` e `signatures` usam concatenação; `history` concatena e mantém quatro mensagens.',
               'Demais campos substituem o valor anterior. Sem reducer, eventos sequenciais se perdem.',

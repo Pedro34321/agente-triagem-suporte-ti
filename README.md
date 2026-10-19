@@ -22,13 +22,14 @@ python -m src.main iniciar "Não consigo entrar no e-mail corporativo: senha inc
 
 Configure `MISTRAL_API_KEY` no `.env.local` local, ignorado pelo Git. O ambiente preparado
 para este trabalho já contém esse arquivo; não o envie nem copie para a entrega.
-`.env.example` lista somente nomes. Provedor padrão: Mistral; modelo `ministral-3b-2512`,
+`.env.example` lista somente nomes. Provedor padrão: Mistral; modelo `ministral-8b-2512`,
 alterável por `LLM_MODEL`. OpenAI é opcional com `LLM_PROVIDER=openai` e `OPENAI_API_KEY`.
 Não é necessário recriar `dados/suporte.db`: ele contém fixtures da Parte 1.
 Em Linux/macOS, ativação: `source .venv/bin/activate`.
 
-**Validação:** testes locais e recuperação executados. A integração Mistral passou no
-teste inicial; os resultados reais dos casos são registrados em `logs/parte2/`.
+**Validação:** 10 testes locais aprovados, 10/10 perguntas de recuperação e 9/9 casos
+reais conferidos com Ministral 8B, incluindo os seis obrigatórios. Evidências em
+`logs/parte2/`. Os critérios automáticos não substituem revisão do texto pelo grupo.
 
 ## Como usar
 
@@ -69,10 +70,11 @@ python conferir_grafo.py
 python -m scripts.avaliar_local
 python -m scripts.documentar_grafo
 python -m scripts.demonstrar
+python -m scripts.conferir_casos
 python -m scripts.ablacao
 ```
 
-Os quatro primeiros não chamam a API. Os dois últimos fazem chamadas pagas e requerem
+Os quatro primeiros e `conferir_casos` não chamam a API. `demonstrar` e `ablacao` fazem chamadas pagas e requerem
 saldo. `demonstrar` gera nove casos (incluindo os seis obrigatórios), saída completa,
 data/commit/modelo/prompts e aprovação editada/repetida. Ele atualiza `docs/io.md` e
 o exemplo principal deste README. Para vínculo exato, execute após commit do código.
@@ -91,3 +93,30 @@ Os logs antigos `.txt` são da Parte 1. Novas evidências ficam em `logs/parte2/
 dados operacionais e checkpoints ficam em `.runtime/`, sem versionamento.
 `src/tools.py` e `src/database.py` são módulos legados da Parte 1; a CLI atual usa
 `src/knowledge.py` e `src/storage.py`. O histórico anterior foi preservado.
+<!-- EXEMPLO_REAL -->
+## Exemplo principal executado
+
+Não consigo entrar no meu e-mail corporativo. Quando coloco minha senha, aparece que ela está incorreta.
+
+```json
+{
+  "resultado": "Falha individual de acesso ao e-mail corporativo devido à senha incorreta.",
+  "fontes": [
+    {
+      "id": "KB-ACESSO",
+      "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1. Não pedir a senha. Exceção: suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2 com prioridade Alta; nunca redefinir credenciais automaticamente."
+    }
+  ],
+  "suficiente": true,
+  "categoria": "Acesso / Conta",
+  "prioridade": "Média",
+  "encaminhamento": "Suporte N1",
+  "perguntas": [],
+  "registrar": true,
+  "motivo_termino": "registrado",
+  "thread_id": "demo:1792454013396141800:caso_simples",
+  "registro_id": 1,
+  "ja_existia": false,
+  "pendencia": null
+}
+```

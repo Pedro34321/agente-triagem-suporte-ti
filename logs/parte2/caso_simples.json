@@ -1,0 +1,149 @@
+{
+  "tipo": "modelo_real",
+  "commit": "8a081b3c8efb40532df566d24685943208f256f8",
+  "data": "2026-10-19T23:53:37.875987+00:00",
+  "modelo": "ministral-8b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Não consigo entrar no meu e-mail corporativo. Quando coloco minha senha, aparece que ela está incorreta.",
+  "inicial": {
+    "resultado": "Falha individual de acesso ao e-mail corporativo devido à senha incorreta.",
+    "fontes": [
+      {
+        "id": "KB-ACESSO",
+        "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1. Não pedir a senha. Exceção: suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2 com prioridade Alta; nunca redefinir credenciais automaticamente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Acesso / Conta",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "demo:1792454013396141800:caso_simples",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Falha individual de acesso ao e-mail corporativo devido à senha incorreta.",
+        "fontes": [
+          {
+            "id": "KB-ACESSO",
+            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1. Não pedir a senha. Exceção: suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2 com prioridade Alta; nunca redefinir credenciais automaticamente."
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1792540417.8157892,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "aprovacao_roteirizada": {
+    "decisao": "aprovar"
+  },
+  "saida": {
+    "resultado": "Falha individual de acesso ao e-mail corporativo devido à senha incorreta.",
+    "fontes": [
+      {
+        "id": "KB-ACESSO",
+        "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1. Não pedir a senha. Exceção: suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2 com prioridade Alta; nunca redefinir credenciais automaticamente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Acesso / Conta",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "demo:1792454013396141800:caso_simples",
+    "registro_id": 1,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 4.391,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-8b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792454013.5438726
+    },
+    {
+      "node": "interpretar",
+      "tokens": 525,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "recuperar",
+      "chamadas_recuperacao": 1,
+      "fontes": [
+        "KB-ACESSO"
+      ],
+      "erros": [],
+      "memorias": [],
+      "semantica": {
+        "atual": null,
+        "descartados": []
+      }
+    },
+    {
+      "node": "responder",
+      "tokens": 1097,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "aprovar",
+      "decisao": {
+        "decisao": "aprovar",
+        "prioridade": null,
+        "encaminhamento": null
+      }
+    },
+    {
+      "node": "registrar",
+      "recibo": {
+        "registro_id": 1,
+        "ja_existia": false,
+        "key": "102084aa58d6dfb42c663aaf85ae9890363cbd166895bb236aa4fcf7e6d7f57f"
+      },
+      "memoria": {
+        "key": "eeb93c524112e0106e97b5e90a865a90cc45c79842154447c961f6d3e171ade1",
+        "ja_existia": false,
+        "bytes": 178
+      },
+      "fatos": []
+    },
+    {
+      "node": "finalizar",
+      "motivo": "registrado"
+    }
+  ]
+}

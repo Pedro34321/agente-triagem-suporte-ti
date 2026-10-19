@@ -63,5 +63,8 @@ regras, evidência que sustenta a decisão ou pedido atual para esconder estouro
 O corpus curto é um pré-requisito: não há compactação automática para corpora grandes.
 
 O checkpoint sobrevive ao término; eliminação precisa do comando explícito. Ao terminar,
-somente triagem aprovada promove os campos selecionados à memória longa. Medições de
-mudança na qualidade do modelo com memória estão pendentes de execução real.
+somente triagem aprovada promove os campos selecionados à memória longa.
+Na rodada final, três casos gravaram um episódio cada: 178, 179 e 183 bytes; os demais
+não escreveram memória longa. O caso de equipamento confirmou um fato semântico.
+A qualidade do modelo com versus sem memória não foi comparada; testes locais
+comprovam mudança no resultado do recall, isolamento, decaimento e remoção.

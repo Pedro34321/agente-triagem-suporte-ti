@@ -69,30 +69,30 @@ validar -> responder [condicional]
 
 ## Campos do estado
 
-| Campo | Tipo | Escreve | Lê / origem |
-|---|---|---|---|
-| owner | `<class 'str'>` | entrada | nós posteriores e checkpoint; definição em src/graph.py |
-| thread_id | `<class 'str'>` | entrada | nós posteriores e checkpoint; definição em src/graph.py |
-| text | `<class 'str'>` | entrada | nós posteriores e checkpoint; definição em src/graph.py |
-| history | `Annotated[list[str], <function history_reducer at 0x000002345063BA60>]` | entrada | nós posteriores e checkpoint; definição em src/graph.py |
-| started | `<class 'float'>` | entrada | nós posteriores e checkpoint; definição em src/graph.py |
-| deadline | `<class 'float'>` | validar | nós posteriores e checkpoint; definição em src/graph.py |
-| interpretation | `<class 'dict'>` | interpretar | nós posteriores e checkpoint; definição em src/graph.py |
-| sources | `list[dict]` | recuperar | nós posteriores e checkpoint; definição em src/graph.py |
-| tool_errors | `list[dict]` | recuperar | nós posteriores e checkpoint; definição em src/graph.py |
-| memories | `list[dict]` | recuperar | nós posteriores e checkpoint; definição em src/graph.py |
-| semantic | `<class 'dict'>` | recuperar | nós posteriores e checkpoint; definição em src/graph.py |
-| decision | `<class 'dict'>` | interpretar/responder/validar/aprovar | nós posteriores e checkpoint; definição em src/graph.py |
-| validation | `list[str]` | validar | nós posteriores e checkpoint; definição em src/graph.py |
-| attempts | `<class 'int'>` | responder | nós posteriores e checkpoint; definição em src/graph.py |
-| calls | `<class 'int'>` | interpretar/responder | nós posteriores e checkpoint; definição em src/graph.py |
-| tokens | `<class 'int'>` | interpretar/responder | nós posteriores e checkpoint; definição em src/graph.py |
-| signatures | `Annotated[list[str], <built-in function add>]` | validar | nós posteriores e checkpoint; definição em src/graph.py |
-| events | `Annotated[list[dict], <built-in function add>]` | entrada e nós | nós posteriores e checkpoint; definição em src/graph.py |
-| route | `<class 'str'>` | nós de decisão | nós posteriores e checkpoint; definição em src/graph.py |
-| reason | `<class 'str'>` | interpretar/responder/validar/aprovar/registrar | nós posteriores e checkpoint; definição em src/graph.py |
-| receipt | `<class 'dict'>` | registrar | nós posteriores e checkpoint; definição em src/graph.py |
-| output | `<class 'dict'>` | finalizar | nós posteriores e checkpoint; definição em src/graph.py |
+| Campo | Tipo | Escreve | Lê | Origem |
+|---|---|---|---|---|
+| owner | `<class 'str'>` | entrada | recuperar, registrar, log | metadados e texto da CLI |
+| thread_id | `<class 'str'>` | entrada | registrar, finalizar, retomar | metadados e texto da CLI |
+| text | `<class 'str'>` | entrada | interpretar, recuperar, responder | metadados e texto da CLI |
+| history | `Annotated[list[str], <function history_reducer>]` | entrada | interpretar, responder | metadados e texto da CLI |
+| started | `<class 'float'>` | entrada | call, registrar | nó produtor em src/graph.py |
+| deadline | `<class 'float'>` | validar | aprovar, expire | nó produtor em src/graph.py |
+| interpretation | `<class 'dict'>` | interpretar | recuperar, responder, validar, registrar | nó produtor em src/graph.py |
+| sources | `list[dict]` | recuperar | responder, validar, registrar | nó produtor em src/graph.py |
+| tool_errors | `list[dict]` | recuperar | responder, validar | nó produtor em src/graph.py |
+| memories | `list[dict]` | recuperar | responder | nó produtor em src/graph.py |
+| semantic | `<class 'dict'>` | recuperar | responder | nó produtor em src/graph.py |
+| decision | `<class 'dict'>` | interpretar/responder/validar/aprovar | validar, aprovar, registrar, finalizar | nó produtor em src/graph.py |
+| validation | `list[str]` | validar | responder | nó produtor em src/graph.py |
+| attempts | `<class 'int'>` | responder | responder, validar | nó produtor em src/graph.py |
+| calls | `<class 'int'>` | interpretar/responder | call | nó produtor em src/graph.py |
+| tokens | `<class 'int'>` | interpretar/responder | call, log | nó produtor em src/graph.py |
+| signatures | `Annotated[list[str], <built-in function add>]` | validar | validar | nó produtor em src/graph.py |
+| events | `Annotated[list[dict], <built-in function add>]` | entrada e nós | log e scripts de evidência | nó produtor em src/graph.py |
+| route | `<class 'str'>` | nós de decisão | arestas condicionais | nó produtor em src/graph.py |
+| reason | `<class 'str'>` | interpretar/responder/validar/aprovar/registrar | finalizar | nó produtor em src/graph.py |
+| receipt | `<class 'dict'>` | registrar | finalizar, run | nó produtor em src/graph.py |
+| output | `<class 'dict'>` | finalizar | snapshot_output, resume | nó produtor em src/graph.py |
 
 Escritas múltiplas são sequenciais: não há ramos paralelos no agente.
 `events` e `signatures` usam concatenação; `history` concatena e mantém quatro mensagens.
@@ -104,9 +104,9 @@ A demonstração paralela da versão instalada levanta InvalidUpdateError, contr
 | Responsabilidade | Método | Linhas físicas |
 |---|---|---|
 | call | src/graph.py:86 | 24 |
-| validar | src/graph.py:146 | 27 |
-| aprovar | src/graph.py:174 | 19 |
-| resume | src/graph.py:248 | 15 |
+| validar | src/graph.py:154 | 35 |
+| aprovar | src/graph.py:190 | 19 |
+| resume | src/graph.py:264 | 15 |
 
 Contagem inclui assinaturas e comentários; esses métodos também fazem outras tarefas.
 Motivo de término é campo próprio; detector compara hashes de decisões inválidas, sem aguardar recursion_limit.
