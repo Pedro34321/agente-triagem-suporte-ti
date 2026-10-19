@@ -6,7 +6,7 @@ from .common import ROOT, canonical, digest
 load_dotenv(ROOT / '.env.local')
 load_dotenv(ROOT / '.env')
 PROVIDER = os.getenv('LLM_PROVIDER') or 'mistral'
-MODEL = os.getenv('LLM_MODEL') or ('ministral-3b-2512' if PROVIDER == 'mistral' else 'gpt-4.1-mini-2025-04-14')
+MODEL = os.getenv('LLM_MODEL') or ('ministral-8b-2512' if PROVIDER == 'mistral' else 'gpt-4.1-mini-2025-04-14')
 
 
 def prompt(name):
