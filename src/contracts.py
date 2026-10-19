@@ -43,6 +43,11 @@ class Approval(Strict):
     encaminhamento: Team | None = None
 
 
+class DraftDecision(Decision):
+    """Modelo seleciona ids; o código materializa os trechos literais."""
+    fontes: list[str]
+
+
 class Output(Decision):
     motivo_termino: str
     thread_id: str

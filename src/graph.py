@@ -10,7 +10,7 @@ from langgraph.graph import StateGraph, START, END
 from langgraph.checkpoint.sqlite import SqliteSaver
 from langgraph.types import interrupt, Command
 from .common import ROOT, canonical, digest, sanitize
-from .contracts import Interpretation, Decision, Approval, Output
+from .contracts import Interpretation, Decision, DraftDecision, Approval, Output
 from .knowledge import search, records
 from .model import LLM, MODEL, prompt, prompt_versions
 from .storage import Store
@@ -140,12 +140,15 @@ class App:
         if not state['sources']:
             return {'decision': refusal('O corpus de suporte não contém informação para responder a este pedido. Consulte o Suporte N1 para obter o procedimento autorizado.'),
                     'reason': 'base_insuficiente', 'route': 'finalizar'}
-        update = self.call(state, 'responder', Decision, {'relato': state['text'], 'historico': state.get('history', []),
+        update = self.call(state, 'responder', DraftDecision, {'relato': state['text'], 'historico': state.get('history', []),
                            'interpretacao': state['interpretation'], 'fontes': state['sources'],
                            'erros_ferramentas': state['tool_errors'], 'memorias': state['memories'],
                            'fatos_anteriores': state['semantic'], 'corrigir': state.get('validation', [])})
         if 'result' in update:
-            update.update(decision=update.pop('result'), route='validar', attempts=state.get('attempts', 0) + 1)
+            draft = update.pop('result')
+            source_map = {s['id']: s['texto'] for s in state['sources']}
+            draft['fontes'] = [{'id': key, 'trecho': source_map.get(key, 'Fonte não recuperada.')} for key in draft['fontes']]
+            update.update(decision=draft, route='validar', attempts=state.get('attempts', 0) + 1)
         return update
 
     def validar(self, state):
@@ -156,7 +159,9 @@ class App:
             errors.append('Decisão suficiente exige fonte.')
         for cite in d['fontes']:
             if cite['id'] not in source_map or cite['trecho'] not in source_map[cite['id']]:
-                errors.append('Citação inválida: use id recuperado e trecho literal.')
+                errors.append('Fonte inválida. Selecione somente ids de: ' + ', '.join(source_map))
+        if d['registrar'] and not any(c['id'].startswith('KB-') for c in d['fontes']):
+            errors.append('Registro exige citar também a regra do corpus que sustenta a classificação.')
         if state['tool_errors'] and (d['suficiente'] or d['registrar']):
             errors.append('Cadastro inexistente: peça confirmação e não registre.')
         if not state['sources'] and d['suficiente']:

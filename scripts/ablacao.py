@@ -5,7 +5,7 @@ from datetime import datetime, timezone
 from src.common import ROOT
 from src.model import LLM, prompt, MODEL
 from src.knowledge import search
-from src.contracts import Decision
+from src.contracts import DraftDecision
 
 
 def main():
@@ -19,7 +19,7 @@ def main():
     for text in cases:
         for treatment, system in [('com_frase', original), ('sem_frase', original.replace(phrase, ''))]:
             data = {'relato': text, 'fontes': search('senha conta', 'acesso'), 'erros_ferramentas': [], 'memorias': []}
-            output, tokens = llm.call('responder', Decision, data, override=system)
+            output, tokens = llm.call('responder', DraftDecision, data, override=system)
             results.append({'tratamento': treatment, 'entrada': text, 'saida': output, 'tokens': tokens,
                             'acerto_categoria': output['categoria'] == 'Acesso / Conta'})
     report = {'data': datetime.now(timezone.utc).isoformat(), 'modelo': MODEL, 'frase_removida': phrase,

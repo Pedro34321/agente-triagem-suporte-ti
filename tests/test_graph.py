@@ -13,7 +13,7 @@ class FakeLLM:
         if name == 'interpretar':
             return {'intent': 'falha', 'topic': 'acesso', 'query': 'senha email', 'asset': None, 'location': None, 'collective': False, 'questions': []}, 10
         source = next(x for x in data['fontes'] if x['id'] == 'KB-ACESSO')
-        return {'resultado': 'Senha rejeitada: encaminhar ao N1.', 'fontes': [{'id': source['id'], 'trecho': 'inventado' if self.invalid else source['texto']}],
+        return {'resultado': 'Senha rejeitada: encaminhar ao N1.', 'fontes': ['inventada' if self.invalid else source['id']],
                 'suficiente': True, 'categoria': 'Acesso / Conta', 'prioridade': 'Média', 'encaminhamento': 'Suporte N1', 'perguntas': [], 'registrar': True}, 20
 
 
@@ -81,6 +81,10 @@ def test_forgetting_and_contradiction(tmp_path):
     assert not app.store.recall(user, 'Acesso Conta')
     assert not app.store.latest(user, 'local')['atual']
     assert not app.graph.get_state(app.config(out['thread_id'])).values
+    for table in ('checkpoints', 'writes'):
+        # Todas as linhas, não só a consulta do último checkpoint.
+        for row in app.conn.execute(f'SELECT * FROM {table}'):
+            assert all(user not in str(cell) and (not isinstance(cell, bytes) or user.encode() not in cell) for cell in row)
     with app.store.connect() as db:
         for line in db.iterdump():
             assert user not in line

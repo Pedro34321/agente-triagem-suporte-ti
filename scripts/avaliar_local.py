@@ -7,7 +7,7 @@ from typing import TypedDict, Annotated
 from langgraph.graph import StateGraph, START, END
 from src.common import ROOT
 from src.knowledge import search, records
-from src.contracts import Output, Interpretation, Decision
+from src.contracts import Output, Interpretation, Decision, DraftDecision
 
 
 def reducer_demo():
@@ -57,7 +57,7 @@ def main():
     destination = ROOT / 'logs/parte2'
     destination.mkdir(exist_ok=True)
     (destination / 'avaliacao-local.json').write_text(json.dumps(data, ensure_ascii=False, indent=2), encoding='utf-8')
-    for name, schema in [('saida', Output), ('interpretacao', Interpretation), ('decisao', Decision)]:
+    for name, schema in [('saida', Output), ('interpretacao', Interpretation), ('decisao', Decision), ('rascunho', DraftDecision)]:
         (ROOT / 'docs' / f'schema-{name}.json').write_text(json.dumps(schema.model_json_schema(), ensure_ascii=False, indent=2), encoding='utf-8')
     print(json.dumps(data, ensure_ascii=False, indent=2))
 
