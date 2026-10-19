@@ -170,6 +170,8 @@ class App:
             errors.append('Informação não registra incidente.')
         if d['registrar'] and (not d['suficiente'] or not all(d[k] for k in ('categoria', 'prioridade', 'encaminhamento'))):
             errors.append('Registro exige classificação completa e suficiente.')
+        if state['interpretation']['intent'] == 'falha' and d['suficiente'] and not d['registrar']:
+            errors.append('Falha com base suficiente precisa propor registro: registrar=true, com equipe preenchida conforme corpus. Isso apenas abre aprovação humana; não executa a ação.')
         if not d['suficiente'] and not d['perguntas'] and state['tool_errors']:
             errors.append('Peça explicitamente confirmação do patrimônio informado.')
         signature = digest(d)
