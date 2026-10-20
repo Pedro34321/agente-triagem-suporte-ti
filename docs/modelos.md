@@ -570,3 +570,26 @@ A versão final do protótipo conseguiu diferenciar:
 - solicitações informativas.
 
 Como evolução futura, o caso ambíguo poderá ser executado juntamente com testes comparativos usando outros modelos, permitindo ampliar a avaliação de qualidade, custo e comportamento do agente.
+
+## Atualização da Parte 2 — decisão medida
+
+Modelo final: `ministral-8b-2512`, pela API Mistral e JSON Schema. A implementação
+começou com o 3B da Parte 1, mas as rodadas reais mostraram recusa indevida do caso
+simples e cópias incorretas de citações. As falhas ficaram preservadas nas subpastas
+de logs/parte2. O 8B respondeu melhor à divergência; alterações de prompt e seleção
+de fontes por id completaram a correção. Não se atribui todo o ganho apenas ao tamanho
+do modelo: código e prompt também mudaram entre as rodadas.
+
+Os nove casos finais passaram nos critérios de scripts/conferir_casos.py, incluindo
+registro inexistente, recusa e aprovação editada/repetida. O conjunto é pequeno e foi
+usado para desenvolvimento, portanto não é um teste cego de generalização.
+Tokens e tempos por caso estão em logs/parte2/conferencia-casos.json. Não foi calculado
+custo monetário nem benchmark contra Gemini ou outros candidatos históricos.
+
+OpenAI continua como adaptador opcional (Responses, gpt-4.1-mini-2025-04-14), mas sua
+execução inicial encontrou saldo esgotado. O usuário autorizou a mudança para Mistral.
+A chave fica em MISTRAL_API_KEY no arquivo local ignorado; o SDK openai é somente o
+cliente compatível e não muda quem presta a inferência.
+
+Fontes: https://docs.mistral.ai/studio/conversations/structured-output/custom e
+https://developers.openai.com/api/docs/guides/structured-outputs

@@ -1,0 +1,177 @@
+{
+  "tipo": "modelo_real",
+  "commit": "0bf045d1b4c681bfd71b00d8affe6349cf2452f1",
+  "data": "2026-10-19T23:45:03.078927+00:00",
+  "modelo": "ministral-3b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "38fcebbd51cd9e3db2c2baf1ab21a422fee6a41863141fb2edbf0dd91bbec1a1",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "0c80ca3bfcfe253f99a90ded7c7b18d2c6f1dfcb1dad0f4f7f2a738e1b1013a4",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Estou no Andar 3 e minha internet caiu. Acho que meu notebook está com problema.",
+  "inicial": {
+    "resultado": "Incidente reportado no Andar 3 com indisponibilidade de rede, mas relato individual sugere possível falha no notebook. Evidência coletiva (falha de rede) prevalece sobre memória de hardware individual. Falta confirmação de impacto real na rede (ex.: teste de conectividade para usuários no mesmo local).",
+    "fontes": [
+      {
+        "id": "KB-REDE",
+        "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura."
+      },
+      {
+        "id": "incidente:1",
+        "trecho": "{\"categoria\":\"Rede / Conectividade\",\"id\":1,\"localizacao\":\"Andar 3\",\"titulo\":\"Indisponibilidade de rede no andar 3\",\"usuarios_afetados\":35}"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Rede / Conectividade",
+    "prioridade": "Alta",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [
+      "Confirme se o incidente no Andar 3 (usuários afetados: 35) está ativo e se a indisponibilidade persiste sem alteração no hardware individual dos usuários.",
+      "Verifique se há evidências adicionais (ex.: logs de rede, testes de conectividade) que confirmem a falha coletiva."
+    ],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "demo:1792453495978686000:caso_divergencia",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Incidente reportado no Andar 3 com indisponibilidade de rede, mas relato individual sugere possível falha no notebook. Evidência coletiva (falha de rede) prevalece sobre memória de hardware individual. Falta confirmação de impacto real na rede (ex.: teste de conectividade para usuários no mesmo local).",
+        "fontes": [
+          {
+            "id": "KB-REDE",
+            "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura."
+          },
+          {
+            "id": "incidente:1",
+            "trecho": "{\"categoria\":\"Rede / Conectividade\",\"id\":1,\"localizacao\":\"Andar 3\",\"titulo\":\"Indisponibilidade de rede no andar 3\",\"usuarios_afetados\":35}"
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Rede / Conectividade",
+        "prioridade": "Alta",
+        "encaminhamento": "Infraestrutura",
+        "perguntas": [
+          "Confirme se o incidente no Andar 3 (usuários afetados: 35) está ativo e se a indisponibilidade persiste sem alteração no hardware individual dos usuários.",
+          "Verifique se há evidências adicionais (ex.: logs de rede, testes de conectividade) que confirmem a falha coletiva."
+        ],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1792539903.039744,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "aprovacao_roteirizada": {
+    "decisao": "aprovar"
+  },
+  "saida": {
+    "resultado": "Incidente reportado no Andar 3 com indisponibilidade de rede, mas relato individual sugere possível falha no notebook. Evidência coletiva (falha de rede) prevalece sobre memória de hardware individual. Falta confirmação de impacto real na rede (ex.: teste de conectividade para usuários no mesmo local).",
+    "fontes": [
+      {
+        "id": "KB-REDE",
+        "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura."
+      },
+      {
+        "id": "incidente:1",
+        "trecho": "{\"categoria\":\"Rede / Conectividade\",\"id\":1,\"localizacao\":\"Andar 3\",\"titulo\":\"Indisponibilidade de rede no andar 3\",\"usuarios_afetados\":35}"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Rede / Conectividade",
+    "prioridade": "Alta",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [
+      "Confirme se o incidente no Andar 3 (usuários afetados: 35) está ativo e se a indisponibilidade persiste sem alteração no hardware individual dos usuários.",
+      "Verifique se há evidências adicionais (ex.: logs de rede, testes de conectividade) que confirmem a falha coletiva."
+    ],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "demo:1792453495978686000:caso_divergencia",
+    "registro_id": 1,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 4.235,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-3b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "38fcebbd51cd9e3db2c2baf1ab21a422fee6a41863141fb2edbf0dd91bbec1a1",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "0c80ca3bfcfe253f99a90ded7c7b18d2c6f1dfcb1dad0f4f7f2a738e1b1013a4",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792453498.9110327
+    },
+    {
+      "node": "interpretar",
+      "tokens": 426,
+      "modelo": "ministral-3b-2512"
+    },
+    {
+      "node": "recuperar",
+      "chamadas_recuperacao": 1,
+      "fontes": [
+        "KB-REDE",
+        "KB-PRIORIDADE",
+        "incidente:1"
+      ],
+      "erros": [],
+      "memorias": [],
+      "semantica": {
+        "atual": null,
+        "descartados": []
+      }
+    },
+    {
+      "node": "responder",
+      "tokens": 1096,
+      "modelo": "ministral-3b-2512"
+    },
+    {
+      "node": "responder",
+      "tokens": 1160,
+      "modelo": "ministral-3b-2512"
+    },
+    {
+      "node": "aprovar",
+      "decisao": {
+        "decisao": "aprovar",
+        "prioridade": null,
+        "encaminhamento": null
+      }
+    },
+    {
+      "node": "registrar",
+      "recibo": {
+        "registro_id": 1,
+        "ja_existia": false,
+        "key": "067783eb0a04789534b20c8f02b58d430486b53f0940526b9f125b2dae087873"
+      },
+      "memoria": {
+        "key": "43a106c3ac4622b403253a0bfd405b143da3bfc69645fb925c25189d4e91df25",
+        "ja_existia": false,
+        "bytes": 198
+      },
+      "fatos": []
+    },
+    {
+      "node": "finalizar",
+      "motivo": "registrado"
+    }
+  ]
+}

@@ -20,3 +20,9 @@ Thumbs.db
 
 # SQLite temporário
 *.db-journal
+.env.local
+.key-setup/
+.venv/
+.runtime/
+__pycache__/
+.pytest_cache/

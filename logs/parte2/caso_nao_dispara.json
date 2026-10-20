@@ -1,0 +1,119 @@
+{
+  "tipo": "modelo_real",
+  "commit": "8a081b3c8efb40532df566d24685943208f256f8",
+  "data": "2026-10-19T23:53:49.669276+00:00",
+  "modelo": "ministral-8b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Vou trabalhar de casa amanhã. Como faço para configurar a VPN no notebook corporativo?",
+  "inicial": {
+    "resultado": "Configuração de VPN em notebook corporativo é procedimento informativo. Não há incidente a registrar.",
+    "fontes": [
+      {
+        "id": "KB-VPN",
+        "trecho": "Para configurar VPN no notebook corporativo, solicitar ao Suporte N1 o cliente homologado e o perfil autorizado; autenticar pelo fluxo corporativo com MFA. Não compartilhar senha. Exceção: em equipamento pessoal, não instalar o cliente corporativo sem autorização. Orientação de VPN é Solicitação Informativa, Baixa, Suporte N1 e não gera incidente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Solicitação Informativa",
+    "prioridade": "Baixa",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "informativo",
+    "thread_id": "demo:1792454013396141800:caso_nao_dispara",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Configuração de VPN em notebook corporativo é procedimento informativo. Não há incidente a registrar.",
+    "fontes": [
+      {
+        "id": "KB-VPN",
+        "trecho": "Para configurar VPN no notebook corporativo, solicitar ao Suporte N1 o cliente homologado e o perfil autorizado; autenticar pelo fluxo corporativo com MFA. Não compartilhar senha. Exceção: em equipamento pessoal, não instalar o cliente corporativo sem autorização. Orientação de VPN é Solicitação Informativa, Baixa, Suporte N1 e não gera incidente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Solicitação Informativa",
+    "prioridade": "Baixa",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "informativo",
+    "thread_id": "demo:1792454013396141800:caso_nao_dispara",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 3.235,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-8b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792454026.4654305
+    },
+    {
+      "node": "interpretar",
+      "tokens": 521,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "recuperar",
+      "chamadas_recuperacao": 1,
+      "fontes": [
+        "KB-VPN"
+      ],
+      "erros": [],
+      "memorias": [
+        {
+          "key": "05b3059403cf59c0f2708974e2b465b19444129cf8d49206e2bf3d8ecbd437de",
+          "payload": {
+            "assunto": "rede",
+            "categoria": "Rede / Conectividade",
+            "consulta": "internet caiu no Andar 3, suspeita de problema no notebook",
+            "encaminhamento": "Infraestrutura",
+            "prioridade": "Alta"
+          },
+          "score": 0.0435
+        },
+        {
+          "key": "eeb93c524112e0106e97b5e90a865a90cc45c79842154447c961f6d3e171ade1",
+          "payload": {
+            "assunto": "acesso",
+            "categoria": "Acesso / Conta",
+            "consulta": "Não consigo entrar no meu e-mail corporativo. Senha incorreta.",
+            "encaminhamento": "Suporte N1",
+            "prioridade": "Média"
+          },
+          "score": 0.0435
+        }
+      ],
+      "semantica": {
+        "atual": null,
+        "descartados": []
+      }
+    },
+    {
+      "node": "responder",
+      "tokens": 1364,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "finalizar",
+      "motivo": "informativo"
+    }
+  ]
+}

@@ -1,0 +1,188 @@
+{
+  "data": "2026-10-19T23:54:16.500613+00:00",
+  "modelo": "ministral-8b-2512",
+  "frase_removida": "Não associe senha individual a rede coletiva.",
+  "commit": "8a081b3c8efb40532df566d24685943208f256f8",
+  "resultados": [
+    {
+      "tratamento": "com_frase",
+      "entrada": "Minha senha do email está incorreta.",
+      "saida": {
+        "resultado": "Falha individual de senha ou conta no sistema de email.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 975,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "sem_frase",
+      "entrada": "Minha senha do email está incorreta.",
+      "saida": {
+        "resultado": "Falha individual de senha ou conta no email.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 962,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "com_frase",
+      "entrada": "Conta bloqueada só para mim.",
+      "saida": {
+        "resultado": "Conta bloqueada individualmente.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 967,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "sem_frase",
+      "entrada": "Conta bloqueada só para mim.",
+      "saida": {
+        "resultado": "Conta bloqueada individualmente sem impacto coletivo.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 960,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "com_frase",
+      "entrada": "Senha incorreta no Andar 3.",
+      "saida": {
+        "resultado": "Falha individual de senha no Andar 3.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 974,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "sem_frase",
+      "entrada": "Senha incorreta no Andar 3.",
+      "saida": {
+        "resultado": "Falha individual de senha no Andar 3.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 963,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "com_frase",
+      "entrada": "Esqueci a senha da conta corporativa.",
+      "saida": {
+        "resultado": "Falha individual de senha ou conta.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 972,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "sem_frase",
+      "entrada": "Esqueci a senha da conta corporativa.",
+      "saida": {
+        "resultado": "Falha individual de senha sem impacto coletivo.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 963,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "com_frase",
+      "entrada": "Meu email rejeita a credencial mas os colegas conseguem entrar.",
+      "saida": {
+        "resultado": "Falha individual de autenticação no email sem impacto coletivo.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 982,
+      "acerto_categoria": true
+    },
+    {
+      "tratamento": "sem_frase",
+      "entrada": "Meu email rejeita a credencial mas os colegas conseguem entrar.",
+      "saida": {
+        "resultado": "Falha individual de autenticação no email do usuário, sem impacto coletivo.",
+        "fontes": [
+          "KB-ACESSO"
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "tokens": 974,
+      "acerto_categoria": true
+    }
+  ]
+}

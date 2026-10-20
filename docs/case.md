@@ -391,3 +391,33 @@ Para reduzir esse risco, o conjunto de testes incluirá propositalmente:
 - situações em que o agente precisa parar e encaminhar o atendimento para um humano.
 
 Além disso, o conjunto de 40 casos rotulados será utilizado como referência para comparar alterações futuras no agente e evitar que mudanças no prompt ou no modelo sejam avaliadas apenas por impressão subjetiva.
+
+## Complemento do case — Parte 2
+
+Este complemento deriva da inspeção dos casos e do protótipo, não de entrevistas
+com uma empresa. Os procedimentos novos são hipóteses acadêmicas simuladas.
+
+Incidente é falha observada; solicitação informativa pede orientação sem afirmar falha.
+Triagem não é diagnóstico: relacionar queda de rede a incidente do mesmo andar não prova
+que o notebook está saudável. N1 recebe o atendimento inicial; N2 trata equipamento e
+segurança; Infraestrutura atende rede; Sistemas atende aplicação. Essa divisão foi
+simplificada para o exercício, não é um padrão universal de organização.
+
+Prioridade não é o adjetivo do usuário. Urgência precisa de impacto/contexto; risco
+elétrico é uma exceção que justifica interrupção humana mesmo para um equipamento.
+VPN em dispositivo pessoal tem exceção de autorização, então a recuperação precisa
+preservar regra e exceção no mesmo documento. Cadastro inexistente exige confirmação,
+não construção de um equipamento plausível pelo modelo.
+
+O processo que antes parecia uma ação foi separado em proposta, revisão humana e
+registro transacional. Isso permite editar prioridade/equipe e retomar sem duplicação.
+A base antiga é somente leitura; novas triagens ficam na área operacional local.
+
+Mudança de autonomia: substituímos o laço livre da Parte 1 por workflow com router e
+uma correção limitada. Nenhum caso exige planejar ações arbitrárias. MCP não foi
+necessário ao contrato desta entrega e permanece evolução; não há multiagente.
+
+Os dez itens de recuperação e os nove relatos de demonstração são datasets pequenos;
+não equivalem ao conjunto futuro de 40 casos mencionado na Parte 1 nem sustentam
+conclusões de desempenho em produção. Antes de ampliar o uso, é preciso validar o
+vocabulário, as regras e as exceções com pessoas responsáveis pelo suporte.

@@ -1,0 +1,193 @@
+{
+  "tipo": "modelo_real",
+  "commit": "4752f6ba1bc14a76fef0ad0bf04ea52191462f19",
+  "data": "2026-10-19T23:55:11.172656+00:00",
+  "modelo": "ministral-8b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Meu notebook patrimônio NB-10203 tem cheiro de queimado.",
+  "inicial": {
+    "resultado": "Notebook NB-10203 (Andar 3) apresenta cheiro de queimado, indicando risco físico imediato.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-10203",
+        "trecho": "patrimonio: NB-10203; tipo: Notebook; status: Ativo; localizacao: Andar 3"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Crítica",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "demo:1792454107100680200:caso_humano",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Notebook NB-10203 (Andar 3) apresenta cheiro de queimado, indicando risco físico imediato.",
+        "fontes": [
+          {
+            "id": "KB-HARDWARE",
+            "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+          },
+          {
+            "id": "equipamento:NB-10203",
+            "trecho": "patrimonio: NB-10203; tipo: Notebook; status: Ativo; localizacao: Andar 3"
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Hardware / Equipamento",
+        "prioridade": "Crítica",
+        "encaminhamento": "Suporte N2",
+        "perguntas": [],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1792540511.0999653,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "aprovacao_roteirizada": {
+    "decisao": "editar",
+    "encaminhamento": "Infraestrutura"
+  },
+  "segunda_aprovacao": {
+    "resultado": "Notebook NB-10203 (Andar 3) apresenta cheiro de queimado, indicando risco físico imediato.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-10203",
+        "trecho": "patrimonio: NB-10203; tipo: Notebook; status: Ativo; localizacao: Andar 3"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Crítica",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "demo:1792454107100680200:caso_humano",
+    "registro_id": 1,
+    "ja_existia": true,
+    "pendencia": null
+  },
+  "registros_deste_caso": 1,
+  "saida": {
+    "resultado": "Notebook NB-10203 (Andar 3) apresenta cheiro de queimado, indicando risco físico imediato.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-10203",
+        "trecho": "patrimonio: NB-10203; tipo: Notebook; status: Ativo; localizacao: Andar 3"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Crítica",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "demo:1792454107100680200:caso_humano",
+    "registro_id": 1,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 4.015,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-8b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792454107.2054276
+    },
+    {
+      "node": "interpretar",
+      "tokens": 532,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "recuperar",
+      "chamadas_recuperacao": 1,
+      "fontes": [
+        "KB-HARDWARE",
+        "equipamento:NB-10203"
+      ],
+      "erros": [],
+      "memorias": [],
+      "semantica": {
+        "atual": null,
+        "descartados": []
+      }
+    },
+    {
+      "node": "responder",
+      "tokens": 1228,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "aprovar",
+      "decisao": {
+        "decisao": "editar",
+        "prioridade": null,
+        "encaminhamento": "Infraestrutura"
+      }
+    },
+    {
+      "node": "registrar",
+      "recibo": {
+        "registro_id": 1,
+        "ja_existia": false,
+        "key": "96c1981a691a3c21073ef0add1c17441e2de67236449f44a9d939c1b575a4396"
+      },
+      "memoria": {
+        "key": "aac04ec48b27273ee67c1d18555684fb07a81fa05600f1395314aeb05e095687",
+        "ja_existia": false,
+        "bytes": 183
+      },
+      "fatos": [
+        {
+          "key": "1c11ed78c1cdbf65c028b22133965f226433a72b68e3360ba79e9f347975593c",
+          "ja_existia": false
+        }
+      ]
+    },
+    {
+      "node": "finalizar",
+      "motivo": "registrado"
+    }
+  ]
+}

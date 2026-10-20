@@ -1,0 +1,168 @@
+{
+  "tipo": "modelo_real",
+  "commit": "8a081b3c8efb40532df566d24685943208f256f8",
+  "data": "2026-10-19T23:53:42.484330+00:00",
+  "modelo": "ministral-8b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Estou no Andar 3 e minha internet caiu. Acho que meu notebook está com problema.",
+  "inicial": {
+    "resultado": "Falha de rede coletiva no Andar 3 (incidente:1) com 35 usuários afetados. Suspeita de notebook não prevalece sobre evidência de indisponibilidade de rede no local. Não há registro de equipamento associado ao relato.",
+    "fontes": [
+      {
+        "id": "KB-REDE",
+        "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura. Sem correspondência de local não associar o incidente. A hipótese de notebook quebrado não prevalece sobre evidência de falha coletiva; não declarar diagnóstico definitivo."
+      },
+      {
+        "id": "incidente:1",
+        "trecho": "id: 1; titulo: Indisponibilidade de rede no andar 3; categoria: Rede / Conectividade; localizacao: Andar 3; usuarios_afetados: 35"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Rede / Conectividade",
+    "prioridade": "Alta",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [
+      "Confirmação do patrimônio do notebook mencionado (se aplicável)"
+    ],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "demo:1792454013396141800:caso_divergencia",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Falha de rede coletiva no Andar 3 (incidente:1) com 35 usuários afetados. Suspeita de notebook não prevalece sobre evidência de indisponibilidade de rede no local. Não há registro de equipamento associado ao relato.",
+        "fontes": [
+          {
+            "id": "KB-REDE",
+            "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura. Sem correspondência de local não associar o incidente. A hipótese de notebook quebrado não prevalece sobre evidência de falha coletiva; não declarar diagnóstico definitivo."
+          },
+          {
+            "id": "incidente:1",
+            "trecho": "id: 1; titulo: Indisponibilidade de rede no andar 3; categoria: Rede / Conectividade; localizacao: Andar 3; usuarios_afetados: 35"
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Rede / Conectividade",
+        "prioridade": "Alta",
+        "encaminhamento": "Infraestrutura",
+        "perguntas": [
+          "Confirmação do patrimônio do notebook mencionado (se aplicável)"
+        ],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1792540422.4584908,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "aprovacao_roteirizada": {
+    "decisao": "aprovar"
+  },
+  "saida": {
+    "resultado": "Falha de rede coletiva no Andar 3 (incidente:1) com 35 usuários afetados. Suspeita de notebook não prevalece sobre evidência de indisponibilidade de rede no local. Não há registro de equipamento associado ao relato.",
+    "fontes": [
+      {
+        "id": "KB-REDE",
+        "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura. Sem correspondência de local não associar o incidente. A hipótese de notebook quebrado não prevalece sobre evidência de falha coletiva; não declarar diagnóstico definitivo."
+      },
+      {
+        "id": "incidente:1",
+        "trecho": "id: 1; titulo: Indisponibilidade de rede no andar 3; categoria: Rede / Conectividade; localizacao: Andar 3; usuarios_afetados: 35"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Rede / Conectividade",
+    "prioridade": "Alta",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [
+      "Confirmação do patrimônio do notebook mencionado (se aplicável)"
+    ],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "demo:1792454013396141800:caso_divergencia",
+    "registro_id": 2,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 4.61,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-8b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "e02fc7870f153b0c9e45207c67316d3c692c97759f8d711a28cc5eda6b363d7a",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792454017.949894
+    },
+    {
+      "node": "interpretar",
+      "tokens": 529,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "recuperar",
+      "chamadas_recuperacao": 1,
+      "fontes": [
+        "KB-REDE",
+        "incidente:1"
+      ],
+      "erros": [],
+      "memorias": [],
+      "semantica": {
+        "atual": null,
+        "descartados": []
+      }
+    },
+    {
+      "node": "responder",
+      "tokens": 1271,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "aprovar",
+      "decisao": {
+        "decisao": "aprovar",
+        "prioridade": null,
+        "encaminhamento": null
+      }
+    },
+    {
+      "node": "registrar",
+      "recibo": {
+        "registro_id": 2,
+        "ja_existia": false,
+        "key": "11491fdce58c1e0eb29567c825a1b6f386355aa2dcdddbf933ada510b02e3343"
+      },
+      "memoria": {
+        "key": "05b3059403cf59c0f2708974e2b465b19444129cf8d49206e2bf3d8ecbd437de",
+        "ja_existia": false,
+        "bytes": 179
+      },
+      "fatos": []
+    },
+    {
+      "node": "finalizar",
+      "motivo": "registrado"
+    }
+  ]
+}

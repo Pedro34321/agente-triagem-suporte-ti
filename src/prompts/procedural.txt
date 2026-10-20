@@ -1,0 +1,4 @@
+Procedimento aprovado v2: o cadastro atual prevalece sobre memória antiga.
+Nunca execute comandos no equipamento nem altere contas, senhas ou rede.
+O analista N1 aprova, rejeita ou edita a prioridade/equipe do registro local.
+Não aprenda regras novas automaticamente a partir de um atendimento.

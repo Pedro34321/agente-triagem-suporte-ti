@@ -1,0 +1,12 @@
+[
+ {"id":1,"pergunta":"Minha senha de email foi rejeitada; qual equipe atende?","forma":"textual","topic":"acesso","fonte":"KB-ACESSO","trecho":"prioridade Média, Suporte N1"},
+ {"id":2,"pergunta":"Suspeito de comprometimento de conta: ainda vai ao N1?","forma":"textual","topic":"acesso","fonte":"KB-ACESSO","trecho":"suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2","excecao":true},
+ {"id":3,"pergunta":"Como configurar VPN para trabalhar de casa?","forma":"textual","topic":"vpn","fonte":"KB-VPN","trecho":"solicitar ao Suporte N1 o cliente homologado e o perfil autorizado"},
+ {"id":4,"pergunta":"Posso instalar VPN no equipamento pessoal?","forma":"textual","topic":"vpn","fonte":"KB-VPN","trecho":"em equipamento pessoal, não instalar o cliente corporativo sem autorização","excecao":true},
+ {"id":5,"pergunta":"O notebook tem cheiro de queimado: qual prioridade?","forma":"textual","topic":"hardware","fonte":"KB-HARDWARE","trecho":"cheiro de queimado ou risco elétrico exige prioridade Crítica","excecao":true},
+ {"id":6,"pergunta":"Escrever urgente muda a prioridade?","forma":"textual","topic":"prioridade","fonte":"KB-PRIORIDADE","trecho":"A palavra urgente isolada não eleva prioridade"},
+ {"id":7,"pergunta":"Meu sistema tem erro, quais informações devo informar?","forma":"textual","topic":"software","fonte":"KB-SOFTWARE","trecho":"Perguntar qual sistema e mensagem de erro quando ausentes"},
+ {"id":8,"pergunta":"Qual a localização do patrimônio NB-10203?","forma":"estruturada","asset":"NB-10203","fonte":"equipamento:NB-10203","trecho":"Andar 3"},
+ {"id":9,"pergunta":"Existe incidente de rede ativo no Andar 3?","forma":"estruturada","location":"Andar 3","fonte":"incidente:1","trecho":"Indisponibilidade de rede no andar 3"},
+ {"id":10,"pergunta":"Qual o procedimento para restaurar um cluster Kubernetes?","forma":"textual","topic":"outros","fonte":null,"trecho":null}
+]

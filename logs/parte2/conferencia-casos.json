@@ -1,0 +1,77 @@
+{
+  "criterios": {
+    "simples": true,
+    "divergencia": true,
+    "inexistente": true,
+    "informativo": true,
+    "fora_corpus": true,
+    "humano": true,
+    "caso_ambiguo": true,
+    "caso_incompleto": true,
+    "fora_escopo": true
+  },
+  "aprovados": 9,
+  "total": 9,
+  "modelo": "ministral-8b-2512",
+  "commits_execucao": {
+    "caso_ambiguo": "8a081b3c8efb40532df566d24685943208f256f8",
+    "caso_divergencia": "8a081b3c8efb40532df566d24685943208f256f8",
+    "caso_fora_corpus": "8a081b3c8efb40532df566d24685943208f256f8",
+    "caso_fora_escopo": "8a081b3c8efb40532df566d24685943208f256f8",
+    "caso_humano": "4752f6ba1bc14a76fef0ad0bf04ea52191462f19",
+    "caso_incompleto": "8a081b3c8efb40532df566d24685943208f256f8",
+    "caso_nao_dispara": "8a081b3c8efb40532df566d24685943208f256f8",
+    "caso_registro_inexistente": "8a081b3c8efb40532df566d24685943208f256f8",
+    "caso_simples": "8a081b3c8efb40532df566d24685943208f256f8"
+  },
+  "chamadas_recuperacao": {
+    "caso_ambiguo": 0,
+    "caso_divergencia": 1,
+    "caso_fora_corpus": 1,
+    "caso_fora_escopo": 0,
+    "caso_humano": 1,
+    "caso_incompleto": 0,
+    "caso_nao_dispara": 1,
+    "caso_registro_inexistente": 1,
+    "caso_simples": 1
+  },
+  "tokens": {
+    "caso_ambiguo": 525,
+    "caso_divergencia": 1800,
+    "caso_fora_corpus": 513,
+    "caso_fora_escopo": 507,
+    "caso_humano": 1760,
+    "caso_incompleto": 511,
+    "caso_nao_dispara": 1885,
+    "caso_registro_inexistente": 1855,
+    "caso_simples": 1622
+  },
+  "segundos": {
+    "caso_ambiguo": 1.421,
+    "caso_divergencia": 4.61,
+    "caso_fora_corpus": 1.454,
+    "caso_fora_escopo": 1.344,
+    "caso_humano": 4.015,
+    "caso_incompleto": 1.094,
+    "caso_nao_dispara": 3.235,
+    "caso_registro_inexistente": 3.89,
+    "caso_simples": 4.391
+  },
+  "bytes_memoria": {
+    "caso_ambiguo": [],
+    "caso_divergencia": [
+      179
+    ],
+    "caso_fora_corpus": [],
+    "caso_fora_escopo": [],
+    "caso_humano": [
+      183
+    ],
+    "caso_incompleto": [],
+    "caso_nao_dispara": [],
+    "caso_registro_inexistente": [],
+    "caso_simples": [
+      178
+    ]
+  }
+}

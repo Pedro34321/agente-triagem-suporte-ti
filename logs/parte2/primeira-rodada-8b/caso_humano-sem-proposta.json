@@ -1,0 +1,117 @@
+{
+  "tipo": "modelo_real",
+  "commit": "00c349aa3baba0be0cd8a34a87503963b7ee0366",
+  "data": "2026-10-19T23:51:26.453099+00:00",
+  "modelo": "ministral-8b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "286aced2dd3a2220649febb053591e0a0634a160b6734146dffa24986c82a570",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Meu notebook patrimônio NB-10203 tem cheiro de queimado.",
+  "inicial": {
+    "resultado": "Equipamento com cheiro de queimado e risco elétrico identificado. **Ação imediata necessária.**",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-10203",
+        "trecho": "patrimonio: NB-10203; tipo: Notebook; status: Ativo; localizacao: Andar 3"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Crítica",
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "informativo",
+    "thread_id": "demo:1792453871225497700:caso_humano",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Equipamento com cheiro de queimado e risco elétrico identificado. **Ação imediata necessária.**",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-10203",
+        "trecho": "patrimonio: NB-10203; tipo: Notebook; status: Ativo; localizacao: Andar 3"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Crítica",
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "informativo",
+    "thread_id": "demo:1792453871225497700:caso_humano",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 2.328,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-8b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "f96eadc35d8ae0d9f8c37fa98ddf02c2af6c3497802ab3071ae511aa8b69b631",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "286aced2dd3a2220649febb053591e0a0634a160b6734146dffa24986c82a570",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792453884.1417298
+    },
+    {
+      "node": "interpretar",
+      "tokens": 532,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "recuperar",
+      "chamadas_recuperacao": 1,
+      "fontes": [
+        "KB-HARDWARE",
+        "equipamento:NB-10203"
+      ],
+      "erros": [],
+      "memorias": [
+        {
+          "key": "05b3059403cf59c0f2708974e2b465b19444129cf8d49206e2bf3d8ecbd437de",
+          "payload": {
+            "assunto": "rede",
+            "categoria": "Rede / Conectividade",
+            "consulta": "internet caiu no Andar 3, suspeita de problema no notebook",
+            "encaminhamento": "Infraestrutura",
+            "prioridade": "Alta"
+          },
+          "score": 0.05
+        }
+      ],
+      "semantica": {
+        "atual": null,
+        "descartados": []
+      }
+    },
+    {
+      "node": "responder",
+      "tokens": 1261,
+      "modelo": "ministral-8b-2512"
+    },
+    {
+      "node": "finalizar",
+      "motivo": "informativo"
+    }
+  ]
+}

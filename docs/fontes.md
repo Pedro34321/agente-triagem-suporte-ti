@@ -59,3 +59,17 @@ Por esse motivo, eles foram utilizados como referências de mercado, mas não co
 Algumas divulgações não apresentam informações completas sobre linha de base, custo por atendimento, distribuição da complexidade dos chamados ou todos os critérios utilizados para considerar um problema como resolvido.
 
 Essas limitações foram consideradas na análise apresentada no `case.md`.
+
+## Fontes técnicas da Parte 2 — consultadas em 19/10/2026
+
+- OpenAI, Structured Outputs: https://developers.openai.com/api/docs/guides/structured-outputs
+- OpenAI, modelo GPT-4.1 mini: https://developers.openai.com/api/docs/models/gpt-4.1-mini
+- LangGraph, interrupções: https://docs.langchain.com/oss/python/langgraph/interrupts
+- LangGraph, persistência: https://docs.langchain.com/oss/python/langgraph/persistence
+- Enunciado Parte 2 fornecido pelo usuário neste trabalho (cópia local, sem URL pública).
+
+As fontes acima sustentam o uso técnico das bibliotecas. O corpus de suporte foi
+construído para simulação acadêmica; não atribuímos suas regras operacionais a essas
+fontes. Não houve entrevistas, pesquisa de campo ou validação empresarial nesta etapa.
+
+- Mistral, Custom Structured Outputs: https://docs.mistral.ai/studio/conversations/structured-output/custom

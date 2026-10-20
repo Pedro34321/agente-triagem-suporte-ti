@@ -1,0 +1,217 @@
+{
+  "tipo": "modelo_real",
+  "commit": "0bf045d1b4c681bfd71b00d8affe6349cf2452f1",
+  "data": "2026-10-19T23:45:14.531019+00:00",
+  "modelo": "ministral-3b-2512",
+  "prompts": {
+    "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+    "interpretar.txt": "38fcebbd51cd9e3db2c2baf1ab21a422fee6a41863141fb2edbf0dd91bbec1a1",
+    "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+    "responder.txt": "0c80ca3bfcfe253f99a90ded7c7b18d2c6f1dfcb1dad0f4f7f2a738e1b1013a4",
+    "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+  },
+  "entrada": "Meu notebook patrimônio NB-10203 tem cheiro de queimado.",
+  "inicial": {
+    "resultado": "Cheiro de queimado em NB-10203 (Andar 3) indica risco elétrico ou sobrecarga interna. Falha física não confirmada no cadastro, mas evidência forte para prioridade Crítica. Verificar patrimônio e interromper uso imediato com segurança.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-10203",
+        "trecho": "{\"localizacao\":\"Andar 3\",\"patrimonio\":\"NB-10203\",\"status\":\"Ativo\",\"tipo\":\"Notebook\"}"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Crítica",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [
+      "Confirmação do patrimônio NB-10203 (Andar 3) e status atual do equipamento?",
+      "Usuário confirmou a localização e o uso do notebook? (Risco imediato de segurança)"
+    ],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "demo:1792453495978686000:caso_humano",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Cheiro de queimado em NB-10203 (Andar 3) indica risco elétrico ou sobrecarga interna. Falha física não confirmada no cadastro, mas evidência forte para prioridade Crítica. Verificar patrimônio e interromper uso imediato com segurança.",
+        "fontes": [
+          {
+            "id": "KB-HARDWARE",
+            "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+          },
+          {
+            "id": "equipamento:NB-10203",
+            "trecho": "{\"localizacao\":\"Andar 3\",\"patrimonio\":\"NB-10203\",\"status\":\"Ativo\",\"tipo\":\"Notebook\"}"
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Hardware / Equipamento",
+        "prioridade": "Crítica",
+        "encaminhamento": "Infraestrutura",
+        "perguntas": [
+          "Confirmação do patrimônio NB-10203 (Andar 3) e status atual do equipamento?",
+          "Usuário confirmou a localização e o uso do notebook? (Risco imediato de segurança)"
+        ],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1792539914.508576,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "aprovacao_roteirizada": {
+    "decisao": "editar",
+    "encaminhamento": "Suporte N2"
+  },
+  "segunda_aprovacao": {
+    "resultado": "Cheiro de queimado em NB-10203 (Andar 3) indica risco elétrico ou sobrecarga interna. Falha física não confirmada no cadastro, mas evidência forte para prioridade Crítica. Verificar patrimônio e interromper uso imediato com segurança.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-10203",
+        "trecho": "{\"localizacao\":\"Andar 3\",\"patrimonio\":\"NB-10203\",\"status\":\"Ativo\",\"tipo\":\"Notebook\"}"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Crítica",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [
+      "Confirmação do patrimônio NB-10203 (Andar 3) e status atual do equipamento?",
+      "Usuário confirmou a localização e o uso do notebook? (Risco imediato de segurança)"
+    ],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "demo:1792453495978686000:caso_humano",
+    "registro_id": 2,
+    "ja_existia": true,
+    "pendencia": null
+  },
+  "registros_deste_caso": 1,
+  "saida": {
+    "resultado": "Cheiro de queimado em NB-10203 (Andar 3) indica risco elétrico ou sobrecarga interna. Falha física não confirmada no cadastro, mas evidência forte para prioridade Crítica. Verificar patrimônio e interromper uso imediato com segurança.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-10203",
+        "trecho": "{\"localizacao\":\"Andar 3\",\"patrimonio\":\"NB-10203\",\"status\":\"Ativo\",\"tipo\":\"Notebook\"}"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Crítica",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [
+      "Confirmação do patrimônio NB-10203 (Andar 3) e status atual do equipamento?",
+      "Usuário confirmou a localização e o uso do notebook? (Risco imediato de segurança)"
+    ],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "demo:1792453495978686000:caso_humano",
+    "registro_id": 2,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "segundos": 2.5,
+  "eventos": [
+    {
+      "node": "inicio",
+      "modelo": "ministral-3b-2512",
+      "prompts": {
+        "aprovacao.txt": "59f86ae7d14c749cfe9d9c257e63e0bf344581f2ddc4c72c46963838d70949f6",
+        "interpretar.txt": "38fcebbd51cd9e3db2c2baf1ab21a422fee6a41863141fb2edbf0dd91bbec1a1",
+        "procedural.txt": "5544f1039b1d54c4759a54c2ada53e8a8f063f5497a89483db962da4df0487c6",
+        "responder.txt": "0c80ca3bfcfe253f99a90ded7c7b18d2c6f1dfcb1dad0f4f7f2a738e1b1013a4",
+        "triagem-v1.txt": "02eb41361634f09e5cfeea1b7d08d9baf45ea371c77efc78524fc15bc8105b65"
+      },
+      "data_unix": 1792453512.1081953
+    },
+    {
+      "node": "interpretar",
+      "tokens": 428,
+      "modelo": "ministral-3b-2512"
+    },
+    {
+      "node": "recuperar",
+      "chamadas_recuperacao": 1,
+      "fontes": [
+        "KB-HARDWARE",
+        "equipamento:NB-10203"
+      ],
+      "erros": [],
+      "memorias": [
+        {
+          "key": "43a106c3ac4622b403253a0bfd405b143da3bfc69645fb925c25189d4e91df25",
+          "payload": {
+            "assunto": "rede",
+            "categoria": "Rede / Conectividade",
+            "consulta": "internet caiu em ambiente corporativo, possível falha no hardware (notebook)",
+            "encaminhamento": "Infraestrutura",
+            "prioridade": "Alta"
+          },
+          "score": 0.0455
+        }
+      ],
+      "semantica": {
+        "atual": null,
+        "descartados": []
+      }
+    },
+    {
+      "node": "responder",
+      "tokens": 1191,
+      "modelo": "ministral-3b-2512"
+    },
+    {
+      "node": "aprovar",
+      "decisao": {
+        "decisao": "editar",
+        "prioridade": null,
+        "encaminhamento": "Suporte N2"
+      }
+    },
+    {
+      "node": "registrar",
+      "recibo": {
+        "registro_id": 2,
+        "ja_existia": false,
+        "key": "e296784673a2ec328a59f639fdbdc4b2d86123933e7a2ccf24d3e49e9c5542ce"
+      },
+      "memoria": {
+        "key": "2aa1a4bd4eacf10f1b0bee69ba5d788acd90cafc0fc0a23f82a08d0e9bc837f1",
+        "ja_existia": false,
+        "bytes": 190
+      },
+      "fatos": [
+        {
+          "key": "fe66fe944adb039782210103fd40a8137f72c056add84e85aeba70da6635865d",
+          "ja_existia": false
+        }
+      ]
+    },
+    {
+      "node": "finalizar",
+      "motivo": "registrado"
+    }
+  ]
+}

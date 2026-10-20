@@ -1,0 +1,98 @@
+{
+  "additionalProperties": false,
+  "description": "Modelo seleciona ids; o código materializa os trechos literais.",
+  "properties": {
+    "resultado": {
+      "maxLength": 1800,
+      "minLength": 1,
+      "title": "Resultado",
+      "type": "string"
+    },
+    "fontes": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Fontes",
+      "type": "array"
+    },
+    "suficiente": {
+      "title": "Suficiente",
+      "type": "boolean"
+    },
+    "categoria": {
+      "anyOf": [
+        {
+          "enum": [
+            "Acesso / Conta",
+            "Rede / Conectividade",
+            "Software / Sistema",
+            "Hardware / Equipamento",
+            "Solicitação Informativa"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Categoria"
+    },
+    "prioridade": {
+      "anyOf": [
+        {
+          "enum": [
+            "Baixa",
+            "Média",
+            "Alta",
+            "Crítica"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Prioridade"
+    },
+    "encaminhamento": {
+      "anyOf": [
+        {
+          "enum": [
+            "Suporte N1",
+            "Infraestrutura",
+            "Sistemas",
+            "Suporte N2"
+          ],
+          "type": "string"
+        },
+        {
+          "type": "null"
+        }
+      ],
+      "title": "Encaminhamento"
+    },
+    "perguntas": {
+      "items": {
+        "type": "string"
+      },
+      "title": "Perguntas",
+      "type": "array"
+    },
+    "registrar": {
+      "title": "Registrar",
+      "type": "boolean"
+    }
+  },
+  "required": [
+    "resultado",
+    "fontes",
+    "suficiente",
+    "categoria",
+    "prioridade",
+    "encaminhamento",
+    "perguntas",
+    "registrar"
+  ],
+  "title": "DraftDecision",
+  "type": "object"
+}
