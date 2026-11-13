@@ -46,9 +46,9 @@ def main():
             response = {'decisao': 'editar', 'encaminhamento': edited_team} if case['id'] == 'caso_humano' else {'decisao': 'aprovar'}
             # A aprovação abaixo é o roteiro automatizado de demonstração, não identidade humana autenticada.
             evidence['aprovacao_roteirizada'] = response
-            final = app.resume(initial['thread_id'], response)
+            final = app.resume(initial['thread_id'], response,token=app.authority.local_credential(),actor=app.authority.principal)
             if case['id'] == 'caso_humano':
-                evidence['segunda_aprovacao'] = app.resume(initial['thread_id'], response)
+                evidence['segunda_aprovacao'] = app.resume(initial['thread_id'], response,token=app.authority.local_credential(),actor=app.authority.principal)
                 with app.store.connect() as db:
                     evidence['registros_deste_caso'] = db.execute('SELECT count(*) FROM triagens WHERE payload LIKE ?', ('%' + initial['thread_id'] + '%',)).fetchone()[0]
                 assert evidence['registros_deste_caso'] == 1

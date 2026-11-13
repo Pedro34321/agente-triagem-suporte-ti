@@ -91,6 +91,7 @@ def observed(fn):
             'gen_ai.operation.name': 'invoke_agent', 'gen_ai.agent.name': 'triagem-ti',
             'gen_ai.agent.version': VERSION, 'gen_ai.provider.name': PROVIDER,
             'gen_ai.request.model': MODEL, 'triagem.system.version': VERSION,
+            'triagem.owner': (kwargs.get('user', args[1] if len(args)>1 else 'demo') if fn.__name__=='run' else args[0].split(':',1)[0]),
             'triagem.operation': fn.__name__, 'triagem.input': canonical(safe({'args': args, 'kwargs': kwargs})),
             'triagem.prompts': canonical(prompt_versions()), 'triagem.environment': 'local-ficticio'
         }) as span:
@@ -102,7 +103,7 @@ def observed(fn):
                 span.set_attribute('triagem.quality.good', False)
                 raise
             reason = result['motivo_termino']
-            good = reason in {'registrado','informativo','base_insuficiente','incompleto','ambiguo','fora_escopo','aguardando_aprovacao','rejeitado'}
+            good = reason in {'registrado','informativo','base_insuficiente','incompleto','ambiguo','fora_escopo','aguardando_aprovacao','rejeitado','politica_bloqueou'}
             span.set_attribute('triagem.termination_reason', reason)
             span.set_attribute('triagem.quality.good', good)
             span.set_attribute('gen_ai.conversation.id', result['thread_id'])

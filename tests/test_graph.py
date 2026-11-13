@@ -29,10 +29,10 @@ def test_restart_edit_and_duplicate(tmp_path):
     assert count(app) == 0
     app.close()
     app = App(tmp_path, FakeLLM())
-    out = app.resume(paused['thread_id'], {'decisao': 'editar', 'encaminhamento': 'Suporte N2'})
+    out = resume_authorized(app, paused['thread_id'], {'decisao': 'editar', 'encaminhamento': 'Suporte N2'})
     assert out['encaminhamento'] == 'Suporte N2'
     assert out['registro_id'] is not None
-    again = app.resume(paused['thread_id'], {'decisao': 'aprovar'})
+    again = resume_authorized(app, paused['thread_id'], {'decisao': 'aprovar'})
     assert again['ja_existia'] and count(app) == 1
     snap = app.graph.get_state(app.config(paused['thread_id'])).values
     receipt = app.store.register('demo', paused['thread_id'], snap['decision'])
@@ -50,7 +50,7 @@ def test_no_write_on_rejection_or_timeout(tmp_path, action):
         now[0] += 86401
         assert app.expire()[0]['motivo_termino'] == 'aprovacao_expirada'
     else:
-        assert app.resume(out['thread_id'], {'decisao': 'rejeitar'})['motivo_termino'] == 'rejeitado'
+        assert resume_authorized(app, out['thread_id'], {'decisao': 'rejeitar'})['motivo_termino'] == 'rejeitado'
     assert count(app) == 0
     app.close()
 
@@ -72,14 +72,14 @@ def test_forgetting_and_contradiction(tmp_path):
     app = App(tmp_path, FakeLLM())
     user = 'TITULAR_FICTICIO_782'
     out = app.run('senha email rejeitada', user=user)
-    app.resume(out['thread_id'], {'decisao': 'aprovar'})
-    app.store.fact(user, 'local', 'Andar 1', 1)
-    app.store.fact(user, 'local', 'Andar 2', 2)
-    assert json.loads(app.store.latest(user, 'local')['atual']['value']) == 'Andar 2'
+    resume_authorized(app, out['thread_id'], {'decisao': 'aprovar'})
+    app.store.fact(user, 'equipamento:NB-10203', {'patrimonio':'NB-10203','tipo':'Notebook','status':'Ativo','localizacao':'Andar 1'}, 1)
+    app.store.fact(user, 'equipamento:NB-10203', {'patrimonio':'NB-10203','tipo':'Notebook','status':'Ativo','localizacao':'Andar 2'}, 2)
+    assert json.loads(app.store.latest(user, 'equipamento:NB-10203')['atual']['value'])['localizacao'] == 'Andar 2'
     assert app.store.recall(user, 'Acesso Conta')
     app.store.forget(user, app.checkpointer)
     assert not app.store.recall(user, 'Acesso Conta')
-    assert not app.store.latest(user, 'local')['atual']
+    assert not app.store.latest(user, 'equipamento:NB-10203')['atual']
     assert not app.graph.get_state(app.config(out['thread_id'])).values
     for table in ('checkpoints', 'writes'):
         # Todas as linhas, não só a consulta do último checkpoint.
@@ -109,7 +109,7 @@ def test_invalid_approval_keeps_pause(tmp_path):
     app = App(tmp_path, FakeLLM())
     out = app.run('senha email rejeitada')
     with pytest.raises(ValueError):
-        app.resume(out['thread_id'], {'decisao': 'editar', 'encaminhamento': 'Equipe inventada'})
+        resume_authorized(app, out['thread_id'], {'decisao': 'editar', 'encaminhamento': 'Equipe inventada'})
     assert app.graph.get_state(app.config(out['thread_id'])).next
     assert count(app) == 0
     app.close()
@@ -140,3 +140,7 @@ def test_elapsed_budget_and_provider_failure(tmp_path):
     assert result['reason'] == 'limite_tempo'
     assert count(app) == 0
     app.close()
+
+
+def resume_authorized(app, *args):
+    return app.resume(*args, token=app.authority.local_credential(), actor=app.authority.principal)

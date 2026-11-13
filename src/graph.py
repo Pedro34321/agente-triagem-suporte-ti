@@ -18,6 +18,7 @@ from .telemetry import Telemetry, observed, event, safe
 from opentelemetry import trace
 from opentelemetry.trace import SpanKind
 from .model import PROVIDER
+from .security import LocalAuthority, HOSTILE, suspended
 
 MAX_SECONDS = 90
 MAX_CALLS = 3
@@ -54,6 +55,7 @@ class State(TypedDict, total=False):
     reason: str
     receipt: dict
     output: dict
+    approval_grant: str
 
 
 def refusal(message, questions=None):
@@ -65,6 +67,8 @@ class App:
     def __init__(self, directory=None, llm=None, clock=time.time):
         self.directory = directory or ROOT / '.runtime'
         self.store = Store(self.directory)
+        self.authority = LocalAuthority(self.directory)
+        self.approval_actor = None
         self.telemetry = Telemetry(self.directory / 'traces')
         self.conn = sqlite3.connect(self.directory / 'checkpoints.sqlite', check_same_thread=False)
         self.conn.execute('PRAGMA secure_delete=ON')
@@ -129,6 +133,8 @@ class App:
         # Identificador nunca é inferido do nada pelo modelo.
         if info['asset'] and info['asset'] not in '\n'.join(state.get('history', [])):
             info['asset'] = None
+        if info['location'] and info['location'].casefold() not in '\n'.join(state.get('history', [])).casefold():
+            info['location'] = None
         update['interpretation'] = info
         if info['intent'] in ('incompleto', 'ambiguo', 'fora_escopo'):
             if info['intent'] != 'fora_escopo' and not info['questions']:
@@ -211,7 +217,8 @@ class App:
         if self.clock() > state['deadline']:
             return {'route': 'finalizar', 'reason': 'aprovacao_expirada'}
         approval = Approval.model_validate(response)
-        event('approval', {'actor':'operador-local-nao-autenticado', 'time':self.clock(), 'response':response, 'proposal':state['decision']})
+        if not self.approval_actor: raise PermissionError('Identidade de revisão ausente.')
+        event('approval', {'actor':self.approval_actor, 'time':self.clock(), 'response':response, 'proposal':state['decision']})
         if approval.decisao == 'rejeitar':
             return {'route': 'finalizar', 'reason': 'rejeitado'}
         decision = dict(state['decision'])
@@ -220,18 +227,22 @@ class App:
                 if getattr(approval, field) is not None:
                     decision[field] = getattr(approval, field)
         Decision.model_validate(decision)
-        return {'route': 'registrar', 'decision': decision, 'events': [{'node': 'aprovar', 'decisao': approval.model_dump()}]}
+        return {'route': 'registrar', 'decision': decision, 'approval_grant':self.authority.sign(state['thread_id'],decision,state['deadline']),
+                'events': [{'node': 'aprovar', 'decisao': approval.model_dump(), 'actor':self.approval_actor}]}
 
     def registrar(self, state):
+        suspended()
+        self.authority.verify(state,self.clock())
         self.telemetry.ensure_available()
         receipt = self.telemetry.tool('registrar_triagem', {'owner':state['owner'],'case':state['thread_id'],'decision':state['decision']}, lambda: self.store.register(state['owner'], state['thread_id'], state['decision']))
         # Se falhar entre as duas escritas, o replay não duplica nenhuma delas.
-        memory = self.store.remember(state['owner'], {'assunto': state['interpretation']['topic'], 'consulta': sanitize(state['interpretation']['query']), 'categoria': state['decision']['categoria'],
-                                     'prioridade': state['decision']['prioridade'], 'encaminhamento': state['decision']['encaminhamento']})
+        memory_payload={'assunto':state['interpretation']['topic'],'categoria':state['decision']['categoria'],
+                        'prioridade':state['decision']['prioridade'],'encaminhamento':state['decision']['encaminhamento']}
+        memory = self.telemetry.tool('gravar_episodio', memory_payload, lambda:self.store.remember(state['owner'],memory_payload))
         facts = []
         for source in state['sources']:
             if source['id'].startswith('equipamento:'):
-                facts.append(self.store.fact(state['owner'], source['id'], source['registro'], state['started']))
+                facts.append(self.telemetry.tool('gravar_fato',source,lambda:self.store.fact(state['owner'], source['id'], source['registro'], state['started'])))
         return {'receipt': receipt, 'reason': 'registrado', 'events': [{'node': 'registrar', 'recibo': receipt, 'memoria': memory, 'fatos': facts}]}
 
     def finalizar(self, state):
@@ -254,11 +265,17 @@ class App:
 
     @observed
     def run(self, text, user='demo', session='principal', case='caso1'):
+        suspended()
         if not isinstance(text, str) or not text.strip() or len(text) > 2000:
             raise ValueError('Informe texto livre com 1 a 2000 caracteres.')
         if any(not re.fullmatch(r'[A-Za-z0-9_-]{1,64}', x) for x in (user, session, case)):
             raise ValueError('Identificadores devem usar letras, números, _ ou - (até 64).')
         thread = f'{user}:{session}:{case}'
+        if HOSTILE.search(text):
+            output=Output(**refusal('Pedido bloqueado por política. Atendo triagem de TI; não executo comandos, revelo credenciais ou altero regras permanentes.'),
+                          motivo_termino='politica_bloqueou',thread_id=thread).model_dump()
+            event('security_block',{'channel':'user_input','rule':'HOSTILE','input':sanitize(text)})
+            return output
         cfg = self.config(thread)
         previous = self.graph.get_state(cfg)
         if previous.next:
@@ -276,7 +293,10 @@ class App:
         return output
 
     @observed
-    def resume(self, thread, response):
+    def resume(self, thread, response, *, token=None, actor=None):
+        suspended()
+        self.authority.authenticate(token,actor)
+        self.approval_actor=actor
         approval = Approval.model_validate(response)
         cfg = self.config(thread)
         snap = self.graph.get_state(cfg)
@@ -299,7 +319,7 @@ class App:
         for thread in threads:
             snap = self.graph.get_state(self.config(thread))
             if snap.next and snap.values.get('deadline', float('inf')) < self.clock():
-                expired.append(self.resume(thread, {'decisao': 'rejeitar'}))
+                expired.append(self.resume(thread, {'decisao': 'rejeitar'},token=self.authority.local_credential(),actor=self.authority.principal))
         return expired
 
     def close(self):
