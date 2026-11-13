@@ -14,6 +14,10 @@ from .contracts import Interpretation, Decision, DraftDecision, Approval, Output
 from .knowledge import search, records
 from .model import LLM, MODEL, prompt, prompt_versions
 from .storage import Store
+from .telemetry import Telemetry, observed, event, safe
+from opentelemetry import trace
+from opentelemetry.trace import SpanKind
+from .model import PROVIDER
 
 MAX_SECONDS = 90
 MAX_CALLS = 3
@@ -61,6 +65,7 @@ class App:
     def __init__(self, directory=None, llm=None, clock=time.time):
         self.directory = directory or ROOT / '.runtime'
         self.store = Store(self.directory)
+        self.telemetry = Telemetry(self.directory / 'traces')
         self.conn = sqlite3.connect(self.directory / 'checkpoints.sqlite', check_same_thread=False)
         self.conn.execute('PRAGMA secure_delete=ON')
         self.checkpointer = SqliteSaver(self.conn)
@@ -91,7 +96,15 @@ class App:
         if reason:
             return {'route': 'finalizar', 'reason': reason, 'decision': refusal('Orçamento esgotado; encaminhe ao analista N1.')}
         try:
-            result, used = self.llm.call(name, schema, data, timeout=MAX_SECONDS - elapsed)
+            with self.telemetry.span('chat ' + MODEL, {'gen_ai.operation.name': 'chat',
+                    'gen_ai.provider.name': PROVIDER, 'gen_ai.request.model': MODEL, 'triagem.stage': name}, kind=SpanKind.CLIENT) as chat:
+                result, used = self.llm.call(name, schema, data, timeout=MAX_SECONDS - elapsed)
+                usage = getattr(self.llm, 'last_usage', {})
+                if usage:
+                    chat.set_attribute('gen_ai.usage.input_tokens', usage['input'])
+                    chat.set_attribute('gen_ai.usage.output_tokens', usage['output'])
+                    chat.set_attribute('triagem.estimated_cost_usd', (usage['input'] + usage['output']) * 0.15 / 1000000)
+                chat.set_attribute('gen_ai.response.model', MODEL)
             updates = {'calls': state.get('calls', 0) + 1, 'tokens': state.get('tokens', 0) + used,
                        'events': [{'node': name, 'tokens': used, 'modelo': MODEL}]}
             if self.clock() - state['started'] >= MAX_SECONDS or updates['tokens'] > MAX_TOKENS:
@@ -128,10 +141,11 @@ class App:
 
     def recuperar(self, state):
         info = state['interpretation']
-        docs = search(info['query'], info['topic'])
-        rows, errors = records(info)
-        memories = self.store.recall(state['owner'], state['text'])
-        semantic = self.store.latest(state['owner'], 'equipamento:' + (info['asset'] or 'nenhum'))
+        docs = self.telemetry.tool('buscar_corpus', {'query': info['query'], 'topic': info['topic']}, lambda: search(info['query'], info['topic']))
+        rows, errors = self.telemetry.tool('consultar_cadastro', info, lambda: records(info))
+        memories = self.telemetry.tool('lembrar_episodios', {'owner':state['owner'], 'query':state['text']}, lambda: self.store.recall(state['owner'], state['text']))
+        semantic = self.telemetry.tool('ler_fato', {'owner':state['owner'],'asset':info['asset']}, lambda: self.store.latest(state['owner'], 'equipamento:' + (info['asset'] or 'nenhum')))
+        event('recovered_context', docs + rows)
         return {'sources': docs + rows, 'tool_errors': errors, 'memories': memories, 'semantic': semantic,
                 'events': [{'node': 'recuperar', 'chamadas_recuperacao': 1, 'fontes': [s['id'] for s in docs + rows],
                             'erros': errors, 'memorias': memories, 'semantica': semantic}]}
@@ -197,6 +211,7 @@ class App:
         if self.clock() > state['deadline']:
             return {'route': 'finalizar', 'reason': 'aprovacao_expirada'}
         approval = Approval.model_validate(response)
+        event('approval', {'actor':'operador-local-nao-autenticado', 'time':self.clock(), 'response':response, 'proposal':state['decision']})
         if approval.decisao == 'rejeitar':
             return {'route': 'finalizar', 'reason': 'rejeitado'}
         decision = dict(state['decision'])
@@ -208,7 +223,8 @@ class App:
         return {'route': 'registrar', 'decision': decision, 'events': [{'node': 'aprovar', 'decisao': approval.model_dump()}]}
 
     def registrar(self, state):
-        receipt = self.store.register(state['owner'], state['thread_id'], state['decision'])
+        self.telemetry.ensure_available()
+        receipt = self.telemetry.tool('registrar_triagem', {'owner':state['owner'],'case':state['thread_id'],'decision':state['decision']}, lambda: self.store.register(state['owner'], state['thread_id'], state['decision']))
         # Se falhar entre as duas escritas, o replay não duplica nenhuma delas.
         memory = self.store.remember(state['owner'], {'assunto': state['interpretation']['topic'], 'consulta': sanitize(state['interpretation']['query']), 'categoria': state['decision']['categoria'],
                                      'prioridade': state['decision']['prioridade'], 'encaminhamento': state['decision']['encaminhamento']})
@@ -231,14 +247,12 @@ class App:
         return state['output']
 
     def log(self, owner, thread, operation, output, state):
-        directory = self.directory / 'logs'
-        directory.mkdir(exist_ok=True)
-        entry = {'owner': owner, 'thread': thread, 'operacao': operation, 'data_unix': self.clock(),
-                 'modelo': MODEL, 'prompts': prompt_versions(), 'output': output,
-                 'tokens': state.get('tokens', 0), 'events': state.get('events', [])}
-        with (directory / (digest(thread) + '.jsonl')).open('a', encoding='utf-8') as f:
-            f.write(canonical(entry) + '\n')
+        event('decision_record', {'owner':owner,'thread':thread,'operation':operation,
+               'input':state.get('text'),'interpretation':state.get('interpretation'),
+               'source_ids':[s['id'] for s in state.get('sources',[])],
+               'output':output,'reason':output['motivo_termino'],'events':state.get('events',[])})
 
+    @observed
     def run(self, text, user='demo', session='principal', case='caso1'):
         if not isinstance(text, str) or not text.strip() or len(text) > 2000:
             raise ValueError('Informe texto livre com 1 a 2000 caracteres.')
@@ -261,6 +275,7 @@ class App:
         self.log(user, thread, 'iniciar', output, state)
         return output
 
+    @observed
     def resume(self, thread, response):
         approval = Approval.model_validate(response)
         cfg = self.config(thread)
