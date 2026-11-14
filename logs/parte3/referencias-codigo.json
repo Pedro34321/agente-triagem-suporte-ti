@@ -1,10 +1,10 @@
 {
-  "autorizar": "src/security.py:31",
-  "grant": "src/security.py:38",
-  "episodio": "src/security.py:48",
-  "fato": "src/security.py:60",
-  "registrar": "src/graph.py:233",
-  "validar": "src/graph.py:174",
-  "interpretar": "src/graph.py:128",
-  "run": "src/graph.py:266"
+  "autorizar": "src/security.py:32",
+  "grant": "src/security.py:40",
+  "episodio": "src/security.py:52",
+  "fato": "src/security.py:61",
+  "registrar": "src/graph.py:235",
+  "validar": "src/graph.py:183",
+  "interpretar": "src/graph.py:136",
+  "run": "src/graph.py:274"
 }
