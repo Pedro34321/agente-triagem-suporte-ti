@@ -1,0 +1,10 @@
+{
+  "autorizar": "src/security.py:31",
+  "grant": "src/security.py:38",
+  "episodio": "src/security.py:48",
+  "fato": "src/security.py:60",
+  "registrar": "src/graph.py:233",
+  "validar": "src/graph.py:174",
+  "interpretar": "src/graph.py:128",
+  "run": "src/graph.py:266"
+}

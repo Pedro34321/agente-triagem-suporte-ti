@@ -48,6 +48,15 @@ def test_trace_failure_is_fail_closed(tmp_path):
     assert count(app)==0;app.close()
 
 
+def test_modified_proposal_invalidates_approval_grant(tmp_path):
+    app=App(tmp_path,FakeLLM());out=app.run('senha do email incorreta')
+    resume_authorized(app,out['thread_id'],{'decisao':'aprovar'})
+    state=dict(app.graph.get_state(app.config(out['thread_id'])).values)
+    state['decision']=dict(state['decision'],prioridade='Crítica')
+    with pytest.raises(PermissionError):app.registrar(state)
+    assert count(app)==1;app.close()
+
+
 def test_suspend_blocks_calls_and_writes(tmp_path,monkeypatch):
     app=App(tmp_path,FakeLLM());monkeypatch.setenv('TRIAGEM_SUSPENDED','1')
     with pytest.raises(PermissionError): app.run('senha incorreta')

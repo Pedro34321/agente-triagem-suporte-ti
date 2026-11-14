@@ -26,11 +26,18 @@ def metrics(directory):
             if s['name'].startswith('execute_tool '):
                 t=tools[s['attributes']['gen_ai.tool.name']];t['chamadas']+=1
                 t['erros']+=bool(s['attributes'].get('error.type'))
-        costs={id:sum(s['attributes'].get('triagem.estimated_cost_usd',0) for s in chats if s['context']['trace_id']==id) for id in ids}
+        costs={}
+        for id in ids:
+            calls=[s for s in chats if s['context']['trace_id']==id]
+            complete=all('triagem.estimated_cost_usd' in s['attributes'] for s in calls)
+            costs[id]=sum(s['attributes']['triagem.estimated_cost_usd'] for s in calls) if complete else None
+        known=[c for c in costs.values() if c is not None]
         good=sum(s['attributes'].get('triagem.quality.good') is True for s in roots)
         n=len(roots);allowed=n*0.1;bad=n-good
         report[version]={'execucoes':n,'p50_s':times[math.ceil(n*0.5)-1],'p95_s':times[math.ceil(n*0.95)-1],
-            'custo_estimado_usd_total':sum(costs.values()),'custo_estimado_usd_por_execucao':sum(costs.values())/n,
+            'custo_estimado_usd_total_conhecido':sum(known),'custo_estimado_usd_por_execucao':sum(known)/n if len(known)==n else None,
+            'custo_limite_inferior_por_execucao':sum(known)/n,'execucoes_com_custo_conhecido':len(known),
+            'lacuna_custo':'API sem usage não permite inferir custo zero' if len(known)!=n else None,
             'custos_individuais_usd':costs,'chamadas_modelo':len(chats),
             'tokens_input':sum(s['attributes'].get('gen_ai.usage.input_tokens',0) for s in chats),
             'tokens_output':sum(s['attributes'].get('gen_ai.usage.output_tokens',0) for s in chats),
