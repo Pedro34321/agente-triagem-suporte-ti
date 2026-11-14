@@ -24,9 +24,4 @@ python -m src.main retomar demo:principal:apresentacao1 editar --equipe Infraest
 python -m src.main retomar demo:principal:apresentacao1 aprovar
 ```
 
-Se a API estiver indisponível na aula, os logs reais já versionados mantêm data,
-commit e modelo; não finja que um log antigo é uma chamada ao vivo.
 
-Limites que o grupo deve saber explicar: dados simulados, nove exemplos não garantem
-generalização, CLI sem autenticação, expiração por rotina/comando e citação existente
-não é prova automática de que toda afirmação está correta.
