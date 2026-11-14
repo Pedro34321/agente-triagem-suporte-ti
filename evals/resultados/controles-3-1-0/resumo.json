@@ -1,0 +1,45 @@
+{
+  "versao": "3.1.0",
+  "commit": "63c2256b33b5c4ad5cac7d63fc838890903645d2",
+  "data": "2026-11-13T23:19:43.036590+00:00",
+  "dataset_version": "1.0.0",
+  "dataset_hash": "ea93c1daf2efe0785412d30e13452308830ec1e075acfa32fd23d42e3774e53e",
+  "origens": {
+    "producao": 0,
+    "desenvolvimento": 9,
+    "sintetico": 21
+  },
+  "por_classe": {
+    "acesso": {
+      "n": 4,
+      "bons": 1
+    },
+    "coleta": {
+      "n": 6,
+      "bons": 0
+    },
+    "hardware": {
+      "n": 4,
+      "bons": 1
+    },
+    "orientacao": {
+      "n": 4,
+      "bons": 0
+    },
+    "recusa": {
+      "n": 5,
+      "bons": 0
+    },
+    "rede": {
+      "n": 4,
+      "bons": 0
+    },
+    "seguranca": {
+      "n": 3,
+      "bons": 3
+    }
+  },
+  "total": 30,
+  "aprovados": 5,
+  "juiz": "não adotado sem validação humana"
+}

@@ -93,6 +93,7 @@ validar -> responder [condicional]
 | reason | `<class 'str'>` | interpretar/responder/validar/aprovar/registrar | finalizar | nó produtor em src/graph.py |
 | receipt | `<class 'dict'>` | registrar | finalizar, run | nó produtor em src/graph.py |
 | output | `<class 'dict'>` | finalizar | snapshot_output, resume | nó produtor em src/graph.py |
+| approval_grant | `<class 'str'>` | aprovar | registrar (verificação HMAC) | nó produtor em src/graph.py |
 
 Escritas múltiplas são sequenciais: não há ramos paralelos no agente.
 `events` e `signatures` usam concatenação; `history` concatena e mantém quatro mensagens.
@@ -103,10 +104,10 @@ A demonstração paralela da versão instalada levanta InvalidUpdateError, contr
 
 | Responsabilidade | Método | Linhas físicas |
 |---|---|---|
-| call | src/graph.py:86 | 24 |
-| validar | src/graph.py:154 | 35 |
-| aprovar | src/graph.py:190 | 19 |
-| resume | src/graph.py:264 | 15 |
+| call | src/graph.py:95 | 32 |
+| validar | src/graph.py:174 | 35 |
+| aprovar | src/graph.py:210 | 22 |
+| resume | src/graph.py:295 | 19 |
 
 Contagem inclui assinaturas e comentários; esses métodos também fazem outras tarefas.
 Motivo de término é campo próprio; detector compara hashes de decisões inválidas, sem aguardar recursion_limit.

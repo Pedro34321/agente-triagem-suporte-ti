@@ -26,6 +26,8 @@ def sanitize(text):
     # Defesa limitada e explícita: somente dados fictícios são aceitos neste protótipo.
     text = re.sub(r'sk-[A-Za-z0-9_-]+', '[SEGREDO]', text)
     text = re.sub(r'mstrl_[A-Za-z0-9_-]+', '[SEGREDO]', text)
-    text = re.sub(r'(?i)\b(senha|token|password)\s*[:=]\s*\S+', r'\1=[REMOVIDO]', text)
+    text = re.sub(r'(?i)\b(senha|token|password)\s*[:=]\s*(?!\[REMOVIDO\])[^\s,";{}\[\]]+', r'\1=[REMOVIDO]', text)
     text = re.sub(r'\b[\w.+-]+@[\w.-]+\.[A-Za-z]{2,}\b', '[EMAIL]', text)
+    text = re.sub(r'\b\d{3}\.?\d{3}\.?\d{3}-?\d{2}\b', '[CPF]', text)
+    text = re.sub(r'(?i)\b(cpf|telefone|celular)\s*[:=]\s*[\d() .+-]+', '[DADO_PESSOAL]', text)
     return text

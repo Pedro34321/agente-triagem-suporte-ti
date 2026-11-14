@@ -1,3 +1,6 @@
+
+> Atualização Parte 3: esta página descreve a entrega anterior. Para controles atuais, credencial local, minimização da memória, traces e resultados novos, consulte docs/model-card.md e docs/seguranca.md. A memória longa atual não guarda mais a consulta livre e a revisão exige credencial local. Os dados e os resultados da Parte 2 permanecem históricos.
+
 # Aprovação humana
 
 O nó `aprovar` chama `interrupt`. Toda proposta de registro aguarda analista N1,

@@ -1,0 +1,106 @@
+{
+  "3.1.0": {
+    "execucoes": 34,
+    "p50_s": 0.638314,
+    "p95_s": 3.449038,
+    "custo_estimado_usd_total_conhecido": 0.0005149499999999999,
+    "custo_estimado_usd_por_execucao": null,
+    "custo_limite_inferior_por_execucao": 1.5145588235294114e-05,
+    "execucoes_com_custo_conhecido": 9,
+    "lacuna_custo": "API sem usage não permite inferir custo zero",
+    "custos_individuais_usd": {
+      "0x480217e38a135bb7c46dd11731e01d73": null,
+      "0x8b97e8952a4e2c782ba9e49ceb357cf5": null,
+      "0xc5b4450fad8eb3452a094ba17c9912a4": 0,
+      "0xbc776308ef3c06ca528afc4839cc5723": null,
+      "0xaa5755cece6d0eb2bdd1e38063843e47": null,
+      "0x62750c3fe5586e00ff48962174c17c8a": null,
+      "0x51c50ddf88e50d4bcae7b9edce62080b": 0,
+      "0x681b75f81156af21562e5e978c5de3cf": null,
+      "0xb2a6781f5410be2d9047cc35ba394338": null,
+      "0xe156e8d7d8d21cdf016d0345037d189c": null,
+      "0x7403a39959391b9a36d40145f7d2320d": null,
+      "0x9a50de388eb1bdbcfc99dc339e90d6aa": null,
+      "0x1fedef19356413cbaa2c605a0809559d": 0,
+      "0xe351085aaaa0f06ccb892a638ab13f22": 0,
+      "0xc1dcc714b3fbd716d039f9e2e4d2d5a8": null,
+      "0x91c19d339e2321464d33b1154053fe07": 0.00024344999999999998,
+      "0x4f649342856fcd2ba2145db9e6dfbfaf": null,
+      "0x9c89d04abaa98156d31620c2afb796bc": null,
+      "0x2cac90658f51d7213c1d5fe44707c233": null,
+      "0x66ae724bad6546ae5b1b11ff1394496c": 0.0002715,
+      "0xa02a2ee96c0c80399203c2d3422001e0": null,
+      "0xfc7a56598ce6d67c5caf68c15ff44c88": null,
+      "0x3460f66f5088c89bed871873383f92b9": null,
+      "0xa5226d733b6f0c3b239eccc9fe860244": null,
+      "0xe093a33ea772961ba6b0fd31d0537e07": 0,
+      "0x1383cc0ecc4d8fdde0cc0aa00f94c46d": null,
+      "0xcff16489b4f05f825ef6e67a82268884": null,
+      "0xab5aa24b8030fdf89d7c57da2e83323c": null,
+      "0xde150e7730b5f39ff3d289e468abf42a": 0,
+      "0xc18027e2c29821e5bc2a073c6400ffc7": null,
+      "0x6bd031cc42064fc8082bc641b666750a": null,
+      "0xf5699d954acce19f3dcaf0757fe918c8": 0,
+      "0x8906a0ad7104d635fd6a7647109fe844": null,
+      "0xb7f835869858a2104cf7aa4e1835ff93": null
+    },
+    "chamadas_modelo": 29,
+    "tokens_input": 3030,
+    "tokens_output": 403,
+    "motivos": {
+      "erro_modelo": 25,
+      "politica_bloqueou": 3,
+      "registrado": 4,
+      "aguardando_aprovacao": 2
+    },
+    "ferramentas": {
+      "buscar_corpus": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "consultar_cadastro": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "lembrar_episodios": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "ler_fato": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "registrar_triagem": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "gravar_episodio": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "gravar_fato": {
+        "chamadas": 1,
+        "erros": 0,
+        "taxa_erro": 0.0
+      }
+    },
+    "slo": {
+      "validos": 34,
+      "bons": 9,
+      "sli": 0.2647058823529412,
+      "alvo": 0.9,
+      "janela": "7 dias",
+      "orçamento_erros": 3.4000000000000004,
+      "erros_observados": 25,
+      "consumo_orcamento": 7.352941176470588,
+      "violado": true,
+      "escopo": "amostra sintética/desenvolvimento desta rodada, não produção"
+    }
+  }
+}
