@@ -17,13 +17,23 @@ def main():
                      ('validar',App.validar),('interpretar',App.interpretar),('run',App.run)]:
         obj=inspect.unwrap(obj)
         file=Path(inspect.getsourcefile(obj)).relative_to(ROOT).as_posix()
-        refs[name]=f'{file}:{inspect.getsourcelines(obj)[1]}'
+        source,start=inspect.getsourcelines(obj)
+        needles={'autorizar':'if actor', 'grant':'if now', 'episodio':'if not payload',
+                 'fato':'if not re.fullmatch', 'registrar':'self.authority.verify',
+                 'validar':"if d['registrar']", 'interpretar':"if info['location']", 'run':'if HOSTILE.search'}
+        offset=next(i for i,line in enumerate(source) if needles[name] in line)
+        refs[name]=f'{file}:{start+offset}'
     target=ROOT/'logs/parte3';target.mkdir(exist_ok=True)
     (target/'referencias-codigo.json').write_text(json.dumps(refs,indent=2),encoding='utf-8')
     path=ROOT/'docs/seguranca.md'
     text=path.read_text(encoding='utf-8').split('<!-- LINHAS -->')[0]
     text+='\n<!-- LINHAS -->\n## Pontos de aplicação verificados\n\n'
     text+='\n'.join(f'- {name}: `{ref}`.' for name,ref in refs.items())+'\n'
+    riskrefs={'ASI03':refs['autorizar']+' e '+refs['grant'],'ASI01':refs['run']+' e '+refs['validar'],
+              'ASI02':refs['registrar'],'ASI09':'src/graph.py:'+str(inspect.getsourcelines(App.aprovar)[1]),
+              'ASI10':'src/security.py:44 e src/graph.py:20','ASI04':'src/model.py:1 e requirements.txt:1',
+              'ASI06':refs['episodio']+' e '+refs['fato'],'ASI08':'src/telemetry.py:75 e src/graph.py:95'}
+    text+='\n| Risco | Componente e linha atual |\n|---|---|\n'+'\n'.join(f'| {k} | `{v}` |' for k,v in riskrefs.items())+'\n'
     path.write_text(text,encoding='utf-8')
     lines=['## Métricas calculadas dos traces','']
     for run in ('baseline-3-0-0','controles-3-1-0'):
@@ -171,7 +181,7 @@ formal do professor disponibilizada; as mudanças vieram da inspeção e dos tes
 4. Credencial/plataforma: comprovar privilégios e gasto no console e auditar ACL.
 5. Dados reais: definir finalidade/base legal, controles e contrato de retenção antes de uso.
 6. Operação: instalar agendamento de expiração/limpeza e acesso individual autenticado.
-7. Escala de impacto: conferir critérios completos da Aula 14, não fornecidos no enunciado.
+7. Riscos: revisar a evolução da análise da Parte 2 em exercicios/aula14-respostas.md.
 '''
     (ROOT/'docs/model-card.md').write_text(model_card,encoding='utf-8')
 

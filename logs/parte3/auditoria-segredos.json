@@ -1,10 +1,10 @@
 {
-  "commits_verificados": 31,
-  "blobs_unicos": 224,
+  "commits_verificados": 36,
+  "blobs_unicos": 321,
   "deteccoes": [],
   "comandos": {
     "git log --all --oneline -- .env": "",
-    "git log --all -S OPENAI_API_KEY= --oneline": "a0581f5 Configura ambiente inicial do projeto\n"
+    "git log --all -S OPENAI_API_KEY= --oneline": "fec641a Documenta Parte 3, resultados negativos e revisÃ£o humana pendente do juiz\na0581f5 Configura ambiente inicial do projeto\n"
   },
   "limitacao": "Varredura por prefixos conhecidos não é prova de ausência de todo segredo ou formato possível."
 }

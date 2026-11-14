@@ -13,21 +13,22 @@ externo de demonstração, não uma capacidade multimídia do agente.
 
 ## Riscos do case, por impacto
 
-Escala operacional adotada aqui: 1 = texto incorreto reversível, 2 = corrupção
-persistente da triagem/memória local, 3 = escrita não autorizada ou divulgação de segredo.
-Os critérios completos da Aula 14 não foram fornecidos: esta escala é uma hipótese
-documentada que os integrantes devem conferir com o material da disciplina.
+Critérios alinhados à análise do grupo em `exercicios/aula14-respostas.md`, encontrada
+na main durante a integração: registro persistente de uma decisão/parecer, abuso de
+identidade e comprometimento de dependências têm impacto 3. Envenenamento de memória
+e indisponibilidade reversível têm impacto 2. Entre os impactos máximos, priorizamos
+ASI03 e ASI01, como no exercício.
 
 | Risco | Impacto | Canal e cenário | Controle e evidência |
 |---|---|---|---|
 | ASI03 identidade/privilégio | 3 | usuário afirma ser administrador e tenta aprovar/escrever | LocalAuthority.authenticate, grant HMAC e test_asi03_unauthorized_approval / test_asi03_direct_write_cannot_bypass_approval |
+| ASI01 sequestro de objetivo | 3 | texto pede ignorar regras e executar powershell | HOSTILE bloqueia padrões antes do modelo; test_asi01_hostile_user_channel_blocked_before_model |
+| ASI02 uso indevido de ferramenta | 3 | proposta tenta gravar sem pausa ou reexecutar a ação | registrar verifica grant e UNIQUE; teste de bypass e test_restart_edit_and_duplicate |
+| ASI09 confiança humano-agente | 3 | revisor aceita classificação mal fundamentada | proposta explícita e fontes, risco semântico residual aceito abaixo |
+| ASI10 agente desgovernado | 3 | execução não encerra ou operador quer suspender | tetos e TRIAGEM_SUSPENDED, test_suspend_blocks_calls_and_writes |
+| ASI04 suprimentos | 3 | dependência Python comprometida roda com privilégios locais | versões fixadas, risco residual aceito; não há verificação criptográfica de toda dependência |
 | ASI06 envenenamento persistente | 2 | entrada/documento/retorno tenta guardar instrução ou senha para futuras conversas | validate_episode/validate_fact e test_asi06_memory_rejects_external_text_and_credentials |
-| ASI02 uso indevido de ferramenta | 2 | proposta tenta gravar sem pausa ou reexecutar a ação | registrar verifica grant e UNIQUE; teste de bypass e test_restart_edit_and_duplicate |
-| ASI01 sequestro de objetivo | 2 | texto pede ignorar regras e executar powershell | HOSTILE bloqueia padrões antes do modelo; test_asi01_hostile_user_channel_blocked_before_model |
-| ASI09 confiança humano-agente | 2 | revisor aceita classificação mal fundamentada | proposta explícita e fontes, risco semântico residual aceito abaixo |
 | ASI08 falhas em cascata | 2 | API indisponível, trace falha e fluxo tenta continuar escrevendo | erro encerra fluxo; trace preflight fail-closed, test_trace_failure_is_fail_closed |
-| ASI10 agente desgovernado | 2 | execução não encerra ou operador quer suspender | tetos e TRIAGEM_SUSPENDED, test_suspend_blocks_calls_and_writes |
-| ASI04 suprimentos | 2 | dependência Python comprometida roda com privilégios locais | versões fixadas, risco residual aceito; não há verificação criptográfica de toda dependência |
 
 ASI05 não é uma ferramenta oferecida: não há shell, eval de Python ou execução de
 código à disposição do modelo. Bibliotecas comprometidas entram no risco ASI04.
@@ -116,14 +117,28 @@ Se a varredura detectar uma chave real, interromper publicação e revogar no pr
 reescrever histórico sozinho não corrige os clones já existentes.
 
 
+
+
+
 <!-- LINHAS -->
 ## Pontos de aplicação verificados
 
-- autorizar: `src/security.py:31`.
-- grant: `src/security.py:38`.
-- episodio: `src/security.py:48`.
-- fato: `src/security.py:60`.
-- registrar: `src/graph.py:233`.
-- validar: `src/graph.py:174`.
-- interpretar: `src/graph.py:128`.
-- run: `src/graph.py:266`.
+- autorizar: `src/security.py:32`.
+- grant: `src/security.py:40`.
+- episodio: `src/security.py:52`.
+- fato: `src/security.py:61`.
+- registrar: `src/graph.py:235`.
+- validar: `src/graph.py:183`.
+- interpretar: `src/graph.py:136`.
+- run: `src/graph.py:274`.
+
+| Risco | Componente e linha atual |
+|---|---|
+| ASI03 | `src/security.py:32 e src/security.py:40` |
+| ASI01 | `src/graph.py:274 e src/graph.py:183` |
+| ASI02 | `src/graph.py:235` |
+| ASI09 | `src/graph.py:210` |
+| ASI10 | `src/security.py:44 e src/graph.py:20` |
+| ASI04 | `src/model.py:1 e requirements.txt:1` |
+| ASI06 | `src/security.py:52 e src/security.py:61` |
+| ASI08 | `src/telemetry.py:75 e src/graph.py:95` |

@@ -107,6 +107,9 @@ https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-
 https://docs.mistral.ai/inference/pricing
 
 
+
+
+
 <!-- MEDIDAS -->
 ## Métricas calculadas dos traces
 

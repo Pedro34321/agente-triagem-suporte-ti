@@ -19,11 +19,11 @@ envio de mensagem ou escrita em sistema externo.
 
 | Limite | Aplicação e evidência |
 |---|---|
-| Escopo de triagem e bloqueio de padrões hostis | código `src/graph.py:266`, testes ASI01 |
-| Aprovação com credencial local e identidade vinculada | `src/security.py:31`, test_asi03_unauthorized_approval |
-| Escrita vinculada à proposta, prazo e aprovação | `src/security.py:38` e `src/graph.py:233`, teste de bypass |
+| Escopo de triagem e bloqueio de padrões hostis | código `src/graph.py:274`, testes ASI01 |
+| Aprovação com credencial local e identidade vinculada | `src/security.py:32`, test_asi03_unauthorized_approval |
+| Escrita vinculada à proposta, prazo e aprovação | `src/security.py:40` e `src/graph.py:235`, teste de bypass |
 | Até 3 chamadas de estágio, 90s, 12000 tokens observados, 16 superpassos | src/graph.py constantes e call; tokens não são teto rígido de fatura |
-| Na falha de fonte/controle, não escrever | `src/graph.py:174`, testes de fonte inválida e auditoria indisponível |
+| Na falha de fonte/controle, não escrever | `src/graph.py:183`, testes de fonte inválida e auditoria indisponível |
 | Operador pode suspender | TRIAGEM_SUSPENDED=1, test_suspend_blocks_calls_and_writes |
 | Credencial de inferência | usada somente no endpoint Mistral no adaptador, não no prompt |
 
@@ -117,4 +117,4 @@ formal do professor disponibilizada; as mudanças vieram da inspeção e dos tes
 4. Credencial/plataforma: comprovar privilégios e gasto no console e auditar ACL.
 5. Dados reais: definir finalidade/base legal, controles e contrato de retenção antes de uso.
 6. Operação: instalar agendamento de expiração/limpeza e acesso individual autenticado.
-7. Escala de impacto: conferir critérios completos da Aula 14, não fornecidos no enunciado.
+7. Riscos: revisar a evolução da análise da Parte 2 em exercicios/aula14-respostas.md.

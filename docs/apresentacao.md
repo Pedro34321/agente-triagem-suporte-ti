@@ -1,3 +1,6 @@
+
+> Atualização Parte 3: esta página descreve a entrega anterior. Para controles atuais, credencial local, minimização da memória, traces e resultados novos, consulte docs/model-card.md e docs/seguranca.md. A memória longa atual não guarda mais a consulta livre e a revisão exige credencial local. Os dados e os resultados da Parte 2 permanecem históricos.
+
 # Roteiro curto para apresentar a Parte 2
 
 1. **Problema:** o usuário descreve a falha em linguagem natural; o sistema classifica,
@@ -23,5 +26,3 @@ python -m src.main iniciar "Meu notebook patrimônio NB-10203 tem cheiro de quei
 python -m src.main retomar demo:principal:apresentacao1 editar --equipe Infraestrutura
 python -m src.main retomar demo:principal:apresentacao1 aprovar
 ```
-
-

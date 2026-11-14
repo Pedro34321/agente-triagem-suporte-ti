@@ -25,5 +25,5 @@ Preencher `evals/revisao/PARA-REVISAO-HUMANA.md`. Depois importar os rótulos e 
 as predições existentes. Nenhuma nota ou autoria de revisão humana foi inventada.
 Se houver desacordos, eles precisam de leitura e classificação individual.
 
-As regras de impacto foram explicitadas com hipótese local, pois o material completo
-da Aula 14 não foi anexado. Conferir essa escala com o professor/material da disciplina.
+A escala de impacto foi alinhada à análise do grupo em exercicios/aula14-respostas.md,
+preservada ao integrar a main. ASI03 e ASI01 são priorizados entre os riscos máximos.
