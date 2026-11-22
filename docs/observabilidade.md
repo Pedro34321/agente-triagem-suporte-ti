@@ -57,7 +57,7 @@ As evidências das rodadas são copiadas para suas próprias pastas traces/, com
 | Falha | Silenciosa? | Sinal |
 |---|---|---|
 | Categoria incorreta com JSON válido | sim | check determinístico do caso, ligado à rodada/trace; SLI de término sozinho não detecta toda semântica |
-| Resposta vaga ou recusa indevida sem exceção técnica | sim | juiz de utilidade após validação humana e leitura dos casos; hoje juiz não adotado: LACUNA |
+| Resposta vaga ou recusa indevida sem exceção técnica | sim | revisão de casos; juiz avaliado com 45% de concordância e não adotado: LACUNA de detecção automática confiável |
 | Orçamento esgotado sem erro de ferramenta | sim | termination_reason limite_* / quality.good=false |
 | API devolve 429 | não | chat com error.type e raiz erro_modelo |
 | Cadastro retorna inexistente | erro de domínio recuperável | execute_tool consultar_cadastro com error.type registro_nao_encontrado |
@@ -105,10 +105,6 @@ Fontes técnicas consultadas em 13/11/2026:
 https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/gen-ai-agent-spans.md
 https://github.com/open-telemetry/semantic-conventions-genai/blob/main/docs/gen-ai/execute-tool.md
 https://docs.mistral.ai/inference/pricing
-
-
-
-
 
 <!-- MEDIDAS -->
 ## Métricas calculadas dos traces

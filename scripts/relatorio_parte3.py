@@ -26,8 +26,8 @@ def main():
     target=ROOT/'logs/parte3';target.mkdir(exist_ok=True)
     (target/'referencias-codigo.json').write_text(json.dumps(refs,indent=2),encoding='utf-8')
     path=ROOT/'docs/seguranca.md'
-    text=path.read_text(encoding='utf-8').split('<!-- LINHAS -->')[0]
-    text+='\n<!-- LINHAS -->\n## Pontos de aplicação verificados\n\n'
+    text=path.read_text(encoding='utf-8').split('<!-- LINHAS -->')[0].rstrip()
+    text+='\n\n<!-- LINHAS -->\n## Pontos de aplicação verificados\n\n'
     text+='\n'.join(f'- {name}: `{ref}`.' for name,ref in refs.items())+'\n'
     riskrefs={'ASI03':refs['autorizar']+' e '+refs['grant'],'ASI01':refs['run']+' e '+refs['validar'],
               'ASI02':refs['registrar'],'ASI09':'src/graph.py:'+str(inspect.getsourcelines(App.aprovar)[1]),
@@ -48,8 +48,8 @@ def main():
             lines+=['','Os tempos são por invocação, inclusive retomadas; não são média de tempo humano de atendimento.','']
     # Seções separadas por versão em vez de linhas de uma tabela interrompida.
     path=ROOT/'docs/observabilidade.md'
-    text=path.read_text(encoding='utf-8').split('<!-- MEDIDAS -->')[0]
-    path.write_text(text+'\n<!-- MEDIDAS -->\n'+'\n'.join(lines),encoding='utf-8')
+    text=path.read_text(encoding='utf-8').split('<!-- MEDIDAS -->')[0].rstrip()
+    path.write_text(text+'\n\n<!-- MEDIDAS -->\n'+'\n'.join(lines).rstrip()+'\n',encoding='utf-8')
     trace_dir=ROOT/'evals/resultados/controles-3-1-0/traces/simples'
     spans=[]
     for file in trace_dir.glob('*.jsonl'):
@@ -64,6 +64,16 @@ def main():
     finals=[json.loads(s['attributes']['triagem.output']) for s in roots if s['attributes']['triagem.termination_reason']=='registrado']
     result=finals[0]
     files=sorted({s['_file'] for s in roots})
+    judge=read(ROOT/'evals/revisao/validacao-juiz.json')
+    agreement=judge.get('concordancia')
+    judge_summary=(f"Juiz: concordância {100*agreement:.0f}% ({round(20*agreement)}/20), limiar {100*judge['limiar']:.0f}%, "
+                   f"{'adotado' if judge['adotado'] else 'não adotado'}. "
+                   f"{len(judge['desacordos'])} desacordos, "
+                   f"{'todos analisados' if judge.get('desacordos_analisados') else 'análise incompleta'}. "
+                   'Fonte: evals/revisao/validacao-juiz.json; matriz em docs/evals.md. '
+                   'Revisão assistida por IA, conferida por Guilherme segundo confirmação do usuário; '
+                   'proveniência em evals/revisao/PROVENIENCIA-REVISAO.md.'
+                   if agreement is not None else '**LACUNA:** revisão e matriz do juiz incompletas.')
     model_card=f'''# Model card — Agente de triagem de suporte de TI
 
 ## 1. Identificação
@@ -106,7 +116,7 @@ OpenTelemetry exporta arquivos locais. Não há MCP nem multiagente.
 
 Ministral 8B `ministral-8b-2512`, Mistral. Prompts versionados e saída estruturada.
 O nome do SDK openai não altera quem presta a inferência. Juiz usa o mesmo modelo,
-com rubrica própria, e não foi adotado sem validação humana.
+com rubrica própria; foi avaliado e não adotado por concordância insuficiente.
 
 ## 6. Dados
 
@@ -121,7 +131,7 @@ Mapeamento completo: docs/seguranca.md.
 controles 3.1.0: 5/30 (16,7%). Evidências: evals/resultados/*/resumo.json e comparacao.txt.
 Melhora na fatia de três ataques: 2/3 para 3/3. Erros 429 dominam os resultados e
 impedem concluir melhoria semântica global. Testes locais em logs/parte3/testes.md.
-**LACUNA:** validação humana do juiz e leitura dos desacordos ainda pendentes.
+{judge_summary}
 
 ## 8. Limites conhecidos
 
@@ -175,8 +185,8 @@ formal do professor disponibilizada; as mudanças vieram da inspeção e dos tes
 
 ## Lacunas e correções propostas
 
-1. Juiz: Guilherme revisar vinte saídas, importar os rótulos e analisar desacordos.
-2. Sintéticos: integrantes confirmar/revisar o dataset além da revisão técnica por IA.
+1. Juiz: permanece não adotado; melhorar a rubrica em nova versão e fazer nova calibração independente.
+2. Avaliação: revisão independente dos sintéticos e das saídas é melhoria futura; autoria técnica por IA está declarada.
 3. Provedor: ajustar limites/ritmo e medir nova rodada; SLO atual está violado.
 4. Credencial/plataforma: comprovar privilégios e gasto no console e auditar ACL.
 5. Dados reais: definir finalidade/base legal, controles e contrato de retenção antes de uso.

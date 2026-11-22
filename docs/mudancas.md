@@ -20,8 +20,21 @@ Baseline: 3/30 critérios completos. Com controles: 5/30. Segurança: 2/3 para 3
 Os erros 429 da Mistral predominam. Não se alega que uma melhora global de 6,7 pp seja
 efeito causal apenas da segurança: disponibilidade/cota é fator de confusão.
 
-O juiz tem rubrica e coleta separada; não recebe status de validado antes de o
-Guilherme revisar as vinte saídas. O SLO é mantido em 90%, mesmo violado.
+O juiz tem rubrica e coleta separada. A revisão assistida por IA foi conferida por
+Guilherme segundo confirmação do usuário, registrada em 22/11/2026. Concordância:
+9/20 (45%), com onze desacordos analisados individualmente por IA e juiz não adotado.
+Proveniência explícita em evals/revisao/PROVENIENCIA-REVISAO.md. O SLO é mantido em
+90%, mesmo violado. Resultados negativos não foram removidos para aprovar o sistema.
+
+## Consolidação para entrega em 22/11/2026
+
+- Importados vinte votos com razões e revisor, preservando a origem assistida dos pareceres.
+- Geradas matriz e análise individual dos onze desacordos; previsões originais preservadas.
+- A consolidação passa a preservar análises vinculadas a texto e votos, rejeitar amostra
+  incompleta e permitir adoção somente com limiar atingido e desacordos analisados.
+- README, model card, comparação e guia da entrega passam a refletir a avaliação concluída
+  com resultado negativo, em vez de uma revisão pendente. O commit consta no histórico
+  da branch e no PR #2; o sistema continua versão 3.1.0, sem rebatizar rodadas antigas.
 
 ## Custos das mudanças
 

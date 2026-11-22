@@ -1,10 +1,61 @@
 """Nunca inventa rótulos humanos nem concordância. Adota só após validação completa."""
 import argparse
+import hashlib
 import json
 import time
 from pathlib import Path
 from src.common import ROOT
 from .juiz import judge
+
+
+def case_hash(case):
+    return hashlib.sha256((case['entrada']+'\n'+case['saida']).encode('utf-8')).hexdigest()
+
+
+def consolidate(packet, predictions, reviews=None, threshold=0.9):
+    """Consolida evidências existentes; análises antigas não valem para outro caso."""
+    ids=[c['id'] for c in packet]
+    if len(ids)!=20 or len(set(ids))!=20:
+        raise ValueError('São necessários vinte casos únicos.')
+    if len(predictions)!=20 or {c['id'] for c in predictions}!=set(ids):
+        raise ValueError('Predições devem corresponder aos vinte casos.')
+    predicted={c['id']:c for c in predictions}
+    for c in packet:
+        if case_hash(c)!=case_hash(predicted[c['id']]):
+            raise ValueError('Predição pertence a outra entrada/saída: '+c['id'])
+    result=[dict(c,juiz=predicted[c['id']]['juiz'],nota_juiz=predicted[c['id']]['nota_juiz']) for c in packet]
+    human_ok=all(isinstance(c['humano'],bool) and c['nota_humana'].strip() and c['revisor_humano'].strip() for c in result)
+    judge_ok=all(isinstance(c['juiz'],bool) for c in result)
+    ready=human_ok and judge_ok
+    matrix={'humano_sim_juiz_sim':0,'humano_sim_juiz_nao':0,'humano_nao_juiz_sim':0,'humano_nao_juiz_nao':0} if ready else None
+    reviews=reviews or []
+    reviewed={r['id']:r for r in reviews}
+    if len(reviewed)!=len(reviews):raise ValueError('Análises duplicadas.')
+    disagreements=[]
+    if ready:
+        for c in result:
+            matrix['humano_'+('sim' if c['humano'] else 'nao')+'_juiz_'+('sim' if c['juiz'] else 'nao')]+=1
+            if c['humano']!=c['juiz']:
+                item=dict(c,classificacao='PENDENTE: defeito do juiz, da rubrica ou do rótulo humano')
+                if c['id'] in reviewed:
+                    r=reviewed[c['id']]
+                    if (r.get('caso_sha256')!=case_hash(c) or r.get('humano') is not c['humano']
+                            or r.get('juiz') is not c['juiz']):
+                        raise ValueError('Análise desatualizada: '+c['id'])
+                    if (r.get('classificacao') not in ('defeito do juiz','defeito da rubrica','defeito do rótulo humano')
+                            or not r.get('analise','').strip() or not r.get('analista','').strip()):
+                        raise ValueError('Análise incompleta: '+c['id'])
+                    item.update({k:r[k] for k in ('classificacao','analise','analista','caso_sha256')})
+                disagreements.append(item)
+    if set(reviewed)-{c['id'] for c in disagreements}:
+        raise ValueError('Análise sem desacordo correspondente.')
+    agreement=sum(c['humano']==c['juiz'] for c in result)/20 if ready else None
+    analyzed=ready and all(not c['classificacao'].startswith('PENDENTE') for c in disagreements)
+    return {'rubrica':'1.0.0','limiar':threshold,'revisao_humana_completa':human_ok,'matriz':matrix,
+            'predicoes_completas':judge_ok,'concordancia':agreement,
+            'desacordos_analisados':analyzed,'adotado':bool(ready and agreement>=threshold and analyzed),
+            'desacordos':disagreements,'casos':result,
+            'lacuna':None if human_ok else 'Vinte rótulos, razões e identificação de revisor humano ainda não fornecidos.'}
 
 
 def prepare(round_dir):
@@ -48,23 +99,11 @@ def main():
         print(c['id'],flush=True)
         (dest/'predicoes-parciais.json').write_text(json.dumps(result,ensure_ascii=False,indent=2),encoding='utf-8')
     if a.consolidar:
-        predictions={c['id']:c for c in json.loads((dest/'predicoes-parciais.json').read_text(encoding='utf-8'))}
-        result=[dict(c,juiz=predictions[c['id']]['juiz'],nota_juiz=predictions[c['id']]['nota_juiz']) for c in packet]
-    human_ok=all(isinstance(c['humano'],bool) and c['nota_humana'].strip() and c['revisor_humano'].strip() for c in result)
-    judge_ok=all(isinstance(c['juiz'],bool) for c in result)
-    ready=human_ok and judge_ok
-    matrix={'humano_sim_juiz_sim':0,'humano_sim_juiz_nao':0,'humano_nao_juiz_sim':0,'humano_nao_juiz_nao':0} if ready else None
-    disagreements=[]
-    if ready:
-        for c in result:
-            matrix['humano_'+('sim' if c['humano'] else 'nao')+'_juiz_'+('sim' if c['juiz'] else 'nao')]+=1
-            if c['humano']!=c['juiz']:
-                disagreements.append(dict(c,classificacao='PENDENTE: defeito do juiz, da rubrica ou do rótulo humano'))
-    agreement=sum(c['humano']==c['juiz'] for c in result)/20 if ready else None
-    report={'rubrica':'1.0.0','limiar':0.9,'revisao_humana_completa':human_ok,'matriz':matrix,
-            'predicoes_completas':judge_ok,'concordancia':agreement,'adotado':bool(ready and agreement>=0.9 and not disagreements),
-            'desacordos':disagreements,'casos':result,
-            'lacuna':None if human_ok else 'Vinte rótulos, razões e identificação de revisor humano ainda não fornecidos.'}
+        result=json.loads((dest/'predicoes-parciais.json').read_text(encoding='utf-8'))
+    review_path=dest/'analise-desacordos.json'
+    reviews=json.loads(review_path.read_text(encoding='utf-8')) if review_path.exists() else []
+    policy=json.loads((ROOT/'evals/politica.json').read_text(encoding='utf-8'))
+    report=consolidate(packet,result,reviews,policy['limiar_adocao_juiz'])
     (dest/'validacao-juiz.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 
 

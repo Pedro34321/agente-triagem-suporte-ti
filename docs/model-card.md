@@ -40,7 +40,7 @@ OpenTelemetry exporta arquivos locais. Não há MCP nem multiagente.
 
 Ministral 8B `ministral-8b-2512`, Mistral. Prompts versionados e saída estruturada.
 O nome do SDK openai não altera quem presta a inferência. Juiz usa o mesmo modelo,
-com rubrica própria, e não foi adotado sem validação humana.
+com rubrica própria; foi avaliado e não adotado por concordância insuficiente.
 
 ## 6. Dados
 
@@ -55,7 +55,7 @@ Mapeamento completo: docs/seguranca.md.
 controles 3.1.0: 5/30 (16,7%). Evidências: evals/resultados/*/resumo.json e comparacao.txt.
 Melhora na fatia de três ataques: 2/3 para 3/3. Erros 429 dominam os resultados e
 impedem concluir melhoria semântica global. Testes locais em logs/parte3/testes.md.
-**LACUNA:** validação humana do juiz e leitura dos desacordos ainda pendentes.
+Juiz: concordância 45% (9/20), limiar 90%, não adotado. 11 desacordos, todos analisados. Fonte: evals/revisao/validacao-juiz.json; matriz em docs/evals.md. Revisão assistida por IA, conferida por Guilherme segundo confirmação do usuário; proveniência em evals/revisao/PROVENIENCIA-REVISAO.md.
 
 ## 8. Limites conhecidos
 
@@ -111,8 +111,8 @@ formal do professor disponibilizada; as mudanças vieram da inspeção e dos tes
 
 ## Lacunas e correções propostas
 
-1. Juiz: Guilherme revisar vinte saídas, importar os rótulos e analisar desacordos.
-2. Sintéticos: integrantes confirmar/revisar o dataset além da revisão técnica por IA.
+1. Juiz: permanece não adotado; melhorar a rubrica em nova versão e fazer nova calibração independente.
+2. Avaliação: revisão independente dos sintéticos e das saídas é melhoria futura; autoria técnica por IA está declarada.
 3. Provedor: ajustar limites/ritmo e medir nova rodada; SLO atual está violado.
 4. Credencial/plataforma: comprovar privilégios e gasto no console e auditar ACL.
 5. Dados reais: definir finalidade/base legal, controles e contrato de retenção antes de uso.

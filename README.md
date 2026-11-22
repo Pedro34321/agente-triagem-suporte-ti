@@ -73,9 +73,14 @@ Para suspender, defina `TRIAGEM_SUSPENDED=1` no ambiente antes de executar a CLI
 
 ### Revisão humana do juiz
 
-O usuário indicou o Guilherme para revisar `evals/revisao/PARA-REVISAO-HUMANA.md`.
-São vinte respostas reais com campos de SIM/NÃO, motivo e nome. O juiz permanece
-**não adotado** e a concordância/matriz não são inventadas enquanto a revisão faltar.
+As vinte respostas em `evals/revisao/PARA-REVISAO-HUMANA.md` estão rotuladas: 17 SIM
+e 3 NÃO. Guilherme conferiu os pareceres assistidos por IA, conforme confirmação do
+usuário. A origem e os limites dessa confirmação estão em
+[PROVENIENCIA-REVISAO.md](evals/revisao/PROVENIENCIA-REVISAO.md).
+Concordância juiz × humano: **9/20 (45%)**, abaixo do limiar prévio de 90%.
+O juiz foi avaliado e **não adotado**. Matriz completa em [evals.md](docs/evals.md);
+os onze desacordos foram lidos individualmente em
+[DESACORDOS.md](evals/revisao/DESACORDOS.md), com análise técnica por IA declarada.
 
 ```powershell
 python -m evals.importar_rotulos evals/revisao/PARA-REVISAO-HUMANA.md
@@ -84,8 +89,9 @@ python -m evals.calibrar_juiz --consolidar
 
 Para coletar novamente as vinte predições do juiz, com custo de API e espaçamento:
 `python -m evals.calibrar_juiz --avaliar --intervalo 35`. Não é necessário repetir
-essa coleta apenas porque chegaram os rótulos humanos. Desacordos exigem análise
-individual antes de adotar o juiz.
+essa coleta apenas porque chegaram os rótulos humanos. A consolidação preserva as
+análises vinculadas aos votos e ao hash do texto; mudanças invalidam análises antigas.
+Uma nova coleta exige nova leitura dos desacordos antes de qualquer adoção.
 
 ### Documentação da Parte 3
 
@@ -95,6 +101,7 @@ individual antes de adotar o juiz.
 - [Plano, métricas e SLO](docs/observabilidade.md)
 - [Mudanças e commits](docs/mudancas.md)
 - [Escopo das frentes opcionais](docs/opcionais.md)
+- [Guia da entrega e limitações](docs/entrega-parte3.md)
 
 Os comandos e resultados abaixo pertencem à **Parte 2** e permanecem como histórico.
 

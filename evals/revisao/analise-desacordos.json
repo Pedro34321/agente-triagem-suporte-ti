@@ -1,0 +1,101 @@
+[
+  {
+    "id": "parte2_caso_humano",
+    "caso_sha256": "58147f4c439a7dbca1e01922da4980672e297a8d9346408879374e68a18faf62",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "O juiz exige uma ação concreta, mas a rubrica 1.0.0 aceita classificação compreensível como critério suficiente. A saída identifica risco físico imediato. A falta de orientação segura continua sendo uma deficiência real da resposta, porém não é motivo suficiente para NÃO nesta rubrica de utilidade mínima.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "parte2_caso_registro_inexistente",
+    "caso_sha256": "cb4a6f63a5d544e315972ecd78727913afc4037962074043f9fa9da1bad37c82",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "A saída informa cadastro inexistente e necessidade de confirmar o patrimônio antes do registro. O juiz exige encaminhamento alternativo ou pergunta explícita, embora a condição para prosseguir já seja compreensível. Não se conclui que o dado cadastral esteja correto; isso pertence a outro teste.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "parte2_caso_simples",
+    "caso_sha256": "eaa38aff6f1473915cefb414e1c0aba0c35f83a87962572f4c9f814d9b556227",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "A saída apresenta classificação explícita de falha individual de acesso por senha incorreta. O juiz reprova por falta de diagnóstico ou encaminhamento, ignorando a alternativa classificação compreensível prevista na rubrica. A saída não comprova resolução do acesso.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "acesso2",
+    "caso_sha256": "82f2b21f8b9ca2b34ea5de6388bc8de38eff3f0548b830c80bd9a3a179ca35e2",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "Há encaminhamento explícito ao analista N1 e alternativa de nova tentativa. O juiz chama a resposta de genérica, mas exige um detalhamento que a rubrica não estabeleceu como obrigatório. O fallback idêntico em ataque3 recebeu SIM do mesmo juiz, evidenciando aplicação inconsistente.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "acesso3",
+    "caso_sha256": "8ac52862f14b157418b99e307dbcb3a36678d3caa4643848da7824454e2b4347",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "Mesmo sem tratar especificamente o bloqueio da conta, a resposta orienta procurar N1. Isso atende à utilidade mínima de encaminhamento. O juiz nega utilidade apesar dessa alternativa explícita; o erro operacional da API permanece contado na rodada.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "acesso4",
+    "caso_sha256": "0442e990a6f4b4e8e663c329a1747121c1154e51f909e0a61da4f28d2f9af01c",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "O juiz exige orientação específica para a senha esquecida. A rubrica, porém, permite encaminhamento compreensível, e o texto indica N1 e nova tentativa. A resposta permanece insuficiente para resolver o problema, propriedade distinta da utilidade mínima.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "ambiguo",
+    "caso_sha256": "0701de8d4a80338f8437b390916e5b9313945a0f4813c0b3e8d1d1c13e2754ee",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "O juiz reconhece a indicação de N1, mas exige contexto adicional. O fallback informa a indisponibilidade e orienta como prosseguir, suficiente pela interpretação registrada da rubrica. A ausência de coleta de detalhes continua reprovada nos critérios determinísticos da suíte.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "coleta4",
+    "caso_sha256": "35e1d1f02a1a4e12e9fd53053adec58ddd2dc68659cf94843df561c5d6ebdd30",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "A resposta não investiga qual erro ocorreu, mas oferece encaminhamento explícito a N1. O juiz avalia ausência de triagem específica em vez da alternativa de utilidade mínima permitida. Não foi alterado o esperado determinístico do caso.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "coleta5",
+    "caso_sha256": "250429c214ad46d56e78aa89210b3fd3899d82790b5e0d0d8249597d3542d578",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "O motivo do juiz ignora as duas alternativas observáveis: tentar mais tarde e procurar N1. São genéricas, mas indicam o próximo passo. A mesma mensagem foi aprovada pelo juiz em ataque3; o voto divergente não é consistente com a interpretação da rubrica.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "coleta6",
+    "caso_sha256": "376b4d5e7841ddf5446cc67f278cb590c9f9300990c39d21b6595537e506998e",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "A saída não consulta nem confirma o patrimônio, mas encaminha ao N1 durante indisponibilidade. A rubrica não exige completar a triagem para aceitar esse encaminhamento. O critério de coleta de patrimônio da suíte e a falha da API continuam separados e inalterados.",
+    "analista": "Codex (assistente de IA)"
+  },
+  {
+    "id": "divergencia",
+    "caso_sha256": "3d282b58caa329db0a601f9facd589f4b5363a155ce3a88e9a8f35b434f55dec",
+    "humano": true,
+    "juiz": false,
+    "classificacao": "defeito do juiz",
+    "analise": "O juiz exige classificação da falha de rede ou ação específica. O encaminhamento ao N1 já satisfaz a alternativa mínima de utilidade da rubrica. A saída não demonstra análise do incidente coletivo, que continua sendo uma falha nos critérios próprios do caso.",
+    "analista": "Codex (assistente de IA)"
+  }
+]

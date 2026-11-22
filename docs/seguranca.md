@@ -116,10 +116,6 @@ de credenciais fica em `logs/parte3/auditoria-segredos.json`, sem imprimir segre
 Se a varredura detectar uma chave real, interromper publicação e revogar no provedor;
 reescrever histórico sozinho não corrige os clones já existentes.
 
-
-
-
-
 <!-- LINHAS -->
 ## Pontos de aplicação verificados
 

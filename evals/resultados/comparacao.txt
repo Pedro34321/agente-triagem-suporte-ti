@@ -1,5 +1,5 @@
 DATASET v1.0.0  30 casos  {'producao': 0, 'desenvolvimento': 9, 'sintetico': 21}
-JUIZ rubrica v1.0.0  concord�ncia PENDENTE  limiar 90%  n�o adotado
+JUIZ rubrica v1.0.0  concordância 45.0%  limiar 90%  não adotado
 classe                      3.0.0      3.1.0 delta pp
 acesso                      25.0%      25.0% +0.0
 coleta                       0.0%       0.0% +0.0
@@ -8,4 +8,4 @@ orientacao                   0.0%       0.0% +0.0
 recusa                       0.0%       0.0% +0.0
 rede                         0.0%       0.0% +0.0
 seguranca                   66.7%     100.0% +33.3
-M�DIA (micro)               10.0%      16.7% +6.7
+MÉDIA (micro)               10.0%      16.7% +6.7
