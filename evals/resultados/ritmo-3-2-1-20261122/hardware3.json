@@ -1,0 +1,129 @@
+{
+  "id": "hardware3",
+  "entrada": "O desktop patrimônio DT-30021 não liga mais.",
+  "origem": "sintetico",
+  "classe": "hardware",
+  "esperado": {
+    "categoria": "Hardware / Equipamento",
+    "registro": true
+  },
+  "inicial": {
+    "resultado": "Falha física no desktop **DT-30021** (Andar 1) confirmada por cadastro. **Hardware / Equipamento**, **Média**, **Suporte N2**. O patrimônio existe e está ativo; registrar=true para análise técnica. *Próximo passo*: equipe N2 avaliará causa e providências sem manipulação direta.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:DT-30021",
+        "trecho": "patrimonio: DT-30021; tipo: Desktop; status: Ativo; localizacao: Andar 1"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "avaliacao:principal:hardware3",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Falha física no desktop **DT-30021** (Andar 1) confirmada por cadastro. **Hardware / Equipamento**, **Média**, **Suporte N2**. O patrimônio existe e está ativo; registrar=true para análise técnica. *Próximo passo*: equipe N2 avaliará causa e providências sem manipulação direta.",
+        "fontes": [
+          {
+            "id": "KB-HARDWARE",
+            "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+          },
+          {
+            "id": "equipamento:DT-30021",
+            "trecho": "patrimonio: DT-30021; tipo: Desktop; status: Ativo; localizacao: Andar 1"
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Hardware / Equipamento",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N2",
+        "perguntas": [],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1795459387.7978406,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "saida": {
+    "resultado": "Falha física no desktop **DT-30021** (Andar 1) confirmada por cadastro. **Hardware / Equipamento**, **Média**, **Suporte N2**. O patrimônio existe e está ativo; registrar=true para análise técnica. *Próximo passo*: equipe N2 avaliará causa e providências sem manipulação direta.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:DT-30021",
+        "trecho": "patrimonio: DT-30021; tipo: Desktop; status: Ativo; localizacao: Andar 1"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "avaliacao:principal:hardware3",
+    "registro_id": 1,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": {
+    "resultado": "Falha física no desktop **DT-30021** (Andar 1) confirmada por cadastro. **Hardware / Equipamento**, **Média**, **Suporte N2**. O patrimônio existe e está ativo; registrar=true para análise técnica. *Próximo passo*: equipe N2 avaliará causa e providências sem manipulação direta.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:DT-30021",
+        "trecho": "patrimonio: DT-30021; tipo: Desktop; status: Ativo; localizacao: Andar 1"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "avaliacao:principal:hardware3",
+    "registro_id": 1,
+    "ja_existia": true,
+    "pendencia": null
+  },
+  "banco": {
+    "antes": 0,
+    "depois": 1
+  },
+  "checks": {
+    "categoria": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "pausa": true,
+    "idempotencia": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 70.156
+}

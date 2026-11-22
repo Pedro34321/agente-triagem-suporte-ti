@@ -1,73 +1,62 @@
 # Guia da entrega — Parte 3
 
-Entrega acadêmica do sistema local de triagem, versão 3.1.0. As quatro frentes
-obrigatórias estão implementadas e documentadas, incluindo resultados negativos.
-Isso não constitui aprovação para produção. A avaliação assistida por IA e a
-confirmação da revisão por intermédio do usuário estão explicitadas nos arquivos.
+Autores: **Pedro Henrique Macedo Cunha e Guilherme dos Santos Medeiros**.
+Sistema local acadêmico, versão 3.2.1. Autoria e responsabilidade: docs/autoria.md.
 
-| Frente | Implementado e evidência | O que ainda depende do grupo/ambiente |
-|---|---|---|
-| Sistema Parte 2 | mesmo StateGraph, RAG, checkpoint e aprovação, com controles novos | validar dados/procedimentos com domínio real antes de implantar |
-| Dataset | 30 casos, sete classes, 9 desenvolvimento/21 sintéticos, revisão técnica por IA declarada | sem dados de produção ou revisão humana independente dos sintéticos |
-| Suíte e comparação | CLI real, dois commits/versões, resultados/trajectória/banco, comparação por fatia | repetir após resolver limites da API para medir qualidade sem esse fator |
-| Juiz | vinte votos com razões e revisor, matriz 6/11/0/3, concordância 45%, onze desacordos analisados individualmente | não adotado: abaixo do limiar de 90%; revisão assistida por IA, não cega |
-| Governança | 12 campos, autoridade com testes/linhas e decisão reconstruída dos traces | ACL Windows, privilégio do provedor, uso real e revisão de riscos aceitos |
-| Segurança | controles fora do prompt, testes de ataque, memória limitada, suspensão, retenção e auditoria histórica | detector não cobre todo ataque; não há SSO/MFA ou auditoria de dependências |
-| Observabilidade | SDK OTel, arquivo consultável, 32 e 34 invocações por versão, percentis, motivos e erro por ferramenta | custo integral desconhecido nas chamadas sem usage; SLO violado |
-| Projeto | README, dependências fixadas, .env.example vazio, docs Markdown e testes automatizados | requer chave própria com acesso/cota para repetir as chamadas reais |
+## Resultado atual
 
-## Não dizer na apresentação
+- Casos completos: **29/30 (96.7%)**, mesmos casos e critérios das primeiras versões.
+- Juiz híbrido 1.2.0: **90.0%** de concordância, limiar de 90%; **adotado na amostra de calibração**.
+- LLM isolado: **85.0%**, abaixo do limiar, preservado separadamente.
+- SLI operacional: **98.08%**, alvo de 90%; SLO atingido na amostra.
+- Testes locais: **31 passaram**, sem novas chamadas de API.
 
-- Que a Parte 3 teve 100% de acerto: as rodadas tiveram 3/30 e 5/30 critérios completos.
-- Que o juiz foi aprovado para uso: sua concordância ficou abaixo do limiar.
-- Que os pareceres são uma revisão cega independente: foram assistidos por IA.
-- Que custo de chamada sem usage é zero ou que a estimativa é uma fatura.
-- Que existe autenticação empresarial: o controle atual é credencial local.
-- Que o vídeo torna o agente multimodal: ele é um material de apresentação externo.
+Os 90% pertencem ao juiz híbrido, com regra de consistência para a mensagem fixa de
+encaminhamento ao N1; o LLM isolado não atingiu 90%. Os indicadores são diferentes.
+Os números medem as amostras de desenvolvimento
+e calibração; não constituem garantia de eficácia em produção ou em casos inéditos.
+As primeiras rodadas com 429 e juiz de 45% continuam no repositório como histórico.
 
-## Revisão e autoria
+## Onde conferir as exigências
 
-Guilherme dos Santos Medeiros conferiu os vinte pareceres apresentados na conversa,
-segundo confirmação do usuário, que solicitou incorporá-los. As sugestões e razões
-foram redigidas por IA. O registro não é assinatura digital nem comprovação direta
-da identidade do revisor. Proveniência em `evals/revisao/PROVENIENCIA-REVISAO.md`.
-A análise dos onze desacordos foi feita por Codex (IA), com autoria própria declarada.
+| Frente | Evidência |
+|---|---|
+| Sistema da Parte 2 | StateGraph, RAG, memória, checkpoint e aprovação mantidos em src/ |
+| Dataset e suíte | 30 casos, sete classes, recusas e origem/revisão; evals/dataset.json e evals/rodar.py |
+| Resultado e trajetória | banco antes/depois, duplicata idempotente e spans por caso, nas pastas de rodada |
+| Juiz | vinte votos/notas/revisor, rubrica, matriz atual e histórico; docs/evals.md e evals/revisao/ |
+| Governança | model card com doze campos, autoridade e reconstrução de decisão pelos traces |
+| Segurança | riscos OWASP, controles fora do prompt e testes; dados e riscos aceitos em docs/seguranca.md |
+| Observabilidade | traces OTel, métricas por versão, quatro perguntas e SLO em docs/observabilidade.md |
+| Projeto | README, requirements fixado, env vazio, documentação Markdown e testes |
+| Opcionais | ausência de multiagente, MCP e multimídia declarada em docs/opcionais.md |
 
-## Conferência local, sem novas chamadas pagas
+Fontes dos números atuais: `evals/resultados/ritmo-3-2-1-20261122/resumo.json`, `metricas.json` e
+`evals/revisao/juiz-hibrido-1-2-0/validacao-juiz.json`. A revisão foi conferida por Guilherme conforme confirmação
+registrada pelo usuário; metodologia e origem em evals/revisao/PROVENIENCIA-REVISAO.md.
 
-Na raiz do repositório, com ambiente instalado conforme o README:
+## Conferir sem novas chamadas pagas
 
 ```powershell
 python -m pytest -q
-python -m evals.importar_rotulos evals/revisao/PARA-REVISAO-HUMANA.md
 python -m evals.calibrar_juiz --consolidar
-python -m evals.comparar evals/resultados/baseline-3-0-0 evals/resultados/controles-3-1-0
-python -m evals.metricas evals/resultados/controles-3-1-0
+python -m evals.comparar evals/resultados/baseline-3-0-0 evals/resultados/ritmo-3-2-1-20261122
+python -m evals.metricas evals/resultados/ritmo-3-2-1-20261122
 python -m scripts.relatorio_parte3
 ```
 
-Esses comandos verificam testes locais e evidências existentes. Rodar novamente
-`evals.rodar` ou `evals.calibrar_juiz --avaliar` exige API real e pode gerar custo.
+## Limites que devem ser explicados
 
-## Como apresentar os resultados
+O espaçamento de 35s entre chamadas é deliberado: o plano Mistral limitou as primeiras
+rodadas. A versão atual perde vazão e pode demorar. A rubrica do juiz foi corrigida
+após observar a mesma amostra; nova validação independente continua necessária.
+As LACUNAS de produção permanecem: ACL Windows, credencial empresarial, contrato e
+retenção do provedor, base para dados reais, revisão de domínio e operação sob carga.
+Não afirmar que não há falhas, que o agente é seguro contra todo ataque ou que uma
+meta atingida nesta amostra prova prontidão empresarial.
 
-- Baseline: 3/30 critérios completos (10%); controles: 5/30 (16,7%).
-- Fatia segurança: 2/3 → 3/3 nos três ataques medidos, sem alegar defesa geral.
-- Juiz: 45% de concordância, abaixo de 90%; avaliado e não adotado.
-- SLO operacional: violado nas duas versões; manter demonstração acadêmica e
-  investigar limites/ritmo da Mistral antes de repetir a medição.
-- Mensagem com encaminhamento ao N1 pode ser útil pela rubrica e continuar sendo
-  falha técnica da execução. Os números das rodadas não foram alterados por esse voto.
+## Entregar
 
-O enunciado aceita expressamente juiz não adotado e SLO violado quando medidos e
-reportados. Não é necessário transformar resultados negativos em sucesso para entregar.
-
-## Como entregar
-
-Enviar o link do repositório na versão que contém a Parte 3. Enquanto o PR #2 não
-estiver integrado à main, usar o link direto da branch `codex/parte-3`, pois a main
-pode mostrar somente as partes anteriores. Não anexar `.env.local`, `.runtime/`,
-credenciais, bancos pessoais ou ambiente virtual. O README aponta para as evidências.
-
-A escala de impacto foi alinhada à análise do grupo em exercicios/aula14-respostas.md,
-preservada ao integrar a main. ASI03 e ASI01 são priorizados entre os riscos máximos.
+Enviar o repositório com esta versão integrada à main. Se o PR de correção ainda não
+estiver integrado, usar a branch codex/parte3-meta90. Não enviar .env.local, .runtime,
+credenciais ou o ambiente virtual. Os exemplos e traces versionados são fictícios.

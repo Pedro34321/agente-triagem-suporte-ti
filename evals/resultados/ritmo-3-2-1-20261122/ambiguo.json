@@ -1,0 +1,60 @@
+{
+  "id": "ambiguo",
+  "entrada": "O sistema não está funcionando e preciso resolver isso urgente porque tenho coisa para entregar hoje.",
+  "origem": "desenvolvimento",
+  "classe": "coleta",
+  "esperado": {
+    "suficiente": false,
+    "registro": false,
+    "perguntas": true
+  },
+  "inicial": {
+    "resultado": "Preciso de informações adicionais. Qual sistema específico não está funcionando?",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [
+      "Qual sistema específico não está funcionando?"
+    ],
+    "registrar": false,
+    "motivo_termino": "ambiguo",
+    "thread_id": "avaliacao:principal:ambiguo",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Preciso de informações adicionais. Qual sistema específico não está funcionando?",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [
+      "Qual sistema específico não está funcionando?"
+    ],
+    "registrar": false,
+    "motivo_termino": "ambiguo",
+    "thread_id": "avaliacao:principal:ambiguo",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "suficiente": true,
+    "perguntas": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 34.953
+}

@@ -12,7 +12,7 @@ def case_hash(case):
     return hashlib.sha256((case['entrada']+'\n'+case['saida']).encode('utf-8')).hexdigest()
 
 
-def consolidate(packet, predictions, reviews=None, threshold=0.9):
+def consolidate(packet, predictions, reviews=None, threshold=0.9, rubric_version='1.0.0'):
     """Consolida evidências existentes; análises antigas não valem para outro caso."""
     ids=[c['id'] for c in packet]
     if len(ids)!=20 or len(set(ids))!=20:
@@ -24,6 +24,9 @@ def consolidate(packet, predictions, reviews=None, threshold=0.9):
         if case_hash(c)!=case_hash(predicted[c['id']]):
             raise ValueError('Predição pertence a outra entrada/saída: '+c['id'])
     result=[dict(c,juiz=predicted[c['id']]['juiz'],nota_juiz=predicted[c['id']]['nota_juiz']) for c in packet]
+    for c in result:
+        source=predicted[c['id']]
+        c.update({k:source[k] for k in ('juiz_bruto','nota_juiz_bruto','metodo','regra') if k in source})
     human_ok=all(isinstance(c['humano'],bool) and c['nota_humana'].strip() and c['revisor_humano'].strip() for c in result)
     judge_ok=all(isinstance(c['juiz'],bool) for c in result)
     ready=human_ok and judge_ok
@@ -51,7 +54,7 @@ def consolidate(packet, predictions, reviews=None, threshold=0.9):
         raise ValueError('Análise sem desacordo correspondente.')
     agreement=sum(c['humano']==c['juiz'] for c in result)/20 if ready else None
     analyzed=ready and all(not c['classificacao'].startswith('PENDENTE') for c in disagreements)
-    return {'rubrica':'1.0.0','limiar':threshold,'revisao_humana_completa':human_ok,'matriz':matrix,
+    return {'rubrica':rubric_version,'limiar':threshold,'revisao_humana_completa':human_ok,'matriz':matrix,
             'predicoes_completas':judge_ok,'concordancia':agreement,
             'desacordos_analisados':analyzed,'adotado':bool(ready and agreement>=threshold and analyzed),
             'desacordos':disagreements,'casos':result,
@@ -84,16 +87,34 @@ def prepare(round_dir):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--preparar');p.add_argument('--avaliar',action='store_true');p.add_argument('--consolidar',action='store_true');p.add_argument('--intervalo',type=float,default=35);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--preparar');p.add_argument('--avaliar',action='store_true');p.add_argument('--consolidar',action='store_true');p.add_argument('--intervalo',type=float,default=3);p.add_argument('--destino');a=p.parse_args()
     if a.preparar: prepare(Path(a.preparar));return
-    dest=ROOT/'evals/revisao'
-    packet=json.loads((dest/'rotulos-humanos.json').read_text(encoding='utf-8'))
+    policy=json.loads((ROOT/'evals/politica.json').read_text(encoding='utf-8'))
+    dest=Path(a.destino) if a.destino else (ROOT/policy.get('validacao_juiz','evals/revisao/validacao-juiz.json')).parent
+    dest.mkdir(parents=True,exist_ok=True)
+    packet=json.loads((ROOT/'evals/revisao/rotulos-humanos.json').read_text(encoding='utf-8'))
+    if not a.consolidar and (dest/'predicoes-parciais.json').exists():
+        p.error('Esta coleta já existe. Use --destino NOVA_PASTA para preservar o histórico.')
+    from src.model import PROVIDER, prompt_versions
+    from .juiz import JUDGE_MODEL
+    metadata_path=dest/'coleta.json'
+    if a.consolidar:
+        previous_path=dest/'validacao-juiz.json'
+        previous=json.loads(previous_path.read_text(encoding='utf-8')) if previous_path.exists() else {}
+        metadata=(json.loads(metadata_path.read_text(encoding='utf-8')) if metadata_path.exists()
+                  else {k:previous[k] for k in ('modelo','provedor','prompt_hash','rubrica') if k in previous})
+        if metadata.get('rubrica',policy['rubrica_version'])!=policy['rubrica_version']:
+            p.error('Rubrica da coleta difere da política atual. Preserve o histórico e use uma nova pasta.')
+    else:
+        metadata={'modelo':JUDGE_MODEL,'provedor':PROVIDER,'prompt_hash':prompt_versions()['juiz.txt'],
+                  'rubrica':policy['rubrica_version'],'modo':'hibrido'}
+        metadata_path.write_text(json.dumps(metadata,ensure_ascii=False,indent=2),encoding='utf-8')
     result=[]
     for index,c in enumerate(packet if not a.consolidar else []):
         if index:time.sleep(max(0,a.intervalo))
         try:
             j=judge(c['entrada'],c['saida'])
-            result.append(dict(c,juiz=j['aprovado'],nota_juiz=j['nota']))
+            result.append(dict(c,juiz=j['aprovado'],nota_juiz=j['nota'],metodo=j.get('metodo','llm'),regra=j.get('regra')))
         except Exception as exc:
             result.append(dict(c,juiz=None,nota_juiz='',erro=type(exc).__name__))
         print(c['id'],flush=True)
@@ -102,8 +123,8 @@ def main():
         result=json.loads((dest/'predicoes-parciais.json').read_text(encoding='utf-8'))
     review_path=dest/'analise-desacordos.json'
     reviews=json.loads(review_path.read_text(encoding='utf-8')) if review_path.exists() else []
-    policy=json.loads((ROOT/'evals/politica.json').read_text(encoding='utf-8'))
-    report=consolidate(packet,result,reviews,policy['limiar_adocao_juiz'])
+    report=consolidate(packet,result,reviews,policy['limiar_adocao_juiz'],policy['rubrica_version'])
+    report.update(metadata,proveniencia_rotulos='evals/revisao/PROVENIENCIA-REVISAO.md')
     (dest/'validacao-juiz.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 
 

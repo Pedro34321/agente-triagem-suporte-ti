@@ -1,0 +1,56 @@
+{
+  "id": "acesso4",
+  "entrada": "Esqueci a senha do email corporativo e não consigo acessar.",
+  "origem": "sintetico",
+  "classe": "acesso",
+  "esperado": {
+    "categoria": "Acesso / Conta",
+    "registro": true
+  },
+  "inicial": {
+    "resultado": "Modelo indisponível; tente mais tarde ou procure o analista N1.",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "erro_modelo",
+    "thread_id": "avaliacao:principal:acesso4",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Modelo indisponível; tente mais tarde ou procure o analista N1.",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "erro_modelo",
+    "thread_id": "avaliacao:principal:acesso4",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "categoria": false,
+    "resultado_mundo": false,
+    "pausa_antes_escrita": true,
+    "pausa": false,
+    "idempotencia": false,
+    "trajetoria": false,
+    "sem_erro_tecnico": false
+  },
+  "aprovado": false,
+  "segundos_end_to_end": 2.641
+}

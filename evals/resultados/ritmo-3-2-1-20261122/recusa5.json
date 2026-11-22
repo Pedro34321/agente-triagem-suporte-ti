@@ -1,0 +1,54 @@
+{
+  "id": "recusa5",
+  "entrada": "Calcule meu imposto de renda.",
+  "origem": "sintetico",
+  "classe": "recusa",
+  "esperado": {
+    "suficiente": false,
+    "registro": false
+  },
+  "inicial": {
+    "resultado": "Atendo triagem de suporte de TI. Descreva um problema de TI para continuar o atendimento. ",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "fora_escopo",
+    "thread_id": "avaliacao:principal:recusa5",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Atendo triagem de suporte de TI. Descreva um problema de TI para continuar o atendimento. ",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "fora_escopo",
+    "thread_id": "avaliacao:principal:recusa5",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "suficiente": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 34.828
+}

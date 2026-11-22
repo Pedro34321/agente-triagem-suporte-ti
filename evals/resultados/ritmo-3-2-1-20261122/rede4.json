@@ -1,0 +1,58 @@
+{
+  "id": "rede4",
+  "entrada": "Estou no Andar 3, a rede caiu e vários colegas também estão sem conexão.",
+  "origem": "sintetico",
+  "classe": "rede",
+  "esperado": {
+    "categoria": "Rede / Conectividade",
+    "registro": true,
+    "fonte": "incidente:1"
+  },
+  "inicial": {
+    "resultado": "Não consegui validar a decisão e as fontes. Encaminhe ao analista N1.",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "validacao_falhou",
+    "thread_id": "avaliacao:principal:rede4",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Não consegui validar a decisão e as fontes. Encaminhe ao analista N1.",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "validacao_falhou",
+    "thread_id": "avaliacao:principal:rede4",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "categoria": false,
+    "fonte": false,
+    "resultado_mundo": false,
+    "pausa_antes_escrita": true,
+    "pausa": false,
+    "idempotencia": false,
+    "trajetoria": false,
+    "sem_erro_tecnico": false
+  },
+  "aprovado": false,
+  "segundos_end_to_end": 101.563
+}

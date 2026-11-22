@@ -1,0 +1,129 @@
+{
+  "id": "hardware4",
+  "entrada": "Notebook NB-20510 com bateria que não carrega.",
+  "origem": "sintetico",
+  "classe": "hardware",
+  "esperado": {
+    "categoria": "Hardware / Equipamento",
+    "registro": true
+  },
+  "inicial": {
+    "resultado": "Falha física de bateria no notebook **NB-20510** (Andar 2). Classificação: **Hardware / Equipamento**, **Prioridade Média**, **Suporte N2**. O patrimônio está ativo no cadastro, mas a falha na bateria não configura risco físico ou queimado. **Suficiente=true, registrar=true** para avaliação do Suporte N2, que aprovará ou ajustará a prioridade.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-20510",
+        "trecho": "patrimonio: NB-20510; tipo: Notebook; status: Ativo; localizacao: Andar 2"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "avaliacao:principal:hardware4",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Falha física de bateria no notebook **NB-20510** (Andar 2). Classificação: **Hardware / Equipamento**, **Prioridade Média**, **Suporte N2**. O patrimônio está ativo no cadastro, mas a falha na bateria não configura risco físico ou queimado. **Suficiente=true, registrar=true** para avaliação do Suporte N2, que aprovará ou ajustará a prioridade.",
+        "fontes": [
+          {
+            "id": "KB-HARDWARE",
+            "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+          },
+          {
+            "id": "equipamento:NB-20510",
+            "trecho": "patrimonio: NB-20510; tipo: Notebook; status: Ativo; localizacao: Andar 2"
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Hardware / Equipamento",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N2",
+        "perguntas": [],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1795459459.8892357,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "saida": {
+    "resultado": "Falha física de bateria no notebook **NB-20510** (Andar 2). Classificação: **Hardware / Equipamento**, **Prioridade Média**, **Suporte N2**. O patrimônio está ativo no cadastro, mas a falha na bateria não configura risco físico ou queimado. **Suficiente=true, registrar=true** para avaliação do Suporte N2, que aprovará ou ajustará a prioridade.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-20510",
+        "trecho": "patrimonio: NB-20510; tipo: Notebook; status: Ativo; localizacao: Andar 2"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "avaliacao:principal:hardware4",
+    "registro_id": 1,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": {
+    "resultado": "Falha física de bateria no notebook **NB-20510** (Andar 2). Classificação: **Hardware / Equipamento**, **Prioridade Média**, **Suporte N2**. O patrimônio está ativo no cadastro, mas a falha na bateria não configura risco físico ou queimado. **Suficiente=true, registrar=true** para avaliação do Suporte N2, que aprovará ou ajustará a prioridade.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      },
+      {
+        "id": "equipamento:NB-20510",
+        "trecho": "patrimonio: NB-20510; tipo: Notebook; status: Ativo; localizacao: Andar 2"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Hardware / Equipamento",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N2",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "avaliacao:principal:hardware4",
+    "registro_id": 1,
+    "ja_existia": true,
+    "pendencia": null
+  },
+  "banco": {
+    "antes": 0,
+    "depois": 1
+  },
+  "checks": {
+    "categoria": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "pausa": true,
+    "idempotencia": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 71.984
+}

@@ -1,6 +1,8 @@
 {
   "dataset_version": "1.0.0",
-  "rubrica_version": "1.0.0",
+  "rubrica_version": "1.2.0",
+  "validacao_juiz": "evals/revisao/juiz-hibrido-1-2-0/validacao-juiz.json",
+  "rodada_atual": "ritmo-3-2-1-20261122",
   "limiar_adocao_juiz": 0.9,
   "minimo_rotulos_humanos": 20,
   "slo": {"alvo": 0.9, "janela": "7 dias", "declarado_antes_das_rodadas": true},

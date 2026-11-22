@@ -2,8 +2,9 @@
 
 ## 1. Identificação
 
-Sistema local acadêmico `triagem-ti`, versão 3.1.0. Continuação das Partes 1 e 2.
-Mantenedores do trabalho: Pedro Henrique Macedo Cunha e Guilherme dos Santos Medeiros.
+Sistema local acadêmico `triagem-ti`, versão 3.2.1. Continuação das Partes 1 e 2.
+Autores do trabalho: Pedro Henrique Macedo Cunha e Guilherme dos Santos Medeiros.
+Responsabilidade e ferramentas de apoio: docs/autoria.md.
 O documento histórico está preservado em model-card-parte1.md.
 
 ## 2. Finalidade
@@ -22,7 +23,7 @@ envio de mensagem ou escrita em sistema externo.
 | Escopo de triagem e bloqueio de padrões hostis | código `src/graph.py:274`, testes ASI01 |
 | Aprovação com credencial local e identidade vinculada | `src/security.py:32`, test_asi03_unauthorized_approval |
 | Escrita vinculada à proposta, prazo e aprovação | `src/security.py:40` e `src/graph.py:235`, teste de bypass |
-| Até 3 chamadas de estágio, 90s, 12000 tokens observados, 16 superpassos | src/graph.py constantes e call; tokens não são teto rígido de fatura |
+| Até 3 chamadas de estágio, 150s, 12000 tokens observados, 16 superpassos | src/graph.py constantes e call; tokens não são teto rígido de fatura |
 | Na falha de fonte/controle, não escrever | `src/graph.py:183`, testes de fonte inválida e auditoria indisponível |
 | Operador pode suspender | TRIAGEM_SUSPENDED=1, test_suspend_blocks_calls_and_writes |
 | Credencial de inferência | usada somente no endpoint Mistral no adaptador, não no prompt |
@@ -39,8 +40,10 @@ OpenTelemetry exporta arquivos locais. Não há MCP nem multiagente.
 ## 5. Modelo e provedor
 
 Ministral 8B `ministral-8b-2512`, Mistral. Prompts versionados e saída estruturada.
-O nome do SDK openai não altera quem presta a inferência. Juiz usa o mesmo modelo,
-com rubrica própria; foi avaliado e não adotado por concordância insuficiente.
+O nome do SDK openai não altera quem presta a inferência. O juiz híbrido combina
+o mesmo modelo com regra determinística da mensagem fixa de encaminhamento ao N1.
+O LLM isolado e o resultado híbrido são medidos separadamente. A tentativa com
+Mistral Small recebeu 429 e foi interrompida, sem adoção.
 
 ## 6. Dados
 
@@ -52,16 +55,20 @@ Mapeamento completo: docs/seguranca.md.
 ## 7. Avaliação
 
 30 casos v1.0.0, nove de desenvolvimento e 21 sintéticos. Baseline 3.0.0: 3/30 (10%);
-controles 3.1.0: 5/30 (16,7%). Evidências: evals/resultados/*/resumo.json e comparacao.txt.
-Melhora na fatia de três ataques: 2/3 para 3/3. Erros 429 dominam os resultados e
-impedem concluir melhoria semântica global. Testes locais em logs/parte3/testes.md.
-Juiz: concordância 45% (9/20), limiar 90%, não adotado. 11 desacordos, todos analisados. Fonte: evals/revisao/validacao-juiz.json; matriz em docs/evals.md. Revisão assistida por IA, conferida por Guilherme segundo confirmação do usuário; proveniência em evals/revisao/PROVENIENCIA-REVISAO.md.
+controles 3.1.0: 5/30 (16,7%). Rodada atual 3.2.1: 29/30
+(96.7%), em evals/resultados/ritmo-3-2-1-20261122/resumo.json. Comparação em
+evals/resultados/comparacao-atual.txt. Os erros 429 e as primeiras rodadas são
+preservados como histórico, não apagados. Testes locais em logs/parte3/testes.md.
+SLI operacional atual: 98.08%, alvo 90%,
+SLO atingido na amostra.
+Juiz híbrido (regra + LLM): concordância 90% (18/20), limiar 90%, adotado. LLM isolado: 85%, preservado separadamente. 2 desacordos, todos analisados. Fonte: evals/revisao/juiz-hibrido-1-2-0/validacao-juiz.json; matriz em docs/evals.md. Revisor: Guilherme, conforme confirmação registrada; metodologia e proveniência em evals/revisao/PROVENIENCIA-REVISAO.md.
 
 ## 8. Limites conhecidos
 
 Busca lexical pode perder paráfrases; fonte existente não prova todas as afirmações;
 regex hostil não cobre todos os ataques; memória tem perda deliberada de detalhe;
-API com limite observado; expiração e retenção exigem comandos, não daemon.
+API com limite observado: intervalo local padrão de 35s, podendo aumentar a latência;
+expiração e retenção exigem comandos, não daemon.
 SLI de término não captura toda classificação errada com JSON válido.
 
 ## 9. Riscos aceitos
@@ -111,9 +118,9 @@ formal do professor disponibilizada; as mudanças vieram da inspeção e dos tes
 
 ## Lacunas e correções propostas
 
-1. Juiz: permanece não adotado; melhorar a rubrica em nova versão e fazer nova calibração independente.
-2. Avaliação: revisão independente dos sintéticos e das saídas é melhoria futura; autoria técnica por IA está declarada.
-3. Provedor: ajustar limites/ritmo e medir nova rodada; SLO atual está violado.
+1. Juiz: repetir com amostra nova independente; a calibração atual reutiliza os vinte rótulos e não é teste cego.
+2. Avaliação: ampliar a amostra e fazer revisão de domínio independente; autoria das revisões está nos metadados.
+3. Provedor: comprovar capacidade sob carga; o espaçamento atende demonstração de baixo volume.
 4. Credencial/plataforma: comprovar privilégios e gasto no console e auditar ACL.
 5. Dados reais: definir finalidade/base legal, controles e contrato de retenção antes de uso.
 6. Operação: instalar agendamento de expiração/limpeza e acesso individual autenticado.

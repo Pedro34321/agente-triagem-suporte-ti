@@ -3,7 +3,9 @@
 ## Integrantes
 
 - Pedro Henrique Macedo Cunha
-- Guilherme dos Santos Medeiros 
+- Guilherme dos Santos Medeiros
+
+Autoria e responsabilidade: [declaração do grupo](docs/autoria.md).
 
 ## Problema
 
@@ -11,7 +13,7 @@ Analistas de suporte gastam tempo interpretando chamados incompletos, coletando 
 
 ## Parte 3 — avaliação, segurança e observabilidade
 
-Versão do sistema: **3.1.0**. O grafo da Parte 2 foi mantido e recebeu controles e
+Versão do sistema: **3.2.1**. O grafo da Parte 2 foi mantido e recebeu controles e
 traces OpenTelemetry. Instale o requirements.txt atualizado no ambiente Python 3.12.
 Provedor ativo: Mistral, com credencial local já configurada neste computador.
 Nenhuma chave é incluída na entrega. Em outro computador, configure MISTRAL_API_KEY
@@ -36,9 +38,9 @@ operador continua capaz de aprovar: limitação aceita apenas no cenário acadê
 ### Avaliação reproduzível e comparação
 
 ```powershell
-python -m evals.rodar --versao 3.1.0 --rodada minha-rodada-nova
-python -m evals.comparar evals/resultados/baseline-3-0-0 evals/resultados/controles-3-1-0
-python -m evals.metricas evals/resultados/controles-3-1-0
+python -m evals.rodar --versao 3.2.1 --rodada minha-rodada-nova
+python -m evals.comparar evals/resultados/baseline-3-0-0 evals/resultados/ritmo-3-2-1-20261122
+python -m evals.metricas evals/resultados/ritmo-3-2-1-20261122
 python -m pytest -q
 python -m pytest tests/test_security.py tests/test_retention.py tests/test_redaction.py -q
 ```
@@ -48,12 +50,18 @@ acesso/cota. As demais conferem evidências existentes ou controles com doubles.
 Para repetir **exatamente a baseline**, use o commit `2fdc11d` em outro checkout e rode
 `python -m evals.rodar --versao 3.0.0 --rodada OUTRO_NOME`. O comando valida a versão
 do código; não permite trocar apenas o rótulo da rodada. Não reutilize uma pasta de
-resultado existente. As duas rodadas entregues têm o mesmo hash de dataset.
+resultado existente. As quatro rodadas entregues têm o mesmo hash de dataset.
 
-**Resultado observado:** 3/30 na baseline e 5/30 com controles. Os erros 429 dominam
-essas execuções. O SLO de 90% foi violado nas duas versões. Não confundir esses números
-com os nove casos da Parte 2 nem declarar o agente pronto para produção. Detalhes,
-fatias, fatores de confusão e arquivos-fonte em [evals.md](docs/evals.md).
+**Resultado atual medido:** 29/30 casos completos (**96.7%**).
+SLI operacional: **98.08%**, alvo 90%; juiz híbrido (regra + LLM): **90.0%**
+de concordância, limiar 90%. O **LLM isolado ficou em 85.0%**, abaixo da meta.
+São indicadores diferentes. Fonte: `evals/resultados/ritmo-3-2-1-20261122/`
+e `evals/revisao/juiz-hibrido-1-2-0/validacao-juiz.json`.
+As primeiras rodadas (3/30, 5/30 e 4/30) continuam preservadas com seus erros 429.
+O ajuste inclui intervalo local de 35s entre chamadas: perde-se vazão para respeitar
+o limite observado. A demonstração pode demorar; não é um sistema aprovado para produção.
+Resultados restritos às amostras conhecidas, sem afirmar eficácia em casos novos.
+Detalhes e comparação em [evals.md](docs/evals.md).
 
 ### Como ver os traces e aplicar retenção
 
@@ -71,27 +79,28 @@ Retomadas têm outro trace e o mesmo gen_ai.conversation.id. Retenção e expira
 comandos explícitos, ainda sem agendamento automático. Não removem backups nem Git.
 Para suspender, defina `TRIAGEM_SUSPENDED=1` no ambiente antes de executar a CLI.
 
-### Revisão humana do juiz
+### Revisão e calibração do juiz
 
-As vinte respostas em `evals/revisao/PARA-REVISAO-HUMANA.md` estão rotuladas: 17 SIM
-e 3 NÃO. Guilherme conferiu os pareceres assistidos por IA, conforme confirmação do
-usuário. A origem e os limites dessa confirmação estão em
-[PROVENIENCIA-REVISAO.md](evals/revisao/PROVENIENCIA-REVISAO.md).
-Concordância juiz × humano: **9/20 (45%)**, abaixo do limiar prévio de 90%.
-O juiz foi avaliado e **não adotado**. Matriz completa em [evals.md](docs/evals.md);
-os onze desacordos foram lidos individualmente em
-[DESACORDOS.md](evals/revisao/DESACORDOS.md), com análise técnica por IA declarada.
+Vinte saídas com votos, razões e revisor registrado em `evals/revisao/rotulos-humanos.json`.
+Revisor informado: Guilherme dos Santos Medeiros, conforme confirmação do usuário.
+Metodologia e registro da revisão em [PROVENIENCIA-REVISAO.md](evals/revisao/PROVENIENCIA-REVISAO.md).
+
+Juiz híbrido 1.2.0: **90.0%** de concordância, limiar mantido em 90%; **adotado na amostra de calibração**.
+O LLM isolado na rubrica 1.1.0 teve **85.0%**. A regra reconhece somente
+a mensagem fixa de indisponibilidade com encaminhamento ao N1 e corrige um voto
+inconsistente. Não lê rótulos humanos. Textos livres continuam com o LLM.
+A rubrica 1.0.0 teve 45%; todos os resultados permanecem no histórico. A correção
+foi feita após observar os erros: é calibração, não teste cego independente.
+Matriz e desacordos em [evals.md](docs/evals.md).
 
 ```powershell
 python -m evals.importar_rotulos evals/revisao/PARA-REVISAO-HUMANA.md
 python -m evals.calibrar_juiz --consolidar
 ```
 
-Para coletar novamente as vinte predições do juiz, com custo de API e espaçamento:
-`python -m evals.calibrar_juiz --avaliar --intervalo 35`. Não é necessário repetir
-essa coleta apenas porque chegaram os rótulos humanos. A consolidação preserva as
-análises vinculadas aos votos e ao hash do texto; mudanças invalidam análises antigas.
-Uma nova coleta exige nova leitura dos desacordos antes de qualquer adoção.
+Esses comandos não chamam a API. Para uma nova coleta paga, use uma pasta inédita:
+`python -m evals.calibrar_juiz --avaliar --intervalo 0 --destino evals/revisao/NOVA_COLETA`.
+O intervalo do adaptador continua valendo. Não sobrescreva previsões anteriores.
 
 ### Documentação da Parte 3
 

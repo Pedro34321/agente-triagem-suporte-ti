@@ -15,10 +15,13 @@ def evidence():
 
 def test_adoption_requires_threshold_and_analysis():
     packet,predictions,reviews=evidence()
+    predictions[0]['juiz_bruto']=False
+    predictions[0]['metodo']='llm'
     assert not consolidate(packet,predictions)['adotado']
     final=consolidate(packet,predictions,reviews)
     assert final['adotado'] and final['concordancia']==0.9
     assert final['matriz']['humano_sim_juiz_nao']==2
+    assert final['casos'][0]['juiz_bruto'] is False and final['casos'][0]['metodo']=='llm'
     assert consolidate(packet,predictions,reviews)==final
     predictions[2]['juiz']=False
     assert not consolidate(packet,predictions,reviews)['adotado']

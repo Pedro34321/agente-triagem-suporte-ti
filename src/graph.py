@@ -20,7 +20,7 @@ from opentelemetry.trace import SpanKind
 from .model import PROVIDER
 from .security import LocalAuthority, HOSTILE, suspended
 
-MAX_SECONDS = 90
+MAX_SECONDS = 150
 MAX_CALLS = 3
 MAX_TOKENS = 12000
 RECURSION_LIMIT = 16
@@ -139,7 +139,7 @@ class App:
         if info['intent'] in ('incompleto', 'ambiguo', 'fora_escopo'):
             if info['intent'] != 'fora_escopo' and not info['questions']:
                 info['questions'] = ['Qual problema de TI ocorre, em qual sistema e qual mensagem de erro aparece?']
-            msg = 'Atendo triagem de suporte de TI. ' if info['intent'] == 'fora_escopo' else 'Preciso de informações adicionais. '
+            msg = 'Atendo triagem de suporte de TI. Descreva um problema de TI para continuar o atendimento. ' if info['intent'] == 'fora_escopo' else 'Preciso de informações adicionais. '
             update.update(route='finalizar', reason=info['intent'], decision=refusal(msg + ' '.join(info['questions']), info['questions']))
         else:
             update['route'] = 'recuperar'

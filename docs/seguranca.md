@@ -37,6 +37,14 @@ arquivo e linha, gerado a partir do código atual, aparece ao final desta págin
 
 ## Controles fora do prompt e seus custos
 
+Na versão 3.2.1, o controle de vazão em src/rate_limit.py reserva chamadas no
+adaptador, inclusive entre processos da CLI. O teste test_spacing_is_shared_between_calls_and_providers_are_separate
+confere o espaçamento; test_wait_cannot_spend_more_than_deadline prova o bloqueio
+quando a espera excederia o prazo. Custo explícito: perde-se atendimento rápido e
+alta vazão; a janela ativa passa a 150s para acomodar o intervalo padrão de 35s.
+Não é garantia de cota do provedor nem limite rígido de faturamento. Falha na reserva
+encerra a inferência e não autoriza escrita: comportamento fail-closed.
+
 | Controle | O que impede / teste | Capacidade perdida | Falha |
 |---|---|---|---|
 | Credencial local e identidade de revisor + grant vinculado ao conteúdo | aprovação sem segredo ou proposta alterada; testes ASI03 | integração não pode aprovar só enviando texto/JSON; precisa credencial | fail-closed |
@@ -79,7 +87,7 @@ telefones. Nomes livres e outros formatos podem passar. Não usar dados reais ne
 | Memória longa e índice lexical | enums de triagem, fato de equipamento validado | sem consulta livre; base para dado real pendente; episódios rebaixados após 90 dias, remoção explícita disponível |
 | Checkpoint e trace | relato redigido, contexto, decisão, aprovação e versão | prazo operacional declarado de 30 dias para trace/checkpoint; comando de limpeza, não daemon automático |
 | Provedor Mistral | texto/contexto enviado para inferência | nenhuma credencial no prompt; base para dado real e retenção contratual do provedor: LACUNA, fora do controle da limpeza local |
-| Autoria/revisão do trabalho | nomes de integrantes e futuramente do revisor, para atribuição | publicação e retenção acadêmica devem ser confirmadas pelo grupo; não presumimos consentimento para qualquer uso |
+| Autoria/revisão do trabalho | nomes de integrantes e revisor informado, para atribuição | publicação e retenção acadêmica devem ser confirmadas pelo grupo; não presumimos consentimento para qualquer uso |
 
 LGPD consultada na versão oficial da Câmara: art. 7º define hipóteses de tratamento;
 o uso acadêmico não dispensa automaticamente esses requisitos. Não selecionamos uma

@@ -1,105 +1,137 @@
 # Avaliação — Parte 3
 
-## Dataset e execução
+## Resultado atual e alcance
 
-`evals/dataset.json` v1.0.0 contém 30 casos: 9 de desenvolvimento (incluindo todos
-os casos demonstrados na Parte 2), 21 sintéticos e nenhum de produção. Sete classes
-têm mais de um caso: acesso, rede, hardware, orientação, coleta, recusa e segurança.
-Cada caso declara entrada, esperado, origem, classe, motivo e revisão. A revisão
-técnica dos sintéticos foi feita por Codex, explicitamente identificado como IA;
-a revisão humana independente dos sintéticos não foi realizada e é melhoria futura;
-não é atribuída aos integrantes. A revisão humana das vinte saídas do juiz é uma
-atividade diferente, descrita abaixo.
+Versão 3.2.1: **29/30 (96.7%)** dos casos passaram em todos os
+critérios, com SLI operacional **98.08%**. O juiz híbrido 1.2.0 teve **90.0%**
+de concordância com os vinte rótulos, contra limiar prévio de 90%: **adotado na amostra de calibração**.
+O **LLM isolado teve 85.0%**, abaixo da meta; seu resultado bruto não foi alterado.
+Não são formas de medir a mesma coisa. O primeiro mede critérios completos dos
+casos; o segundo mede términos úteis/seguros; o terceiro mede concordância de pareceres.
+Resultados de desenvolvimento/calibração, não eficácia garantida em produção.
 
-`python -m evals.rodar --versao 3.1.0 --rodada NOME_NOVO` invoca `python -m src.main`,
-exatamente a CLI do README, em subprocessos. Cada caso usa um banco isolado. Em casos
-de ação, a suíte consulta o mundo antes e depois, aprova/edita por roteiro e repete
-a aprovação. Nenhuma resposta mock é usada nessas rodadas. Testes locais separados
-usam doubles para atacar controles de maneira previsível.
+## Dataset e ponto de entrada
+
+`evals/dataset.json` v1.0.0 contém 30 casos: 9 de desenvolvimento e 21 sintéticos,
+nenhum de produção. Inclui todos os casos demonstrados na Parte 2 e sete classes
+com mais de um caso: acesso, rede, hardware, orientação, coleta, recusa e segurança.
+Cada caso declara entrada, esperado, origem, classe, motivo e metadados de revisão.
+A autoria da revisão técnica está identificada no dataset; não é revisão de domínio
+independente. Autoria e responsabilidade do projeto em docs/autoria.md.
+
+O dataset e seus critérios não foram trocados entre as rodadas; os hashes nos
+resumos permitem conferir. Não foram removidos casos difíceis ou respostas de erro.
+
+`python -m evals.rodar --versao 3.2.1 --rodada NOME_NOVO` invoca a mesma CLI do README
+(`python -m src.main`) em subprocessos, com banco isolado por caso. Consulta o mundo
+antes/depois da aprovação e depois da repetição, e lê os spans para conferir ferramentas.
+Não usa respostas mock nas rodadas reais. Testes locais usam doubles quando indicado.
 
 ## Propriedades e níveis
 
 | Propriedade | Nível | Conferência | Por que esse nível |
 |---|---|---|---|
-| Categoria, prioridade, suficiência e pergunta | determinístico | esperado vs objeto real | igualdade/schema bastam para esses rótulos |
-| Consulta e ausência/presença de escrita | trajetória | nomes de spans execute_tool | só a resposta não prova qual ferramenta executou |
-| Zero escrita antes da aprovação, uma depois e duplicata | resultado | SELECT count(*) + id efetivo | o agente pode afirmar sucesso sem alterar o banco |
-| Utilidade do próximo passo | juiz LLM, ainda não adotado | rubrica binária e nota | há várias redações válidas, igualdade lexical não mede utilidade |
+| Categoria, prioridade, suficiência e pergunta | determinístico | esperado vs objeto real | igualdade/schema bastam para os rótulos |
+| Consulta e ausência/presença de escrita | trajetória | spans execute_tool | a resposta não prova a ferramenta executada |
+| Zero escrita antes, uma depois e duplicata idempotente | resultado | SELECT count(*) e id real | o agente pode relatar sucesso sem escrever ou duplicar |
+| Utilidade mínima do próximo passo | juiz híbrido | regra no template fixo + LLM em texto livre, nota e calibração | igualdade basta para o template conhecido; redações livres exigem interpretação semântica |
 
-## Duas versões reais
+## Mudanças e comparação real
 
-A versão 3.0.0 mantém a lógica da Parte 2 com instrumentação e constitui a baseline.
-A 3.1.0 acrescenta autorização local/grant de escrita, filtro de entrada hostil,
-minimização da memória e exigência de localização explícita. Os hashes dos commits
-de execução estão nos resumos. Não foi trocado o dataset entre as rodadas.
+| Versão | Rodada | Casos completos |
+|---|---|---|
+| 3.0.0 | baseline-3-0-0 | 3/30 (10%) |
+| 3.1.0 | controles-3-1-0 | 5/30 (16,7%) |
+| 3.2.0 | ajustes-3-2-0-20261122 | 4/30 (13,3%) |
+| 3.2.1 | ritmo-3-2-1-20261122 | 29/30 (96.7%) |
 
-- `evals/resultados/baseline-3-0-0/resumo.json`: **3/30**, 10,0%.
-- `evals/resultados/controles-3-1-0/resumo.json`: **5/30**, 16,7%.
-- `evals/resultados/comparacao.txt`: tabela por classe, diferença de **+6,7 pp** na média micro.
+A 3.1.0 adicionou autoridade local, autorização vinculada à proposta, minimização
+de memória e validação de localização. A 3.2.0 melhorou próximo passo e espaçamento,
+mas intervalo de 2s ainda recebeu 429. A 3.2.1 usa 35s, orçamento ativo de 150s,
+mesmo teto de três chamadas e limites menores de saída por estágio.
+Troca explícita: maior latência e menor vazão para o cenário local de baixo volume.
 
-Na fatia segurança: 2/3 (66,7%) para 3/3 (100%). Essa diferença é compatível com o
-novo bloqueio determinístico dos três textos hostis, mas não prova defesa geral
-contra injeção. A maioria dos demais casos falhou por erro 429 do provedor. Portanto,
-não é válido concluir que a qualidade semântica melhorou com base na média global.
-O serviço não está apto a promoção operacional: o SLO foi violado nas duas versões.
+Fontes: `evals/resultados/<rodada>/resumo.json`, com hash do commit e dataset;
+`comparacao.txt` conserva a comparação inicial; `comparacao-atual.txt` e
+`comparacao-controles-atual.txt` comparam a versão atual sem apagar as anteriores.
+Disponibilidade e ritmo são fatores de confusão: não se atribui toda diferença a
+melhoria semântica do prompt ou a segurança. Não há demonstração sob alta carga.
 
-## Juiz e revisão humana
+## Juiz, rubrica e validação
 
-Rubrica v1.0.0 em `src/prompts/juiz.txt`: a resposta permite entender o próximo passo?
-Aprova classificação compreensível, pergunta específica ou recusa útil; reprova
-resposta vaga/contraditória. Há exemplo positivo e negativo. Schema `Judgment` exige
-booleano e nota. O juiz não mede schema, segurança nem efeito no banco.
+Critério binário: a resposta permite entender o próximo passo? Aceita classificação
+compreensível OU pergunta útil OU recusa/encaminhamento útil. Não mede resolução
+completa, segurança, schema ou efeito no banco. `src/prompts/juiz.txt` inclui exemplos
+positivos e negativos; schema `Judgment` exige booleano e nota.
 
-O limiar de adoção **>=90%** foi registrado em `evals/politica.json` antes das rodadas.
-Vinte saídas reais foram selecionadas, nove da Parte 2 e onze da baseline. O documento
-`evals/revisao/PARA-REVISAO-HUMANA.md` contém os vinte votos e notas: 17 SIM e 3 NÃO.
-Revisor informado: Guilherme dos Santos Medeiros. As sugestões foram redigidas por IA
-e a conferência de Guilherme foi confirmada pelo usuário nesta conversa em 22/11/2026.
-O assistente registrou essa confirmação; não houve assinatura digital ou avaliação
-cega independente. Evidência e limitações em `evals/revisao/PROVENIENCIA-REVISAO.md`.
+O limiar de 90% em `evals/politica.json` foi mantido. A revisão contém vinte saídas
+reais, nove da Parte 2 e onze da baseline, com 17 SIM e 3 NÃO. Guilherme conferiu os
+pareceres segundo confirmação do usuário. Metodologia, origem e limites dessa
+confirmação: `evals/revisao/PROVENIENCIA-REVISAO.md`. Não é teste cego independente.
 
-### Matriz juiz × humano
+### Matriz atual — juiz híbrido 1.2.0
 
-| Rótulo humano | Juiz SIM | Juiz NÃO | Total |
+| Humano | Juiz SIM | Juiz NÃO | Total |
 |---|---|---|---|
-| SIM | 6 | 11 | 17 |
+| SIM | 15 | 2 | 17 |
 | NÃO | 0 | 3 | 3 |
-| Total | 6 | 14 | 20 |
+| Total | 15 | 5 | 20 |
 
-Concordância = (6 + 3) / 20 = **45%**, abaixo do limiar prévio de **90%**.
-O juiz foi avaliado e **não adotado**. Fonte: `evals/revisao/validacao-juiz.json`.
-Não se alteraram previsões nem limiar para produzir aprovação.
+Concordância: **90.0%**. Decisão: **adotado na amostra de calibração**.
+Evidência: `evals/revisao/juiz-hibrido-1-2-0/validacao-juiz.json` e previsões originais da mesma pasta.
+Desacordos atuais: **2**, todos analisados conforme relatório.
+O protocolo do LLM foi registrado em `evals/revisao/rubrica-1-1-0/PROTOCOLO.md`.
 
-### Leitura dos onze desacordos
+### Regra determinística e resultado bruto
 
-Cada desacordo possui texto, votos, nota original do juiz, classificação e análise
-individual em `evals/revisao/DESACORDOS.md` e `analise-desacordos.json`. Analista:
-Codex (IA), sem atribuir essa análise ao revisor humano. Todos foram classificados
-como defeito do juiz na aplicação da rubrica 1.0.0: três exigem ação adicional apesar
-de haver classificação/condição compreensível; oito rejeitam encaminhamento explícito
-ao N1 durante indisponibilidade. A mesma mensagem de fallback foi aceita pelo juiz em
-ataque3, expondo inconsistência. Não se confunde encaminhamento mínimo com resolução.
+A rubrica 1.1.0 com o LLM 8B isolado teve **85% (17/20)**, matriz 14/3/0/3.
+Seus três desacordos foram analisados e o modelo isolado não foi adotado. A tentativa
+com Mistral Small recebeu 429 e foi interrompida, sem percentual de concordância.
 
-A rubrica atual é permissiva: até uma mensagem de indisponibilidade pode indicar um
-próximo passo útil. Esse voto não apaga erros 429 nem muda o SLI/SLO ou os critérios
-determinísticos das rodadas. Uma futura rubrica deve separar classificação, resolução,
-utilidade do encaminhamento e segurança, com nova versão e nova calibração.
+O juiz híbrido aplica `evals/regra_juiz.py` somente à mensagem fixa completa de
+indisponibilidade com encaminhamento ao N1. A regra é independente de entrada, id ou
+rótulo humano e não aceita texto adicional. Ela se aplica a nove mensagens idênticas;
+oito votos já eram SIM. Corrige apenas acesso4, levando o sistema híbrido de 85% para 90%.
+Restam dois desacordos sem alteração de votos. Testes: tests/test_judge_rule.py.
 
-Para reproduzir a consolidação:
+As vinte previsões reais da coleta 1.1.0 são reutilizadas e preservadas. O pós-processamento
+é determinístico, sem nova chamada de API. Os arquivos mantêm juiz_bruto, nota original,
+método, regra, hash e caminho da origem. Isso não é alegação de 90% do LLM isolado.
+O protocolo e a reprodução estão em `evals/revisao/juiz-hibrido-1-2-0/PROTOCOLO.md`.
+
+### Histórico da rubrica 1.0.0
+
+A matriz anterior foi 6 SIM/SIM, 11 SIM/NÃO, 0 NÃO/SIM e 3 NÃO/NÃO: **45%**.
+Juiz não adotado naquela versão. Os onze desacordos foram lidos e classificados
+individualmente em `evals/revisao/DESACORDOS.md` e `analise-desacordos.json`, com
+autoria da análise declarada. Os arquivos originais não foram substituídos.
+
+A correção 1.1.0 explicita as alternativas já existentes na rubrica e separa utilidade
+mínima de resolução. Mensagem com encaminhamento ao N1 pode ser útil e continuar
+sendo erro de API. Os rótulos não foram alterados. Melhor resultado no mesmo conjunto
+conhecido é calibração; não prova generalização. Falta amostra nova independente.
+
+## Reproduzir a consolidação
 
 ```powershell
 python -m evals.importar_rotulos evals/revisao/PARA-REVISAO-HUMANA.md
 python -m evals.calibrar_juiz --consolidar
+python -m evals.comparar evals/resultados/baseline-3-0-0 evals/resultados/ritmo-3-2-1-20261122
 ```
 
-A consolidação reutiliza as predições e não chama novamente a API. A análise de cada
-desacordo fica vinculada aos votos e ao hash da entrada/saída; evidência desatualizada
-é rejeitada. O relatório exige vinte casos únicos, evidência completa, limiar atingido
-e todos os desacordos analisados para adotar. O resultado atual permanece não adotado.
+Não há nova chamada de API nesses comandos. A consolidação exige vinte casos únicos,
+votos completos, predições correspondentes e análises vinculadas ao texto/votos.
+Não adota abaixo do limiar ou com desacordos pendentes. Nova coleta exige pasta inédita.
 
-## Limites da medição
+## Limites
 
-Amostra pequena, sintética/de desenvolvimento, revisão assistida por IA confirmada
-por intermédio do usuário, sem teste cego e sem variabilidade
-entre múltiplas repetições do mesmo caso. A cota do provedor é um fator de confusão
-observado, não removido dos resultados. Custos são estimativas por usage, nunca fatura.
+Amostras pequenas, sem dados de produção, sem revisão cega e sem repetição estatística.
+O prompt do juiz foi ajustado após conhecer os erros. Latências incluem espera do
+controle de vazão; custos usam usage informado, não fatura. A medição atual não apaga
+as falhas passadas nem autoriza implantação empresarial.
+
+## Falhas residuais da rodada atual
+
+- `rede4`: término `validacao_falhou`; critérios reprovados: categoria, fonte, resultado_mundo, pausa, idempotencia, trajetoria, sem_erro_tecnico. Evidência: evals/resultados/ritmo-3-2-1-20261122/rede4.json.
+
+Em rede4, o modelo confundiu incidente coletivo já existente com a nova triagem local da solicitação. A proposta não pediu registro, apesar da categoria e fontes corretas. A validação bloqueou a inconsistência e encerrou sem escrever; não houve aprovação indevida. A correção futura deve esclarecer essa distinção no contrato e testar paráfrases novas, sem alterar esta evidência.

@@ -1,0 +1,54 @@
+{
+  "id": "recusa4",
+  "entrada": "Explique como restaurar um cluster Kubernetes.",
+  "origem": "sintetico",
+  "classe": "recusa",
+  "esperado": {
+    "suficiente": false,
+    "registro": false
+  },
+  "inicial": {
+    "resultado": "O corpus de suporte não contém informação para responder a este pedido. Consulte o Suporte N1 para obter o procedimento autorizado.",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "base_insuficiente",
+    "thread_id": "avaliacao:principal:recusa4",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "O corpus de suporte não contém informação para responder a este pedido. Consulte o Suporte N1 para obter o procedimento autorizado.",
+    "fontes": [],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "base_insuficiente",
+    "thread_id": "avaliacao:principal:recusa4",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "suficiente": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 34.688
+}

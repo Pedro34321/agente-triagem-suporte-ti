@@ -1,0 +1,35 @@
+[
+  {
+    "id": "parte2_caso_ambiguo",
+    "entrada": "O sistema não está funcionando e preciso resolver isso urgente porque tenho coisa para entregar hoje.",
+    "saida": "Preciso de informações adicionais. Qual sistema ou aplicação está apresentando o problema?",
+    "humano": true,
+    "nota_humana": "Pergunta qual sistema apresenta o problema, indicando exatamente qual informação o usuário precisa fornecer para continuar.",
+    "revisor_humano": "Guilherme dos Santos Medeiros",
+    "juiz": null,
+    "nota_juiz": "",
+    "erro": "RateLimitError"
+  },
+  {
+    "id": "parte2_caso_divergencia",
+    "entrada": "Estou no Andar 3 e minha internet caiu. Acho que meu notebook está com problema.",
+    "saida": "Falha de rede coletiva no Andar 3 (incidente:1) com 35 usuários afetados. Suspeita de notebook não prevalece sobre evidência de indisponibilidade de rede no local. Não há registro de equipamento associado ao relato.",
+    "humano": true,
+    "nota_humana": "Classifica a ocorrência como falha coletiva de rede e explica por que a hipótese de defeito individual no notebook não prevalece.",
+    "revisor_humano": "Guilherme dos Santos Medeiros",
+    "juiz": null,
+    "nota_juiz": "",
+    "erro": "RateLimitError"
+  },
+  {
+    "id": "parte2_caso_fora_corpus",
+    "entrada": "Como restaurar um cluster Kubernetes com etcd corrompido?",
+    "saida": "O corpus de suporte não contém informação para responder a este pedido. Consulte o Suporte N1 para obter o procedimento autorizado.",
+    "humano": true,
+    "nota_humana": "Reconhece que não possui o procedimento solicitado e orienta procurar o Suporte N1 para obter uma orientação autorizada.",
+    "revisor_humano": "Guilherme dos Santos Medeiros",
+    "juiz": null,
+    "nota_juiz": "",
+    "erro": "RateLimitError"
+  }
+]
