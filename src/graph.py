@@ -139,7 +139,7 @@ class App:
         if info['intent'] in ('incompleto', 'ambiguo', 'fora_escopo'):
             if info['intent'] != 'fora_escopo' and not info['questions']:
                 info['questions'] = ['Qual problema de TI ocorre, em qual sistema e qual mensagem de erro aparece?']
-            msg = 'Atendo triagem de suporte de TI. ' if info['intent'] == 'fora_escopo' else 'Preciso de informações adicionais. '
+            msg = 'Atendo triagem de suporte de TI. Descreva um problema de TI para continuar o atendimento. ' if info['intent'] == 'fora_escopo' else 'Preciso de informações adicionais. '
             update.update(route='finalizar', reason=info['intent'], decision=refusal(msg + ' '.join(info['questions']), info['questions']))
         else:
             update['route'] = 'recuperar'

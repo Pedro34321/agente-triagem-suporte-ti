@@ -1,7 +1,9 @@
 import os
+import time
 from dotenv import load_dotenv
 from openai import OpenAI
 from .common import ROOT, canonical, digest
+from .rate_limit import wait_for_slot
 
 load_dotenv(ROOT / '.env.local')
 load_dotenv(ROOT / '.env')
@@ -22,13 +24,23 @@ class LLM:
         self.client = None
 
     def call(self, name, schema, data, timeout=30, override=None):
+        started=time.monotonic()
+        self.last_usage={}
+        interval=float(os.getenv('LLM_MIN_INTERVAL_SECONDS') or ('2' if PROVIDER=='mistral' else '0'))
+        waited=wait_for_slot(ROOT/'.runtime/provider-rate.sqlite',PROVIDER,interval,timeout)
+        if waited:
+            from .telemetry import event
+            event('provider_wait',{'seconds':round(waited,4),'provider':PROVIDER})
+        timeout-=time.monotonic()-started
+        if timeout<=0:raise TimeoutError('Orçamento consumido antes da chamada ao provedor.')
         if self.client is None:
             if PROVIDER not in ('mistral', 'openai'):
                 raise ValueError('Provedor deve ser mistral ou openai.')
             self.client = OpenAI(api_key=os.getenv('MISTRAL_API_KEY' if PROVIDER == 'mistral' else 'OPENAI_API_KEY'),
                                  base_url='https://api.mistral.ai/v1' if PROVIDER == 'mistral' else 'https://api.openai.com/v1',
                                  max_retries=0, timeout=30)
-        messages = [{'role': 'system', 'content': (override if override is not None else prompt(name)) + '\n' + prompt('procedural')},
+        procedural='' if name=='juiz' else '\n'+prompt('procedural')
+        messages = [{'role': 'system', 'content': (override if override is not None else prompt(name)) + procedural},
                     {'role': 'user', 'content': canonical(data)}]
         if PROVIDER == 'mistral':
             response = self.client.chat.completions.create(

@@ -87,7 +87,8 @@ def main():
              'data':datetime.now(timezone.utc).isoformat(),'dataset_version':'1.0.0','dataset_hash':digest(dataset),
              'origens':{k:sum(r['origem']==k for r in results) for k in ('producao','desenvolvimento','sintetico')},
              'por_classe':{c:{'n':sum(r['classe']==c for r in results),'bons':sum(r['classe']==c and r['aprovado'] for r in results)} for c in sorted({r['classe'] for r in results})},
-             'total':len(results),'aprovados':sum(r['aprovado'] for r in results),'juiz':'não adotado sem validação humana'}
+             'total':len(results),'aprovados':sum(r['aprovado'] for r in results),
+             'juiz':'Critérios desta rodada são determinísticos/trajetória/resultado; juiz medido separadamente.'}
     (dest/'resumo.json').write_text(json.dumps(summary,ensure_ascii=False,indent=2),encoding='utf-8')
 
 

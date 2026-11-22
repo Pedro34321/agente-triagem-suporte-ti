@@ -12,7 +12,7 @@ def case_hash(case):
     return hashlib.sha256((case['entrada']+'\n'+case['saida']).encode('utf-8')).hexdigest()
 
 
-def consolidate(packet, predictions, reviews=None, threshold=0.9):
+def consolidate(packet, predictions, reviews=None, threshold=0.9, rubric_version='1.0.0'):
     """Consolida evidências existentes; análises antigas não valem para outro caso."""
     ids=[c['id'] for c in packet]
     if len(ids)!=20 or len(set(ids))!=20:
@@ -51,7 +51,7 @@ def consolidate(packet, predictions, reviews=None, threshold=0.9):
         raise ValueError('Análise sem desacordo correspondente.')
     agreement=sum(c['humano']==c['juiz'] for c in result)/20 if ready else None
     analyzed=ready and all(not c['classificacao'].startswith('PENDENTE') for c in disagreements)
-    return {'rubrica':'1.0.0','limiar':threshold,'revisao_humana_completa':human_ok,'matriz':matrix,
+    return {'rubrica':rubric_version,'limiar':threshold,'revisao_humana_completa':human_ok,'matriz':matrix,
             'predicoes_completas':judge_ok,'concordancia':agreement,
             'desacordos_analisados':analyzed,'adotado':bool(ready and agreement>=threshold and analyzed),
             'desacordos':disagreements,'casos':result,
@@ -84,10 +84,14 @@ def prepare(round_dir):
 
 
 def main():
-    p=argparse.ArgumentParser();p.add_argument('--preparar');p.add_argument('--avaliar',action='store_true');p.add_argument('--consolidar',action='store_true');p.add_argument('--intervalo',type=float,default=35);a=p.parse_args()
+    p=argparse.ArgumentParser();p.add_argument('--preparar');p.add_argument('--avaliar',action='store_true');p.add_argument('--consolidar',action='store_true');p.add_argument('--intervalo',type=float,default=3);p.add_argument('--destino');a=p.parse_args()
     if a.preparar: prepare(Path(a.preparar));return
-    dest=ROOT/'evals/revisao'
-    packet=json.loads((dest/'rotulos-humanos.json').read_text(encoding='utf-8'))
+    policy=json.loads((ROOT/'evals/politica.json').read_text(encoding='utf-8'))
+    dest=Path(a.destino) if a.destino else (ROOT/policy.get('validacao_juiz','evals/revisao/validacao-juiz.json')).parent
+    dest.mkdir(parents=True,exist_ok=True)
+    packet=json.loads((ROOT/'evals/revisao/rotulos-humanos.json').read_text(encoding='utf-8'))
+    if not a.consolidar and (dest/'predicoes-parciais.json').exists():
+        p.error('Esta coleta já existe. Use --destino NOVA_PASTA para preservar o histórico.')
     result=[]
     for index,c in enumerate(packet if not a.consolidar else []):
         if index:time.sleep(max(0,a.intervalo))
@@ -102,8 +106,10 @@ def main():
         result=json.loads((dest/'predicoes-parciais.json').read_text(encoding='utf-8'))
     review_path=dest/'analise-desacordos.json'
     reviews=json.loads(review_path.read_text(encoding='utf-8')) if review_path.exists() else []
-    policy=json.loads((ROOT/'evals/politica.json').read_text(encoding='utf-8'))
-    report=consolidate(packet,result,reviews,policy['limiar_adocao_juiz'])
+    report=consolidate(packet,result,reviews,policy['limiar_adocao_juiz'],policy['rubrica_version'])
+    from src.model import MODEL, PROVIDER, prompt_versions
+    report.update(modelo=MODEL,provedor=PROVIDER,prompt_hash=prompt_versions()['juiz.txt'],
+                  proveniencia_rotulos='evals/revisao/PROVENIENCIA-REVISAO.md')
     (dest/'validacao-juiz.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 
 
