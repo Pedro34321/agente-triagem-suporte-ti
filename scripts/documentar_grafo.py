@@ -28,6 +28,8 @@ def main():
     intro = path.read_text(encoding='utf-8').split('<!-- GERADO -->')[0]
     lines = ['<!-- GERADO -->', '', '## Conferência executada', '', '`python conferir_grafo.py`', '', '```text', inventory(), '```', '',
              '## Campos do estado', '', '| Campo | Tipo | Escreve | Lê | Origem |', '|---|---|---|---|---|']
+    WRITERS['approval_grant']='aprovar'
+    READERS['approval_grant']='registrar (verificação HMAC)'
     for field, annotation in State.__annotations__.items():
         type_name = re.sub(r' at 0x[0-9A-Fa-f]+', '', str(annotation)).replace('typing.', '').replace('|', '/')
         origin = 'metadados e texto da CLI' if field in ('owner', 'thread_id', 'text', 'history') else 'nó produtor em src/graph.py'

@@ -25,13 +25,14 @@ def main():
         if args.comando == 'iniciar':
             result = app.run(args.texto or input('Descreva o problema: '), args.usuario, args.sessao, args.caso)
         elif args.comando == 'retomar':
-            result = app.resume(args.thread, {'decisao': args.decisao, 'prioridade': args.prioridade, 'encaminhamento': args.equipe})
+            result = app.resume(args.thread, {'decisao': args.decisao, 'prioridade': args.prioridade, 'encaminhamento': args.equipe},
+                                token=app.authority.local_credential(),actor=app.authority.principal)
         elif args.comando == 'expirar':
             result = app.expire()
         else:
             result = app.store.forget(args.usuario, app.checkpointer)
         print(json.dumps(result, ensure_ascii=False, indent=2))
-    except ValueError as exc:
+    except (ValueError,PermissionError) as exc:
         parser.error(str(exc))
 
 

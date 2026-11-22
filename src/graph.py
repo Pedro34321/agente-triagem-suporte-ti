@@ -14,6 +14,11 @@ from .contracts import Interpretation, Decision, DraftDecision, Approval, Output
 from .knowledge import search, records
 from .model import LLM, MODEL, prompt, prompt_versions
 from .storage import Store
+from .telemetry import Telemetry, observed, event, safe
+from opentelemetry import trace
+from opentelemetry.trace import SpanKind
+from .model import PROVIDER
+from .security import LocalAuthority, HOSTILE, suspended
 
 MAX_SECONDS = 90
 MAX_CALLS = 3
@@ -50,6 +55,7 @@ class State(TypedDict, total=False):
     reason: str
     receipt: dict
     output: dict
+    approval_grant: str
 
 
 def refusal(message, questions=None):
@@ -61,6 +67,9 @@ class App:
     def __init__(self, directory=None, llm=None, clock=time.time):
         self.directory = directory or ROOT / '.runtime'
         self.store = Store(self.directory)
+        self.authority = LocalAuthority(self.directory)
+        self.approval_actor = None
+        self.telemetry = Telemetry(self.directory / 'traces')
         self.conn = sqlite3.connect(self.directory / 'checkpoints.sqlite', check_same_thread=False)
         self.conn.execute('PRAGMA secure_delete=ON')
         self.checkpointer = SqliteSaver(self.conn)
@@ -91,7 +100,15 @@ class App:
         if reason:
             return {'route': 'finalizar', 'reason': reason, 'decision': refusal('Orçamento esgotado; encaminhe ao analista N1.')}
         try:
-            result, used = self.llm.call(name, schema, data, timeout=MAX_SECONDS - elapsed)
+            with self.telemetry.span('chat ' + MODEL, {'gen_ai.operation.name': 'chat',
+                    'gen_ai.provider.name': PROVIDER, 'gen_ai.request.model': MODEL, 'triagem.stage': name}, kind=SpanKind.CLIENT) as chat:
+                result, used = self.llm.call(name, schema, data, timeout=MAX_SECONDS - elapsed)
+                usage = getattr(self.llm, 'last_usage', {})
+                if usage:
+                    chat.set_attribute('gen_ai.usage.input_tokens', usage['input'])
+                    chat.set_attribute('gen_ai.usage.output_tokens', usage['output'])
+                    chat.set_attribute('triagem.estimated_cost_usd', (usage['input'] + usage['output']) * 0.15 / 1000000)
+                chat.set_attribute('gen_ai.response.model', MODEL)
             updates = {'calls': state.get('calls', 0) + 1, 'tokens': state.get('tokens', 0) + used,
                        'events': [{'node': name, 'tokens': used, 'modelo': MODEL}]}
             if self.clock() - state['started'] >= MAX_SECONDS or updates['tokens'] > MAX_TOKENS:
@@ -116,6 +133,8 @@ class App:
         # Identificador nunca é inferido do nada pelo modelo.
         if info['asset'] and info['asset'] not in '\n'.join(state.get('history', [])):
             info['asset'] = None
+        if info['location'] and info['location'].casefold() not in '\n'.join(state.get('history', [])).casefold():
+            info['location'] = None
         update['interpretation'] = info
         if info['intent'] in ('incompleto', 'ambiguo', 'fora_escopo'):
             if info['intent'] != 'fora_escopo' and not info['questions']:
@@ -128,10 +147,11 @@ class App:
 
     def recuperar(self, state):
         info = state['interpretation']
-        docs = search(info['query'], info['topic'])
-        rows, errors = records(info)
-        memories = self.store.recall(state['owner'], state['text'])
-        semantic = self.store.latest(state['owner'], 'equipamento:' + (info['asset'] or 'nenhum'))
+        docs = self.telemetry.tool('buscar_corpus', {'query': info['query'], 'topic': info['topic']}, lambda: search(info['query'], info['topic']))
+        rows, errors = self.telemetry.tool('consultar_cadastro', info, lambda: records(info))
+        memories = self.telemetry.tool('lembrar_episodios', {'owner':state['owner'], 'query':state['text']}, lambda: self.store.recall(state['owner'], state['text']))
+        semantic = self.telemetry.tool('ler_fato', {'owner':state['owner'],'asset':info['asset']}, lambda: self.store.latest(state['owner'], 'equipamento:' + (info['asset'] or 'nenhum')))
+        event('recovered_context', docs + rows)
         return {'sources': docs + rows, 'tool_errors': errors, 'memories': memories, 'semantic': semantic,
                 'events': [{'node': 'recuperar', 'chamadas_recuperacao': 1, 'fontes': [s['id'] for s in docs + rows],
                             'erros': errors, 'memorias': memories, 'semantica': semantic}]}
@@ -197,6 +217,8 @@ class App:
         if self.clock() > state['deadline']:
             return {'route': 'finalizar', 'reason': 'aprovacao_expirada'}
         approval = Approval.model_validate(response)
+        if not self.approval_actor: raise PermissionError('Identidade de revisão ausente.')
+        event('approval', {'actor':self.approval_actor, 'time':self.clock(), 'response':response, 'proposal':state['decision']})
         if approval.decisao == 'rejeitar':
             return {'route': 'finalizar', 'reason': 'rejeitado'}
         decision = dict(state['decision'])
@@ -205,17 +227,22 @@ class App:
                 if getattr(approval, field) is not None:
                     decision[field] = getattr(approval, field)
         Decision.model_validate(decision)
-        return {'route': 'registrar', 'decision': decision, 'events': [{'node': 'aprovar', 'decisao': approval.model_dump()}]}
+        return {'route': 'registrar', 'decision': decision, 'approval_grant':self.authority.sign(state['thread_id'],decision,state['deadline']),
+                'events': [{'node': 'aprovar', 'decisao': approval.model_dump(), 'actor':self.approval_actor}]}
 
     def registrar(self, state):
-        receipt = self.store.register(state['owner'], state['thread_id'], state['decision'])
+        suspended()
+        self.authority.verify(state,self.clock())
+        self.telemetry.ensure_available()
+        receipt = self.telemetry.tool('registrar_triagem', {'owner':state['owner'],'case':state['thread_id'],'decision':state['decision']}, lambda: self.store.register(state['owner'], state['thread_id'], state['decision']))
         # Se falhar entre as duas escritas, o replay não duplica nenhuma delas.
-        memory = self.store.remember(state['owner'], {'assunto': state['interpretation']['topic'], 'consulta': sanitize(state['interpretation']['query']), 'categoria': state['decision']['categoria'],
-                                     'prioridade': state['decision']['prioridade'], 'encaminhamento': state['decision']['encaminhamento']})
+        memory_payload={'assunto':state['interpretation']['topic'],'categoria':state['decision']['categoria'],
+                        'prioridade':state['decision']['prioridade'],'encaminhamento':state['decision']['encaminhamento']}
+        memory = self.telemetry.tool('gravar_episodio', memory_payload, lambda:self.store.remember(state['owner'],memory_payload))
         facts = []
         for source in state['sources']:
             if source['id'].startswith('equipamento:'):
-                facts.append(self.store.fact(state['owner'], source['id'], source['registro'], state['started']))
+                facts.append(self.telemetry.tool('gravar_fato',source,lambda:self.store.fact(state['owner'], source['id'], source['registro'], state['started'])))
         return {'receipt': receipt, 'reason': 'registrado', 'events': [{'node': 'registrar', 'recibo': receipt, 'memoria': memory, 'fatos': facts}]}
 
     def finalizar(self, state):
@@ -231,20 +258,24 @@ class App:
         return state['output']
 
     def log(self, owner, thread, operation, output, state):
-        directory = self.directory / 'logs'
-        directory.mkdir(exist_ok=True)
-        entry = {'owner': owner, 'thread': thread, 'operacao': operation, 'data_unix': self.clock(),
-                 'modelo': MODEL, 'prompts': prompt_versions(), 'output': output,
-                 'tokens': state.get('tokens', 0), 'events': state.get('events', [])}
-        with (directory / (digest(thread) + '.jsonl')).open('a', encoding='utf-8') as f:
-            f.write(canonical(entry) + '\n')
+        event('decision_record', {'owner':owner,'thread':thread,'operation':operation,
+               'input':state.get('text'),'interpretation':state.get('interpretation'),
+               'source_ids':[s['id'] for s in state.get('sources',[])],
+               'output':output,'reason':output['motivo_termino'],'events':state.get('events',[])})
 
+    @observed
     def run(self, text, user='demo', session='principal', case='caso1'):
+        suspended()
         if not isinstance(text, str) or not text.strip() or len(text) > 2000:
             raise ValueError('Informe texto livre com 1 a 2000 caracteres.')
         if any(not re.fullmatch(r'[A-Za-z0-9_-]{1,64}', x) for x in (user, session, case)):
             raise ValueError('Identificadores devem usar letras, números, _ ou - (até 64).')
         thread = f'{user}:{session}:{case}'
+        if HOSTILE.search(text):
+            output=Output(**refusal('Pedido bloqueado por política. Atendo triagem de TI; não executo comandos, revelo credenciais ou altero regras permanentes.'),
+                          motivo_termino='politica_bloqueou',thread_id=thread).model_dump()
+            event('security_block',{'channel':'user_input','rule':'HOSTILE','input':sanitize(text)})
+            return output
         cfg = self.config(thread)
         previous = self.graph.get_state(cfg)
         if previous.next:
@@ -261,7 +292,11 @@ class App:
         self.log(user, thread, 'iniciar', output, state)
         return output
 
-    def resume(self, thread, response):
+    @observed
+    def resume(self, thread, response, *, token=None, actor=None):
+        suspended()
+        self.authority.authenticate(token,actor)
+        self.approval_actor=actor
         approval = Approval.model_validate(response)
         cfg = self.config(thread)
         snap = self.graph.get_state(cfg)
@@ -284,7 +319,7 @@ class App:
         for thread in threads:
             snap = self.graph.get_state(self.config(thread))
             if snap.next and snap.values.get('deadline', float('inf')) < self.clock():
-                expired.append(self.resume(thread, {'decisao': 'rejeitar'}))
+                expired.append(self.resume(thread, {'decisao': 'rejeitar'},token=self.authority.local_credential(),actor=self.authority.principal))
         return expired
 
     def close(self):

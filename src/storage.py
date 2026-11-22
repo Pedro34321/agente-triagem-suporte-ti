@@ -33,6 +33,8 @@ class Store:
             db.execute('INSERT OR IGNORE INTO threads VALUES(?,?)', (thread, owner))
 
     def fact(self, owner, name, value, stamp):
+        from .security import validate_fact
+        validate_fact(name,value)
         key = digest([owner, name, value, stamp])
         with self.connect() as db:
             cur = db.execute('INSERT OR IGNORE INTO fatos VALUES(?,?,?,?,?)', (key, owner, name, canonical(value), stamp))
@@ -44,6 +46,8 @@ class Store:
         return {'atual': dict(rows[0]) if rows else None, 'descartados': [dict(x) for x in rows[1:]]}
 
     def remember(self, owner, payload, created=None):
+        from .security import validate_episode
+        validate_episode(payload)
         key = digest([owner, payload])
         with self.connect() as db:
             cur = db.execute('INSERT OR IGNORE INTO episodios VALUES(?,?,?,?)', (key, owner, canonical(payload), created or time.time()))
@@ -88,6 +92,18 @@ class Store:
             checkpointer.delete_thread(thread)
             log = self.directory / 'logs' / (digest(thread) + '.jsonl')
             log.unlink(missing_ok=True)
+        for path in (self.directory/'traces').glob('*.jsonl'):
+            # Proprietário e thread nos eventos do próprio trace, sem índice externo.
+            import json
+            remove=False
+            for line in path.read_text(encoding='utf-8').splitlines():
+                span=json.loads(line)
+                if span.get('attributes',{}).get('triagem.owner')==owner: remove=True
+                if span.get('attributes',{}).get('gen_ai.conversation.id') in threads: remove=True
+                for event in span.get('events',[]):
+                    data=json.loads(event.get('attributes',{}).get('data','{}'))
+                    if isinstance(data,dict) and data.get('owner')==owner: remove=True
+            if remove: path.unlink()
         # Não há cache persistente nem índice vetorial separado.
         with self.connect() as db:
             db.execute('VACUUM')

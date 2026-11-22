@@ -9,6 +9,102 @@
 
 Analistas de suporte gastam tempo interpretando chamados incompletos, coletando informações adicionais e classificam manualmente a categoria, prioridade e encaminhamento correto de cada solicitação.
 
+## Parte 3 — avaliação, segurança e observabilidade
+
+Versão do sistema: **3.1.0**. O grafo da Parte 2 foi mantido e recebeu controles e
+traces OpenTelemetry. Instale o requirements.txt atualizado no ambiente Python 3.12.
+Provedor ativo: Mistral, com credencial local já configurada neste computador.
+Nenhuma chave é incluída na entrega. Em outro computador, configure MISTRAL_API_KEY
+em `.env.local`, a partir do seu acesso ao provedor; `.env.example` contém só nomes.
+
+Do zero, no PowerShell:
+
+```powershell
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
+python -m pip install -r requirements.txt
+python -m src.main iniciar "Senha incorreta no meu e-mail corporativo." --caso exemplo-parte3
+python -m src.main retomar demo:principal:exemplo-parte3 aprovar
+```
+
+A CLI gera um segredo de revisão em `.runtime/reviewer.json`, ignorado pelo Git, e o
+usa para o principal `revisor-local`. Não exiba nem publique esse arquivo. Isso prova
+posse da credencial local, não login corporativo/MFA. Chamadas Python a App.resume
+sem credencial/identidade corretas são bloqueadas. Quem tem acesso aos arquivos como
+operador continua capaz de aprovar: limitação aceita apenas no cenário acadêmico.
+
+### Avaliação reproduzível e comparação
+
+```powershell
+python -m evals.rodar --versao 3.1.0 --rodada minha-rodada-nova
+python -m evals.comparar evals/resultados/baseline-3-0-0 evals/resultados/controles-3-1-0
+python -m evals.metricas evals/resultados/controles-3-1-0
+python -m pytest -q
+python -m pytest tests/test_security.py tests/test_retention.py tests/test_redaction.py -q
+```
+
+A primeira linha faz chamadas reais pagas à Mistral, em bancos isolados, e precisa de
+acesso/cota. As demais conferem evidências existentes ou controles com doubles.
+Para repetir **exatamente a baseline**, use o commit `2fdc11d` em outro checkout e rode
+`python -m evals.rodar --versao 3.0.0 --rodada OUTRO_NOME`. O comando valida a versão
+do código; não permite trocar apenas o rótulo da rodada. Não reutilize uma pasta de
+resultado existente. As duas rodadas entregues têm o mesmo hash de dataset.
+
+**Resultado observado:** 3/30 na baseline e 5/30 com controles. Os erros 429 dominam
+essas execuções. O SLO de 90% foi violado nas duas versões. Não confundir esses números
+com os nove casos da Parte 2 nem declarar o agente pronto para produção. Detalhes,
+fatias, fatores de confusão e arquivos-fonte em [evals.md](docs/evals.md).
+
+### Como ver os traces e aplicar retenção
+
+```powershell
+Get-ChildItem .runtime/traces/*.jsonl
+python -m scripts.ver_traces CAMINHO_DO_TRACE.jsonl
+python -m scripts.retencao --dias 30
+python -m src.main expirar
+```
+
+As evidências versionadas ficam em `evals/resultados/<rodada>/traces/`. Cada arquivo
+é um trace OpenTelemetry JSONL com raiz invoke_agent, chamadas chat e execute_tool.
+Entrada, fontes, modelo, prompts, resultado e aprovação ficam no mesmo trace.
+Retomadas têm outro trace e o mesmo gen_ai.conversation.id. Retenção e expiração são
+comandos explícitos, ainda sem agendamento automático. Não removem backups nem Git.
+Para suspender, defina `TRIAGEM_SUSPENDED=1` no ambiente antes de executar a CLI.
+
+### Revisão humana do juiz
+
+As vinte respostas em `evals/revisao/PARA-REVISAO-HUMANA.md` estão rotuladas: 17 SIM
+e 3 NÃO. Guilherme conferiu os pareceres assistidos por IA, conforme confirmação do
+usuário. A origem e os limites dessa confirmação estão em
+[PROVENIENCIA-REVISAO.md](evals/revisao/PROVENIENCIA-REVISAO.md).
+Concordância juiz × humano: **9/20 (45%)**, abaixo do limiar prévio de 90%.
+O juiz foi avaliado e **não adotado**. Matriz completa em [evals.md](docs/evals.md);
+os onze desacordos foram lidos individualmente em
+[DESACORDOS.md](evals/revisao/DESACORDOS.md), com análise técnica por IA declarada.
+
+```powershell
+python -m evals.importar_rotulos evals/revisao/PARA-REVISAO-HUMANA.md
+python -m evals.calibrar_juiz --consolidar
+```
+
+Para coletar novamente as vinte predições do juiz, com custo de API e espaçamento:
+`python -m evals.calibrar_juiz --avaliar --intervalo 35`. Não é necessário repetir
+essa coleta apenas porque chegaram os rótulos humanos. A consolidação preserva as
+análises vinculadas aos votos e ao hash do texto; mudanças invalidam análises antigas.
+Uma nova coleta exige nova leitura dos desacordos antes de qualquer adoção.
+
+### Documentação da Parte 3
+
+- [Avaliação](docs/evals.md)
+- [Model card e reconstrução da decisão](docs/model-card.md)
+- [Segurança, autoridade e dados](docs/seguranca.md)
+- [Plano, métricas e SLO](docs/observabilidade.md)
+- [Mudanças e commits](docs/mudancas.md)
+- [Escopo das frentes opcionais](docs/opcionais.md)
+- [Guia da entrega e limitações](docs/entrega-parte3.md)
+
+Os comandos e resultados abaixo pertencem à **Parte 2** e permanecem como histórico.
+
 ## Parte 2 — como rodar
 
 Python 3.12. Execute na raiz do repositório (Windows/PowerShell):

@@ -37,6 +37,7 @@ class LLM:
                 timeout=max(1, min(timeout, 30)),
             )
             parsed = schema.model_validate_json(response.choices[0].message.content)
+            self.last_usage = {'input':response.usage.prompt_tokens,'output':response.usage.completion_tokens}
             return parsed.model_dump(), response.usage.total_tokens
         response = self.client.responses.parse(
             model=MODEL, store=False, temperature=0,
@@ -45,4 +46,5 @@ class LLM:
         )
         if response.output_parsed is None:
             raise ValueError('resposta_sem_objeto')
+        self.last_usage = {'input':response.usage.input_tokens,'output':response.usage.output_tokens}
         return response.output_parsed.model_dump(), response.usage.total_tokens

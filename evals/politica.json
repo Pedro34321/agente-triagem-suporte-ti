@@ -1,0 +1,8 @@
+{
+  "dataset_version": "1.0.0",
+  "rubrica_version": "1.0.0",
+  "limiar_adocao_juiz": 0.9,
+  "minimo_rotulos_humanos": 20,
+  "slo": {"alvo": 0.9, "janela": "7 dias", "declarado_antes_das_rodadas": true},
+  "preco": {"moeda": "USD", "input_por_milhao": 0.15, "output_por_milhao": 0.15, "tipo": "estimativa de tabela, sem cache, não cobrança", "fonte": "https://docs.mistral.ai/inference/pricing", "consulta": "2026-11-13"}
+}
