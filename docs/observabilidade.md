@@ -57,7 +57,7 @@ As evidências das rodadas são copiadas para suas próprias pastas traces/, com
 | Falha | Silenciosa? | Sinal |
 |---|---|---|
 | Categoria incorreta com JSON válido | sim | check determinístico do caso, ligado à rodada/trace; SLI de término sozinho não detecta toda semântica |
-| Resposta vaga ou recusa indevida sem exceção técnica | sim | revisão de casos; juiz avaliado com 45% de concordância e não adotado: LACUNA de detecção automática confiável |
+| Resposta vaga ou recusa indevida sem exceção técnica | sim | juiz híbrido 1.2.0 com 90% na calibração; LLM isolado 85%; generalização e monitoramento automático exigem validação independente |
 | Orçamento esgotado sem erro de ferramenta | sim | termination_reason limite_* / quality.good=false |
 | API devolve 429 | não | chat com error.type e raiz erro_modelo |
 | Cadastro retorna inexistente | erro de domínio recuperável | execute_tool consultar_cadastro com error.type registro_nao_encontrado |
@@ -85,9 +85,8 @@ As tabelas numéricas e referências aos arquivos são acrescentadas pelo relat�
 e a versão com controles 34, porque início e retomadas/repetições são invocações
 distintas. Cada rodada tem 30 casos do dataset.
 
-O SLO foi **violado** nas duas rodadas por indisponibilidade/limite da Mistral.
-Não promover para operação; investigar limites do plano e espaçamento das chamadas
-e só então repetir as medições em uma nova rodada, preservando as atuais.
+O SLO foi **violado** nas primeiras rodadas por indisponibilidade/limite da Mistral.
+Na rodada atual ritmo-3-2-1-20261122, o SLI é 98.08%: SLO atingido nesta amostra. O intervalo de 35s reduz vazão e aumenta latência; o orçamento ativo foi ampliado para 150s. Não se aprova produção com base apenas nesta demonstração.
 
 Latências baixas podem significar rejeição rápida da API, não um agente melhor.
 Custos são estimativas pelos tokens informados e tabela de US$0,15/milhão tanto
@@ -95,9 +94,11 @@ entrada como saída, sem desconto de cache. Chamadas com erro e sem usage têm c
 desconhecido: não são contabilizadas como custo zero nem usadas para inventar uma fatura.
 O relatório informa cobertura de usage e limite inferior da média quando há lacunas.
 
-As respostas às quatro perguntas são: (1) não há base operacional para promover;
-(2) o provedor concentra as falhas, ferramentas tiveram pouca exposição e zero erros
-não prova robustez; (3) custo integral não é inferível sem usage de falhas;
+As respostas às quatro perguntas são: (1) a amostra atual consta nas tabelas; ainda falta validação independente para promover;
+(2) o provedor concentrou as falhas iniciais; na 3.2.1 houve uma validação falha,
+sem 429, e cadastros inexistentes recuperáveis; poucos casos não provam robustez;
+(3) na 3.2.1 há usage para todas as chamadas e custo médio estimado de US$0,00012253
+por invocação; nas rodadas anteriores, falhas sem usage impedem inferir custo integral;
 (4) traces de escrita bem-sucedida permitem reconstruir a decisão e a autorização
 local, mas identidade humana forte e ACL de produção permanecem lacunas.
 
@@ -152,5 +153,52 @@ Ferramentas 3.1.0:
 | registrar_triagem | 2 | 0 | 0.0% |
 | gravar_episodio | 2 | 0 | 0.0% |
 | gravar_fato | 1 | 0 | 0.0% |
+
+Os tempos são por invocação, inclusive retomadas; não são média de tempo humano de atendimento.
+
+### Versão 3.2.0
+
+| Versão | Invocações | p50 s | p95 s | Custo médio completo USD | SLI | Consumo do orçamento |
+|---|---|---|---|---|---|---|
+| 3.2.0 | 32 | 0.6431 | 3.5505 | LACUNA: usage ausente em falhas | 18.75% | 812.50% |
+
+Fonte: `evals/resultados/ajustes-3-2-0-20261122/metricas.json`. Custo conhecido em 6/32 invocações; limite inferior da média USD 0.00000855.
+
+Motivos 3.2.0: `{'erro_modelo': 26, 'politica_bloqueou': 3, 'registrado': 2, 'aguardando_aprovacao': 1}`.
+
+Ferramentas 3.2.0:
+
+| Ferramenta | Chamadas | Erros | Taxa |
+|---|---|---|---|
+| buscar_corpus | 2 | 0 | 0.0% |
+| consultar_cadastro | 2 | 0 | 0.0% |
+| lembrar_episodios | 2 | 0 | 0.0% |
+| ler_fato | 2 | 0 | 0.0% |
+| registrar_triagem | 1 | 0 | 0.0% |
+| gravar_episodio | 1 | 0 | 0.0% |
+
+Os tempos são por invocação, inclusive retomadas; não são média de tempo humano de atendimento.
+
+### Versão 3.2.1
+
+| Versão | Invocações | p50 s | p95 s | Custo médio completo USD | SLI | Consumo do orçamento |
+|---|---|---|---|---|---|---|
+| 3.2.1 | 52 | 28.6197 | 98.1776 | 0.00012252692307692308 | 98.08% | 19.23% |
+
+Fonte: `evals/resultados/ritmo-3-2-1-20261122/metricas.json`. Custo conhecido em 52/52 invocações; limite inferior da média USD 0.00012253.
+
+Motivos 3.2.1: `{'registrado': 22, 'aguardando_aprovacao': 11, 'ambiguo': 2, 'politica_bloqueou': 3, 'incompleto': 2, 'base_insuficiente': 4, 'fora_escopo': 3, 'informativo': 4, 'validacao_falhou': 1}`.
+
+Ferramentas 3.2.1:
+
+| Ferramenta | Chamadas | Erros | Taxa |
+|---|---|---|---|
+| registrar_triagem | 11 | 0 | 0.0% |
+| gravar_episodio | 11 | 0 | 0.0% |
+| buscar_corpus | 20 | 0 | 0.0% |
+| consultar_cadastro | 20 | 2 | 10.0% |
+| lembrar_episodios | 20 | 0 | 0.0% |
+| ler_fato | 20 | 0 | 0.0% |
+| gravar_fato | 4 | 0 | 0.0% |
 
 Os tempos são por invocação, inclusive retomadas; não são média de tempo humano de atendimento.

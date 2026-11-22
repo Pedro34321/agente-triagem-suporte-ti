@@ -20,8 +20,9 @@ def prompt_versions():
 
 
 class LLM:
-    def __init__(self):
+    def __init__(self, model=None):
         self.client = None
+        self.model = model or MODEL
 
     def call(self, name, schema, data, timeout=30, override=None):
         started=time.monotonic()
@@ -45,15 +46,16 @@ class LLM:
         max_output={'interpretar':400,'juiz':200}.get(name,800)
         if PROVIDER == 'mistral':
             response = self.client.chat.completions.create(
-                model=MODEL, messages=messages, temperature=0, max_tokens=max_output,
+                model=self.model, messages=messages, temperature=0, max_tokens=max_output,
                 response_format={'type': 'json_schema', 'json_schema': {'name': schema.__name__, 'schema': schema.model_json_schema(), 'strict': True}},
                 timeout=max(1, min(timeout, 30)),
+                **({'reasoning_effort':'none'} if self.model=='mistral-small-2603' else {}),
             )
             parsed = schema.model_validate_json(response.choices[0].message.content)
             self.last_usage = {'input':response.usage.prompt_tokens,'output':response.usage.completion_tokens}
             return parsed.model_dump(), response.usage.total_tokens
         response = self.client.responses.parse(
-            model=MODEL, store=False, temperature=0,
+            model=self.model, store=False, temperature=0,
             input=messages,
             text_format=schema, max_output_tokens=max_output, timeout=max(1, min(timeout, 30)),
         )

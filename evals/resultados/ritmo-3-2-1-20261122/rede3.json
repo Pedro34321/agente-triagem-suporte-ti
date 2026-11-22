@@ -1,0 +1,131 @@
+{
+  "id": "rede3",
+  "entrada": "Minha conexão caiu no Andar 3. Existe incidente nesse andar?",
+  "origem": "sintetico",
+  "classe": "rede",
+  "esperado": {
+    "categoria": "Rede / Conectividade",
+    "registro": true,
+    "fonte": "incidente:1"
+  },
+  "inicial": {
+    "resultado": "Falha de rede no **Andar 3** confirmada por incidente ativo (incidente:1). **Rede / Conectividade, Alta, Infraestrutura**. **Suficiente=true, registrar=true** (equipe: Infraestrutura). Próximo passo: **Aprovação do analista N1** para registro formal. Não há evidência de causa individual; não diagnosticar equipamento. **Perguntas=[]** (informação suficiente).",
+    "fontes": [
+      {
+        "id": "KB-REDE",
+        "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura. Sem correspondência de local não associar o incidente. A hipótese de notebook quebrado não prevalece sobre evidência de falha coletiva; não declarar diagnóstico definitivo."
+      },
+      {
+        "id": "incidente:1",
+        "trecho": "id: 1; titulo: Indisponibilidade de rede no andar 3; categoria: Rede / Conectividade; localizacao: Andar 3; usuarios_afetados: 35"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Rede / Conectividade",
+    "prioridade": "Alta",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "avaliacao:principal:rede3",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Falha de rede no **Andar 3** confirmada por incidente ativo (incidente:1). **Rede / Conectividade, Alta, Infraestrutura**. **Suficiente=true, registrar=true** (equipe: Infraestrutura). Próximo passo: **Aprovação do analista N1** para registro formal. Não há evidência de causa individual; não diagnosticar equipamento. **Perguntas=[]** (informação suficiente).",
+        "fontes": [
+          {
+            "id": "KB-REDE",
+            "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura. Sem correspondência de local não associar o incidente. A hipótese de notebook quebrado não prevalece sobre evidência de falha coletiva; não declarar diagnóstico definitivo."
+          },
+          {
+            "id": "incidente:1",
+            "trecho": "id: 1; titulo: Indisponibilidade de rede no andar 3; categoria: Rede / Conectividade; localizacao: Andar 3; usuarios_afetados: 35"
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Rede / Conectividade",
+        "prioridade": "Alta",
+        "encaminhamento": "Infraestrutura",
+        "perguntas": [],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1795459142.866789,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "saida": {
+    "resultado": "Falha de rede no **Andar 3** confirmada por incidente ativo (incidente:1). **Rede / Conectividade, Alta, Infraestrutura**. **Suficiente=true, registrar=true** (equipe: Infraestrutura). Próximo passo: **Aprovação do analista N1** para registro formal. Não há evidência de causa individual; não diagnosticar equipamento. **Perguntas=[]** (informação suficiente).",
+    "fontes": [
+      {
+        "id": "KB-REDE",
+        "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura. Sem correspondência de local não associar o incidente. A hipótese de notebook quebrado não prevalece sobre evidência de falha coletiva; não declarar diagnóstico definitivo."
+      },
+      {
+        "id": "incidente:1",
+        "trecho": "id: 1; titulo: Indisponibilidade de rede no andar 3; categoria: Rede / Conectividade; localizacao: Andar 3; usuarios_afetados: 35"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Rede / Conectividade",
+    "prioridade": "Alta",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "avaliacao:principal:rede3",
+    "registro_id": 1,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": {
+    "resultado": "Falha de rede no **Andar 3** confirmada por incidente ativo (incidente:1). **Rede / Conectividade, Alta, Infraestrutura**. **Suficiente=true, registrar=true** (equipe: Infraestrutura). Próximo passo: **Aprovação do analista N1** para registro formal. Não há evidência de causa individual; não diagnosticar equipamento. **Perguntas=[]** (informação suficiente).",
+    "fontes": [
+      {
+        "id": "KB-REDE",
+        "trecho": "Falha de rede em local com incidente ativo correspondente: Rede / Conectividade, prioridade Alta, Infraestrutura. Sem correspondência de local não associar o incidente. A hipótese de notebook quebrado não prevalece sobre evidência de falha coletiva; não declarar diagnóstico definitivo."
+      },
+      {
+        "id": "incidente:1",
+        "trecho": "id: 1; titulo: Indisponibilidade de rede no andar 3; categoria: Rede / Conectividade; localizacao: Andar 3; usuarios_afetados: 35"
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Rede / Conectividade",
+    "prioridade": "Alta",
+    "encaminhamento": "Infraestrutura",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "avaliacao:principal:rede3",
+    "registro_id": 1,
+    "ja_existia": true,
+    "pendencia": null
+  },
+  "banco": {
+    "antes": 0,
+    "depois": 1
+  },
+  "checks": {
+    "categoria": true,
+    "fonte": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "pausa": true,
+    "idempotencia": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 103.812
+}

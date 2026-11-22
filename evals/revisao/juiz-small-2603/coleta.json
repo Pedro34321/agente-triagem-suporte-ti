@@ -1,0 +1,6 @@
+{
+  "modelo": "mistral-small-2603",
+  "provedor": "mistral",
+  "prompt_hash": "cdbfa6cc052907551973e45d29180fe06152ca0469c59029a04be39530654d1c",
+  "rubrica": "1.1.0"
+}

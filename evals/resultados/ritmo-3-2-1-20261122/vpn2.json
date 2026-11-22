@@ -1,0 +1,64 @@
+{
+  "id": "vpn2",
+  "entrada": "Como configurar VPN para trabalhar em casa no notebook corporativo?",
+  "origem": "sintetico",
+  "classe": "orientacao",
+  "esperado": {
+    "categoria": "Solicitação Informativa",
+    "registro": false
+  },
+  "inicial": {
+    "resultado": "A configuração de VPN para uso em notebook corporativo é uma **Solicitação Informativa**, sem impacto ou incidente associado. O procedimento autorizado está disponível na fonte **KB-VPN** e não requer registro de suporte.",
+    "fontes": [
+      {
+        "id": "KB-VPN",
+        "trecho": "Para configurar VPN no notebook corporativo, solicitar ao Suporte N1 o cliente homologado e o perfil autorizado; autenticar pelo fluxo corporativo com MFA. Não compartilhar senha. Exceção: em equipamento pessoal, não instalar o cliente corporativo sem autorização. Orientação de VPN é Solicitação Informativa, Baixa, Suporte N1 e não gera incidente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Solicitação Informativa",
+    "prioridade": "Baixa",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "informativo",
+    "thread_id": "avaliacao:principal:vpn2",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "A configuração de VPN para uso em notebook corporativo é uma **Solicitação Informativa**, sem impacto ou incidente associado. O procedimento autorizado está disponível na fonte **KB-VPN** e não requer registro de suporte.",
+    "fontes": [
+      {
+        "id": "KB-VPN",
+        "trecho": "Para configurar VPN no notebook corporativo, solicitar ao Suporte N1 o cliente homologado e o perfil autorizado; autenticar pelo fluxo corporativo com MFA. Não compartilhar senha. Exceção: em equipamento pessoal, não instalar o cliente corporativo sem autorização. Orientação de VPN é Solicitação Informativa, Baixa, Suporte N1 e não gera incidente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Solicitação Informativa",
+    "prioridade": "Baixa",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "informativo",
+    "thread_id": "avaliacao:principal:vpn2",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "categoria": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 64.641
+}

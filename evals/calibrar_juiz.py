@@ -24,6 +24,9 @@ def consolidate(packet, predictions, reviews=None, threshold=0.9, rubric_version
         if case_hash(c)!=case_hash(predicted[c['id']]):
             raise ValueError('Predição pertence a outra entrada/saída: '+c['id'])
     result=[dict(c,juiz=predicted[c['id']]['juiz'],nota_juiz=predicted[c['id']]['nota_juiz']) for c in packet]
+    for c in result:
+        source=predicted[c['id']]
+        c.update({k:source[k] for k in ('juiz_bruto','nota_juiz_bruto','metodo','regra') if k in source})
     human_ok=all(isinstance(c['humano'],bool) and c['nota_humana'].strip() and c['revisor_humano'].strip() for c in result)
     judge_ok=all(isinstance(c['juiz'],bool) for c in result)
     ready=human_ok and judge_ok
@@ -92,12 +95,26 @@ def main():
     packet=json.loads((ROOT/'evals/revisao/rotulos-humanos.json').read_text(encoding='utf-8'))
     if not a.consolidar and (dest/'predicoes-parciais.json').exists():
         p.error('Esta coleta já existe. Use --destino NOVA_PASTA para preservar o histórico.')
+    from src.model import PROVIDER, prompt_versions
+    from .juiz import JUDGE_MODEL
+    metadata_path=dest/'coleta.json'
+    if a.consolidar:
+        previous_path=dest/'validacao-juiz.json'
+        previous=json.loads(previous_path.read_text(encoding='utf-8')) if previous_path.exists() else {}
+        metadata=(json.loads(metadata_path.read_text(encoding='utf-8')) if metadata_path.exists()
+                  else {k:previous[k] for k in ('modelo','provedor','prompt_hash','rubrica') if k in previous})
+        if metadata.get('rubrica',policy['rubrica_version'])!=policy['rubrica_version']:
+            p.error('Rubrica da coleta difere da política atual. Preserve o histórico e use uma nova pasta.')
+    else:
+        metadata={'modelo':JUDGE_MODEL,'provedor':PROVIDER,'prompt_hash':prompt_versions()['juiz.txt'],
+                  'rubrica':policy['rubrica_version'],'modo':'hibrido'}
+        metadata_path.write_text(json.dumps(metadata,ensure_ascii=False,indent=2),encoding='utf-8')
     result=[]
     for index,c in enumerate(packet if not a.consolidar else []):
         if index:time.sleep(max(0,a.intervalo))
         try:
             j=judge(c['entrada'],c['saida'])
-            result.append(dict(c,juiz=j['aprovado'],nota_juiz=j['nota']))
+            result.append(dict(c,juiz=j['aprovado'],nota_juiz=j['nota'],metodo=j.get('metodo','llm'),regra=j.get('regra')))
         except Exception as exc:
             result.append(dict(c,juiz=None,nota_juiz='',erro=type(exc).__name__))
         print(c['id'],flush=True)
@@ -107,9 +124,7 @@ def main():
     review_path=dest/'analise-desacordos.json'
     reviews=json.loads(review_path.read_text(encoding='utf-8')) if review_path.exists() else []
     report=consolidate(packet,result,reviews,policy['limiar_adocao_juiz'],policy['rubrica_version'])
-    from src.model import MODEL, PROVIDER, prompt_versions
-    report.update(modelo=MODEL,provedor=PROVIDER,prompt_hash=prompt_versions()['juiz.txt'],
-                  proveniencia_rotulos='evals/revisao/PROVENIENCIA-REVISAO.md')
+    report.update(metadata,proveniencia_rotulos='evals/revisao/PROVENIENCIA-REVISAO.md')
     (dest/'validacao-juiz.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')
 
 

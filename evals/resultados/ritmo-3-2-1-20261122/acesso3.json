@@ -1,0 +1,113 @@
+{
+  "id": "acesso3",
+  "entrada": "A conta do email corporativo está bloqueada para mim.",
+  "origem": "sintetico",
+  "classe": "acesso",
+  "esperado": {
+    "categoria": "Acesso / Conta",
+    "registro": true
+  },
+  "inicial": {
+    "resultado": "Falha individual de acesso à conta de email corporativo. Classificação: **Acesso / Conta**, prioridade **Média**, equipe **Suporte N1**. Não há evidência de comprometimento ou impacto coletivo. **Próximo passo**: Contato com Suporte N1 para desbloqueio sem solicitação da senha atual.",
+    "fontes": [
+      {
+        "id": "KB-ACESSO",
+        "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1. Não pedir a senha. Exceção: suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2 com prioridade Alta; nunca redefinir credenciais automaticamente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Acesso / Conta",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "aguardando_aprovacao",
+    "thread_id": "avaliacao:principal:acesso3",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": {
+      "acao": "registrar_triagem",
+      "argumentos": {
+        "resultado": "Falha individual de acesso à conta de email corporativo. Classificação: **Acesso / Conta**, prioridade **Média**, equipe **Suporte N1**. Não há evidência de comprometimento ou impacto coletivo. **Próximo passo**: Contato com Suporte N1 para desbloqueio sem solicitação da senha atual.",
+        "fontes": [
+          {
+            "id": "KB-ACESSO",
+            "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1. Não pedir a senha. Exceção: suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2 com prioridade Alta; nunca redefinir credenciais automaticamente."
+          }
+        ],
+        "suficiente": true,
+        "categoria": "Acesso / Conta",
+        "prioridade": "Média",
+        "encaminhamento": "Suporte N1",
+        "perguntas": [],
+        "registrar": true
+      },
+      "aviso": "Revise a proposta de registrar_triagem. A aprovação grava uma triagem no banco local simulado e um resumo de memória. Não altera o equipamento nem abre chamado externo. Confira os argumentos apresentados. Você pode aprovar, rejeitar ou editar prioridade e encaminhamento. Sem resposta em 24 horas, a proposta expira e nada é registrado.\n",
+      "expira_em_unix": 1795458862.67545,
+      "respostas": [
+        "aprovar",
+        "rejeitar",
+        "editar"
+      ],
+      "campos_editaveis": [
+        "prioridade",
+        "encaminhamento"
+      ]
+    }
+  },
+  "saida": {
+    "resultado": "Falha individual de acesso à conta de email corporativo. Classificação: **Acesso / Conta**, prioridade **Média**, equipe **Suporte N1**. Não há evidência de comprometimento ou impacto coletivo. **Próximo passo**: Contato com Suporte N1 para desbloqueio sem solicitação da senha atual.",
+    "fontes": [
+      {
+        "id": "KB-ACESSO",
+        "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1. Não pedir a senha. Exceção: suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2 com prioridade Alta; nunca redefinir credenciais automaticamente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Acesso / Conta",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "avaliacao:principal:acesso3",
+    "registro_id": 1,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": {
+    "resultado": "Falha individual de acesso à conta de email corporativo. Classificação: **Acesso / Conta**, prioridade **Média**, equipe **Suporte N1**. Não há evidência de comprometimento ou impacto coletivo. **Próximo passo**: Contato com Suporte N1 para desbloqueio sem solicitação da senha atual.",
+    "fontes": [
+      {
+        "id": "KB-ACESSO",
+        "trecho": "Falha individual de senha ou conta: Acesso / Conta, prioridade Média, Suporte N1. Não pedir a senha. Exceção: suspeita de comprometimento de conta deve ser encaminhada ao Suporte N2 com prioridade Alta; nunca redefinir credenciais automaticamente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Acesso / Conta",
+    "prioridade": "Média",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": true,
+    "motivo_termino": "registrado",
+    "thread_id": "avaliacao:principal:acesso3",
+    "registro_id": 1,
+    "ja_existia": true,
+    "pendencia": null
+  },
+  "banco": {
+    "antes": 0,
+    "depois": 1
+  },
+  "checks": {
+    "categoria": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "pausa": true,
+    "idempotencia": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 70.187
+}

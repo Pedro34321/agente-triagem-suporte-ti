@@ -1,0 +1,70 @@
+{
+  "id": "inexistente",
+  "entrada": "Meu notebook patrimônio NB-98451 parou de carregar.",
+  "origem": "desenvolvimento",
+  "classe": "coleta",
+  "esperado": {
+    "suficiente": false,
+    "registro": false,
+    "perguntas": true
+  },
+  "inicial": {
+    "resultado": "Notebook **NB-98451** não encontrado no cadastro. **Não há evidência de falha física confirmada** (falta registro ativo). **Ação**: Confirmar existência do patrimônio antes de qualquer procedimento. Se existir, avaliar falha de carregamento como **Hardware / Equipamento, Prioridade Média, Suporte N2** (KB-HARDWARE). Se inexistente, **não registrar** (suportado por KB-HARDWARE).",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      }
+    ],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [
+      "Confirme se o patrimônio **NB-98451** existe no cadastro atual."
+    ],
+    "registrar": false,
+    "motivo_termino": "base_insuficiente",
+    "thread_id": "avaliacao:principal:inexistente",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Notebook **NB-98451** não encontrado no cadastro. **Não há evidência de falha física confirmada** (falta registro ativo). **Ação**: Confirmar existência do patrimônio antes de qualquer procedimento. Se existir, avaliar falha de carregamento como **Hardware / Equipamento, Prioridade Média, Suporte N2** (KB-HARDWARE). Se inexistente, **não registrar** (suportado por KB-HARDWARE).",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      }
+    ],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [
+      "Confirme se o patrimônio **NB-98451** existe no cadastro atual."
+    ],
+    "registrar": false,
+    "motivo_termino": "base_insuficiente",
+    "thread_id": "avaliacao:principal:inexistente",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "suficiente": true,
+    "perguntas": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 66.594
+}

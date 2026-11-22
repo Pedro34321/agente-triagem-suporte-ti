@@ -1,0 +1,99 @@
+{
+  "3.2.0": {
+    "execucoes": 32,
+    "p50_s": 0.643126,
+    "p95_s": 3.550463,
+    "custo_estimado_usd_total_conhecido": 0.00027345,
+    "custo_estimado_usd_por_execucao": null,
+    "custo_limite_inferior_por_execucao": 8.5453125e-06,
+    "execucoes_com_custo_conhecido": 6,
+    "lacuna_custo": "API sem usage não permite inferir custo zero",
+    "custos_individuais_usd": {
+      "0x4113daecd1837672221ad21e5aed7585": null,
+      "0xe6feaed56e5f099e7d1ea2c04739317b": null,
+      "0xfcec19620b7dd80a6c7455fbd56ab69e": null,
+      "0x9345148f543035dd51d608ab985b8e00": null,
+      "0xa3e42c6958a2087c016ed25f76339f7e": null,
+      "0x965946b91ab8e63f78cd21b6907bb836": null,
+      "0x268ce36510ed31f0dda9a4b8ac8f2627": 0,
+      "0x9c86a1386d72db96747fe3dedd5555c4": null,
+      "0xcd4e3ce5efbcb71bfeabb031395107fd": null,
+      "0xcf0723124a1271afb0e1dcd2cd77fa50": null,
+      "0x465f5e58ae44088e9ba3a02147bcf16f": null,
+      "0xf7ae08768483c7e309635d7b77de1351": null,
+      "0xb0a6612de6b710f3f1c0de6bf41dfa7b": 0,
+      "0x799255198f5bb430d7b509d87376b78c": null,
+      "0x17634a251d55223c26285b25aa6213fd": null,
+      "0xeb3d27fb637270eadb8044bb56022ecd": null,
+      "0xbb430d00864efe8847a6ac61c63db1a7": null,
+      "0x3b33559c1313cd10185e0a69048582b5": 0,
+      "0x51dea2046eec952653c8a894b1f048da": null,
+      "0xff46c55fc7d980fe89a21d5553e59067": null,
+      "0x35d1713209e5daf589633f4a89fb33af": null,
+      "0x96aedf598091720a13f9bcb5fe6d6784": 0,
+      "0x4e8e25cb492c0f059da837ed83095db5": null,
+      "0xa6a7bb30ee5510f97cece25f67cd48cc": null,
+      "0x578b37d06c7008ece909629005c03e11": null,
+      "0x26f6aa806d6aba0f191a7209181c7afc": 0,
+      "0x0911c8e5d391aa59c61a3ca0632cb6f2": null,
+      "0x2de9bc01750fc65dcafd3d397869e748": null,
+      "0xcc743f60f63d4ba9714a3d46a36755e9": null,
+      "0xda31339d55a113e5e56ce42590556eec": 0.00027345,
+      "0xf93ef02e75eb932025b576e7e3d76b4f": null,
+      "0x8387795bf813bf5697e7ddde29d6d9b4": null
+    },
+    "chamadas_modelo": 30,
+    "tokens_input": 3254,
+    "tokens_output": 468,
+    "motivos": {
+      "erro_modelo": 26,
+      "politica_bloqueou": 3,
+      "registrado": 2,
+      "aguardando_aprovacao": 1
+    },
+    "ferramentas": {
+      "buscar_corpus": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "consultar_cadastro": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "lembrar_episodios": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "ler_fato": {
+        "chamadas": 2,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "registrar_triagem": {
+        "chamadas": 1,
+        "erros": 0,
+        "taxa_erro": 0.0
+      },
+      "gravar_episodio": {
+        "chamadas": 1,
+        "erros": 0,
+        "taxa_erro": 0.0
+      }
+    },
+    "slo": {
+      "validos": 32,
+      "bons": 6,
+      "sli": 0.1875,
+      "alvo": 0.9,
+      "janela": "7 dias",
+      "orçamento_erros": 3.2,
+      "erros_observados": 26,
+      "consumo_orcamento": 8.125,
+      "violado": true,
+      "escopo": "amostra sintética/desenvolvimento desta rodada, não produção"
+    }
+  }
+}

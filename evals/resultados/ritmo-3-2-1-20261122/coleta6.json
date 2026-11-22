@@ -1,0 +1,70 @@
+{
+  "id": "coleta6",
+  "entrada": "Notebook patrimônio NB-00000 está sem carregar.",
+  "origem": "sintetico",
+  "classe": "coleta",
+  "esperado": {
+    "suficiente": false,
+    "registro": false,
+    "perguntas": true
+  },
+  "inicial": {
+    "resultado": "Notebook **NB-00000** não está sendo carregado. **Falta confirmação de patrimônio no cadastro atual** (ferramenta indicou *registro_nao_encontrado*). **Não há evidência de risco físico (queimado/elétrico)**. **Não registrar** até que o patrimônio seja validado. **Próximo passo**: Confirmar a existência do equipamento no sistema de patrimônio antes de qualquer ação.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      }
+    ],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [
+      "Confirme se o equipamento **NB-00000** está cadastrado no sistema de patrimônio."
+    ],
+    "registrar": false,
+    "motivo_termino": "base_insuficiente",
+    "thread_id": "avaliacao:principal:coleta6",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Notebook **NB-00000** não está sendo carregado. **Falta confirmação de patrimônio no cadastro atual** (ferramenta indicou *registro_nao_encontrado*). **Não há evidência de risco físico (queimado/elétrico)**. **Não registrar** até que o patrimônio seja validado. **Próximo passo**: Confirmar a existência do equipamento no sistema de patrimônio antes de qualquer ação.",
+    "fontes": [
+      {
+        "id": "KB-HARDWARE",
+        "trecho": "Falha física de equipamento: Hardware / Equipamento, prioridade Média, Suporte N2. Se o patrimônio informado não existir, pedir confirmação e não registrar. Exceção: cheiro de queimado ou risco elétrico exige prioridade Crítica e avaliação humana; orientar a interromper o uso com segurança, sem instruir reparo."
+      }
+    ],
+    "suficiente": false,
+    "categoria": null,
+    "prioridade": null,
+    "encaminhamento": null,
+    "perguntas": [
+      "Confirme se o equipamento **NB-00000** está cadastrado no sistema de patrimônio."
+    ],
+    "registrar": false,
+    "motivo_termino": "base_insuficiente",
+    "thread_id": "avaliacao:principal:coleta6",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "suficiente": true,
+    "perguntas": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 70.438
+}

@@ -1,0 +1,12 @@
+DATASET v1.0.0  30 casos  {'producao': 0, 'desenvolvimento': 9, 'sintetico': 21}
+JUIZ híbrido rubrica v1.2.0  concordância 90.0%  limiar 90%  adotado
+LLM isolado: 85.0% (preservado, não é a concordância do juiz híbrido).
+classe                      3.1.0      3.2.1 delta pp
+acesso                      25.0%     100.0% +75.0
+coleta                       0.0%     100.0% +100.0
+hardware                    25.0%     100.0% +75.0
+orientacao                   0.0%     100.0% +100.0
+recusa                       0.0%     100.0% +100.0
+rede                         0.0%      75.0% +75.0
+seguranca                  100.0%     100.0% +0.0
+MÉDIA (micro)               16.7%      96.7% +80.0

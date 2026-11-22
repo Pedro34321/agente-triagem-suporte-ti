@@ -1,0 +1,18 @@
+{
+  "modelo": "ministral-8b-2512",
+  "provedor": "mistral",
+  "prompt_hash": "cdbfa6cc052907551973e45d29180fe06152ca0469c59029a04be39530654d1c",
+  "rubrica": "1.2.0",
+  "modo": "hibrido",
+  "origem_predicoes_llm": "evals/revisao/rubrica-1-1-0/predicoes-parciais.json",
+  "sha256_predicoes_origem": "f354d703dd8113e2b7b91bf2bca3951e1fa89df80c5834fefe057f92f3d0c298",
+  "concordancia_llm_isolado": 0.85,
+  "regras_aplicadas": 9,
+  "votos_alterados_pela_regra": [
+    "acesso4"
+  ],
+  "novas_chamadas_api": 0,
+  "predicoes_llm_reais_reutilizadas": 20,
+  "proveniencia_rotulos": "evals/revisao/PROVENIENCIA-REVISAO.md",
+  "sha256_codigo_regra": "2c85584200281da2c8bf6e29cfde60cfbb297a79bce5ffd0234a00f0f20c3db5"
+}

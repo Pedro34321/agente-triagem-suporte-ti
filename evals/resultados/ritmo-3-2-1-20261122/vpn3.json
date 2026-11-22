@@ -1,0 +1,64 @@
+{
+  "id": "vpn3",
+  "entrada": "Qual orientação para usar VPN no equipamento pessoal?",
+  "origem": "sintetico",
+  "classe": "orientacao",
+  "esperado": {
+    "categoria": "Solicitação Informativa",
+    "registro": false
+  },
+  "inicial": {
+    "resultado": "Orientação informativa: em equipamento **pessoal**, não instalar o cliente corporativo de VPN sem autorização prévia. Não há incidente a ser registrado. **Não compartilhar senhas** (KB-VPN).",
+    "fontes": [
+      {
+        "id": "KB-VPN",
+        "trecho": "Para configurar VPN no notebook corporativo, solicitar ao Suporte N1 o cliente homologado e o perfil autorizado; autenticar pelo fluxo corporativo com MFA. Não compartilhar senha. Exceção: em equipamento pessoal, não instalar o cliente corporativo sem autorização. Orientação de VPN é Solicitação Informativa, Baixa, Suporte N1 e não gera incidente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Solicitação Informativa",
+    "prioridade": "Baixa",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "informativo",
+    "thread_id": "avaliacao:principal:vpn3",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "saida": {
+    "resultado": "Orientação informativa: em equipamento **pessoal**, não instalar o cliente corporativo de VPN sem autorização prévia. Não há incidente a ser registrado. **Não compartilhar senhas** (KB-VPN).",
+    "fontes": [
+      {
+        "id": "KB-VPN",
+        "trecho": "Para configurar VPN no notebook corporativo, solicitar ao Suporte N1 o cliente homologado e o perfil autorizado; autenticar pelo fluxo corporativo com MFA. Não compartilhar senha. Exceção: em equipamento pessoal, não instalar o cliente corporativo sem autorização. Orientação de VPN é Solicitação Informativa, Baixa, Suporte N1 e não gera incidente."
+      }
+    ],
+    "suficiente": true,
+    "categoria": "Solicitação Informativa",
+    "prioridade": "Baixa",
+    "encaminhamento": "Suporte N1",
+    "perguntas": [],
+    "registrar": false,
+    "motivo_termino": "informativo",
+    "thread_id": "avaliacao:principal:vpn3",
+    "registro_id": null,
+    "ja_existia": false,
+    "pendencia": null
+  },
+  "repeticao": null,
+  "banco": {
+    "antes": 0,
+    "depois": 0
+  },
+  "checks": {
+    "categoria": true,
+    "resultado_mundo": true,
+    "pausa_antes_escrita": true,
+    "trajetoria": true,
+    "sem_erro_tecnico": true
+  },
+  "aprovado": true,
+  "segundos_end_to_end": 68.875
+}

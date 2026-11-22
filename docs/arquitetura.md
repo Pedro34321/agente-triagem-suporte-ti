@@ -111,9 +111,16 @@ A demonstração paralela da versão instalada levanta InvalidUpdateError, contr
 
 Contagem inclui assinaturas e comentários; esses métodos também fazem outras tarefas.
 Motivo de término é campo próprio; detector compara hashes de decisões inválidas, sem aguardar recursion_limit.
-Tetos explícitos: 90s de tempo ativo, 3 chamadas ao modelo, 12000 tokens contabilizados e 16 superpassos.
-Tokens são teto observado após chamada, com saída limitada a 1200; não é um limite de cobrança estrito.
-Timeout por chamada <=30s e retries=0; tempo de espera humana não conta como execução ativa.
+Tetos explícitos na versão 3.2.1: 150s de tempo ativo, 3 chamadas ao modelo, 12000 tokens contabilizados e 16 superpassos.
+Tokens são teto observado após chamada, com saída limitada a 400 na interpretação,
+800 na proposta e 200 no juiz; não é um limite de cobrança estrito.
+Timeout HTTP por chamada <=30s e retries=0; tempo de espera humana não conta como execução ativa.
+O adaptador Mistral reserva chamadas em um SQLite local compartilhado, sem relatos
+ou credenciais, com intervalo padrão de 35s entre inícios. A espera consome o orçamento
+de tempo e aparece no evento provider_wait do span chat. O intervalo é configurável
+por LLM_MIN_INTERVAL_SECONDS (0–60); uma espera que excederia o prazo é bloqueada.
+O orçamento foi ampliado de 90s para 150s para acomodar o ritmo mais lento, sem aumentar
+as três chamadas máximas ou dispensar aprovação. Isso reduz vazão e aumenta latência.
 Registro inexistente é recuperável e volta ao modelo como dado; API indisponível termina com erro_modelo.
 Falhas inesperadas de armazenamento são fatais e podem exigir diagnóstico; não há repetição automática de escritas.
 

@@ -13,7 +13,10 @@ def main():
     judge_path=ROOT/policy.get('validacao_juiz','evals/revisao/validacao-juiz.json')
     judge=json.loads(judge_path.read_text(encoding='utf-8')) if judge_path.exists() else {}
     agreement=judge.get('concordancia')
-    print('JUIZ rubrica v'+policy['rubrica_version']+'  concordância '+(f'{100*agreement:.1f}%' if agreement is not None else 'PENDENTE')+'  limiar 90%  '+('adotado' if judge.get('adotado') else 'não adotado'))
+    mode=' híbrido' if judge.get('modo')=='hibrido' else ''
+    print('JUIZ'+mode+' rubrica v'+policy['rubrica_version']+'  concordância '+(f'{100*agreement:.1f}%' if agreement is not None else 'PENDENTE')+'  limiar 90%  '+('adotado' if judge.get('adotado') else 'não adotado'))
+    if 'concordancia_llm_isolado' in judge:
+        print(f'LLM isolado: {100*judge["concordancia_llm_isolado"]:.1f}% (preservado, não é a concordância do juiz híbrido).')
     print(f'classe                 {x["versao"]:>10} {y["versao"]:>10} delta pp')
     for c in x['por_classe']:
         aa=x['por_classe'][c];bb=y['por_classe'][c]
