@@ -20,7 +20,7 @@ from opentelemetry.trace import SpanKind
 from .model import PROVIDER
 from .security import LocalAuthority, HOSTILE, suspended
 
-MAX_SECONDS = 90
+MAX_SECONDS = 150
 MAX_CALLS = 3
 MAX_TOKENS = 12000
 RECURSION_LIMIT = 16

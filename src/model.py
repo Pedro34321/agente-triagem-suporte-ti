@@ -26,7 +26,7 @@ class LLM:
     def call(self, name, schema, data, timeout=30, override=None):
         started=time.monotonic()
         self.last_usage={}
-        interval=float(os.getenv('LLM_MIN_INTERVAL_SECONDS') or ('2' if PROVIDER=='mistral' else '0'))
+        interval=float(os.getenv('LLM_MIN_INTERVAL_SECONDS') or ('35' if PROVIDER=='mistral' else '0'))
         waited=wait_for_slot(ROOT/'.runtime/provider-rate.sqlite',PROVIDER,interval,timeout)
         if waited:
             from .telemetry import event
@@ -42,9 +42,10 @@ class LLM:
         procedural='' if name=='juiz' else '\n'+prompt('procedural')
         messages = [{'role': 'system', 'content': (override if override is not None else prompt(name)) + procedural},
                     {'role': 'user', 'content': canonical(data)}]
+        max_output={'interpretar':400,'juiz':200}.get(name,800)
         if PROVIDER == 'mistral':
             response = self.client.chat.completions.create(
-                model=MODEL, messages=messages, temperature=0, max_tokens=1200,
+                model=MODEL, messages=messages, temperature=0, max_tokens=max_output,
                 response_format={'type': 'json_schema', 'json_schema': {'name': schema.__name__, 'schema': schema.model_json_schema(), 'strict': True}},
                 timeout=max(1, min(timeout, 30)),
             )
@@ -54,7 +55,7 @@ class LLM:
         response = self.client.responses.parse(
             model=MODEL, store=False, temperature=0,
             input=messages,
-            text_format=schema, max_output_tokens=1200, timeout=max(1, min(timeout, 30)),
+            text_format=schema, max_output_tokens=max_output, timeout=max(1, min(timeout, 30)),
         )
         if response.output_parsed is None:
             raise ValueError('resposta_sem_objeto')

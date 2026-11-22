@@ -20,7 +20,7 @@ def db_count(runtime):
 
 def command(args, runtime):
     env = dict(os.environ, TRIAGEM_RUNTIME=str(runtime), PYTHONIOENCODING='utf-8')
-    p = subprocess.run([sys.executable,'-m','src.main',*args],cwd=ROOT,env=env,capture_output=True,text=True,encoding='utf-8',timeout=150)
+    p = subprocess.run([sys.executable,'-m','src.main',*args],cwd=ROOT,env=env,capture_output=True,text=True,encoding='utf-8',timeout=180)
     if p.returncode:
         return {'cli_error':True, 'motivo_termino':'erro_cli','suficiente':False,'registro_id':None}
     return json.loads(p.stdout)
